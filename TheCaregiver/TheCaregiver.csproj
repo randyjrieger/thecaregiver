@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AEE580F9-CA82-4D5E-842C-A1D6DE01DC6A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>TheCaregiver</RootNamespace>
+    <AssemblyName>TheCaregiver</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.Core.3.3.100.5\lib\net45\AWSSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\Atlas.cs" />
+    <Compile Include="Classes\CombatManager.cs" />
+    <Compile Include="Classes\Coordinates.cs" />
+    <Compile Include="Classes\Dice.cs" />
+    <Compile Include="Classes\GameState.cs" />
+    <Compile Include="Classes\GardenPlot.cs" />
+    <Compile Include="Classes\Kingdom.cs" />
+    <Compile Include="Classes\Map.cs" />
+    <Compile Include="Classes\MapHelper.cs" />
+    <Compile Include="Classes\NPC\Merchant.cs" />
+    <Compile Include="Classes\MobCard.cs" />
+    <Compile Include="Classes\MobHelper.cs" />
+    <Compile Include="Classes\NPC\NPC.cs" />
+    <Compile Include="Classes\Person.cs" />
+    <Compile Include="Classes\Mob.cs" />
+    <Compile Include="Classes\Player.cs" />
+    <Compile Include="Classes\MapRegion.cs" />
+    <Compile Include="Classes\NPC\QuestPerson.cs" />
+    <Compile Include="Classes\Store.cs" />
+    <Compile Include="Classes\Tile.cs" />
+    <Compile Include="Classes\Reality.cs" />
+    <Compile Include="Classes\Armour.cs" />
+    <Compile Include="Classes\Weapon.cs" />
+    <Compile Include="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameBoard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameBoard.Designer.cs">
+      <DependentUpon>GameBoard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Maps.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\TransPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Splash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Splash.Designer.cs">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tiles.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tiles.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameBoard.resx">
+      <DependentUpon>GameBoard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Maps.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Maps.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Splash.resx">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tiles.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Tiles.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Resources\tiles\tiles.zip" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tiles\waterfall4.jpg" />
+    <None Include="Resources\tiles\waterfall3.jpg" />
+    <None Include="Resources\tiles\waterfall2.jpg" />
+    <None Include="Resources\tiles\waterfall1.jpg" />
+    <None Include="Resources\lava1.bmp" />
+    <Content Include="Resources\maps\Byas.txt" />
+    <Content Include="Resources\maps\Fyster.txt" />
+    <Content Include="Resources\maps\GroveOfFilu.txt" />
+    <Content Include="Resources\maps\island.txt" />
+    <Content Include="Resources\maps\house.txt" />
+    <Content Include="Resources\maps\Iye.txt" />
+    <Content Include="Resources\maps\Lancer.txt" />
+    <None Include="Resources\raft.bmp" />
+    <None Include="Resources\raft.png" />
+    <Content Include="Resources\maps\Lawdyn.txt" />
+    <Content Include="Resources\maps\Nazidar.txt" />
+    <Content Include="Resources\maps\NordPoint.txt" />
+    <Content Include="Resources\maps\Otalio.txt" />
+    <Content Include="Resources\maps\Southwind.txt" />
+    <None Include="Resources\partman_trans.bmp" />
+    <Content Include="Resources\maps\Tempest.txt" />
+    <EmbeddedResource Include="Resources\maps\world_empty.txt" />
+    <Content Include="Resources\scroll.png" />
+    <Content Include="Resources\tiles\alter.jpg" />
+    <None Include="Resources\tiles\amberGiant.png" />
+    <Content Include="Resources\tiles\armour.jpg" />
+    <Content Include="Resources\tiles\bandit.jpg" />
+    <Content Include="Resources\tiles\bar1.jpg" />
+    <Content Include="Resources\tiles\bar2.jpg" />
+    <Content Include="Resources\tiles\bar3.jpg" />
+    <Content Include="Resources\tiles\bar4.jpg" />
+    <Content Include="Resources\tiles\bed.jpg" />
+    <Content Include="Resources\tiles\boats.jpg" />
+    <Content Include="Resources\tiles\boatshop.jpg" />
+    <None Include="Resources\tiles\brickwall.png" />
+    <Content Include="Resources\tiles\bridge.jpg" />
+    <Content Include="Resources\tiles\cactus.jpg" />
+    <Content Include="Resources\tiles\castleL.jpg" />
+    <Content Include="Resources\tiles\castleR.jpg" />
+    <None Include="Resources\tiles\chopping.png" />
+    <None Include="Resources\tiles\chopping_swing.png" />
+    <Content Include="Resources\tiles\counter.jpg" />
+    <Content Include="Resources\tiles\deepboat.jpg" />
+    <Content Include="Resources\tiles\deepsea.jpg" />
+    <Content Include="Resources\tiles\deepsea2.jpg" />
+    <Content Include="Resources\tiles\deepsea3.jpg" />
+    <Content Include="Resources\tiles\deepsea4.jpg" />
+    <Content Include="Resources\tiles\desert.jpg" />
+    <Content Include="Resources\tiles\drawbrid.jpg" />
+    <None Include="Resources\tiles\fishing_casting.png" />
+    <None Include="Resources\tiles\fishing_linein.png" />
+    <None Include="Resources\tiles\ettin1.png" />
+    <None Include="Resources\tiles\fireGiant.png" />
+    <None Include="Resources\tiles\emeraldGiant.png" />
+    <None Include="Resources\tiles\fireants.png" />
+    <Content Include="Resources\tiles\foothill.jpg" />
+    <Content Include="Resources\tiles\forest.png" />
+    <Content Include="Resources\tiles\FOW.png" />
+    <None Include="Resources\tiles\frogjelly.png" />
+    <Content Include="Resources\tiles\garden.jpg" />
+    <None Include="Resources\tiles\gardengrow.jpg" />
+    <None Include="Resources\tiles\gardenready.jpg" />
+    <Content Include="Resources\tiles\general.jpg" />
+    <Content Include="Resources\tiles\giant.jpg" />
+    <Content Include="Resources\tiles\goblin.jpg" />
+    <Content Include="Resources\tiles\grass.jpg" />
+    <Content Include="Resources\tiles\healer.jpg" />
+    <Content Include="Resources\tiles\house.jpg" />
+    <Content Include="Resources\tiles\inn.jpg" />
+    <Content Include="Resources\tiles\inn2.jpg" />
+    <None Include="Resources\tiles\lava1.jpg" />
+    <None Include="Resources\tiles\lava2.jpg" />
+    <None Include="Resources\tiles\lava3.jpg" />
+    <None Include="Resources\tiles\lava4.jpg" />
+    <Content Include="Resources\tiles\market.jpg" />
+    <Content Include="Resources\tiles\merchant.jpg" />
+    <None Include="Resources\tiles\merchant.png" />
+    <Content Include="Resources\tiles\mount.jpg" />
+    <Content Include="Resources\tiles\mountain.jpg" />
+    <Content Include="Resources\tiles\n.jpg" />
+    <Content Include="Resources\tiles\ne.jpg" />
+    <Content Include="Resources\tiles\nw.jpg" />
+    <Content Include="Resources\tiles\opendoor.jpg" />
+    <Content Include="Resources\tiles\opendoorH.jpg" />
+    <Content Include="Resources\tiles\partman.jpg" />
+    <None Include="Resources\tiles\partman_trans.png" />
+    <Content Include="Resources\tiles\patch.jpg" />
+    <Content Include="Resources\tiles\person.jpg" />
+    <Content Include="Resources\tiles\person2.jpg" />
+    <Content Include="Resources\tiles\person3.jpg" />
+    <Content Include="Resources\tiles\personD.jpg" />
+    <None Include="Resources\tiles\plainsGiant.png" />
+    <Content Include="Resources\tiles\player1.png" />
+    <Content Include="Resources\tiles\purbloom.jpg" />
+    <Content Include="Resources\tiles\raft.png" />
+    <Content Include="Resources\tiles\redbloom.jpg" />
+    <Content Include="Resources\tiles\rockpath.jpg" />
+    <Content Include="Resources\tiles\rocks.jpg" />
+    <None Include="Resources\tiles\sandGiant.png" />
+    <Content Include="Resources\tiles\sea.jpg" />
+    <Content Include="Resources\tiles\sea1.jpg" />
+    <Content Include="Resources\tiles\sea2.jpg" />
+    <Content Include="Resources\tiles\sea3.jpg" />
+    <Content Include="Resources\tiles\sea4.jpg" />
+    <Content Include="Resources\tiles\seaboat.jpg" />
+    <Content Include="Resources\tiles\searock.jpg" />
+    <Content Include="Resources\tiles\searock1.jpg" />
+    <Content Include="Resources\tiles\searock2.jpg" />
+    <Content Include="Resources\tiles\searock3.jpg" />
+    <Content Include="Resources\tiles\searock4.jpg" />
+    <None Include="Resources\tiles\seedbox.png" />
+    <Content Include="Resources\tiles\shutdoor.jpg" />
+    <Content Include="Resources\tiles\shutdoorH.jpg" />
+    <Content Include="Resources\tiles\sign.jpg" />
+    <None Include="Resources\tiles\sign.png" />
+    <None Include="Resources\tiles\silverblade.png" />
+    <Content Include="Resources\tiles\sleep.jpg" />
+    <None Include="Resources\tiles\sleep1.png" />
+    <None Include="Resources\tiles\sleep2.png" />
+    <None Include="Resources\tiles\sleep3.png" />
+    <None Include="Resources\tiles\sleep4.png" />
+    <Content Include="Resources\tiles\smithy.jpg" />
+    <None Include="Resources\tiles\squidling.png" />
+    <None Include="Resources\tiles\snow.jpg" />
+    <Content Include="Resources\tiles\swamp.jpg" />
+    <Content Include="Resources\tiles\swamptree.jpg" />
+    <None Include="Resources\tiles\terrabird.png" />
+    <Content Include="Resources\tiles\town.jpg" />
+    <Content Include="Resources\tiles\tree.jpg" />
+    <Content Include="Resources\tiles\trees.png" />
+    <None Include="Resources\tiles\venomweed.png" />
+    <Content Include="Resources\tiles\wall.jpg" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
