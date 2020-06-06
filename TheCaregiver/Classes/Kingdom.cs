@@ -10,8 +10,6 @@ namespace TheCaregiver.Classes
     {
         public string Name { get; set; }
 
-
-
         public Kingdom() { }
         
     }

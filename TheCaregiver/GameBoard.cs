@@ -14,6 +14,7 @@ using System.Reflection;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TheCaregiver.Dialogs;
 
 namespace TheCaregiver
 {
@@ -165,8 +166,8 @@ namespace TheCaregiver
                         
             richTextBox1.Text = "Game On";
             
-            inventoryPanel.Visible = false;
-            statsPanel.Visible = false;
+           // inventoryPanel.Visible = false;
+           // statsPanel.Visible = false;
             GameTimer.Enabled = true;
 
             //Getting Ready...
@@ -1872,55 +1873,22 @@ namespace TheCaregiver
             // UpdateActionWindow("size");
         }
 
-        private void btnInventory_Click(object sender, EventArgs e)
+        private void LoadInventoryDialog()
         {
-            inventoryPanel.Visible = true;
-
-            lblCoinCnt.Text = player1.coin.ToString();
-            lblFoodCnt.Text = player1.food.ToString();
-            lblWoodCnt.Text = player1.wood.ToString();
-            lblFishCnt.Text = player1.fish.ToString();
+            Inventory ic = new Inventory(player1);
+            ic.StartPosition = FormStartPosition.CenterScreen; 
+            ic.Show(this);  
         }
-
-        private void btnInvClose_Click(object sender, EventArgs e)
-        {
-            inventoryPanel.Visible = false;
-            this.ActiveControl = null;
-            CommandArea.Enabled = false;
-        }
-
 
         #region UIButtons
-        private void btnCharacter_Click(object sender, EventArgs e)
+        private void LoadCharacterDialog()
         {
-            statsPanel.Visible = true;
-
-            pbHealth.Minimum = 0;
-            pbHealth.Maximum = player1.HealthMax;
-            pbHealth.Value = player1.Health;
-            pbHealth.Style = ProgressBarStyle.Blocks;
-            pbHealth.ForeColor = Color.LightCoral;
-            lblHealth.Text = player1.Health + "/" + player1.HealthMax;
-
-
-            txtName.Text = player1.Name;
-            txtStr.Text = player1.Attribute_Strength.ToString();
-            txtCharisma.Text = player1.Attribute_Charisma.ToString();
-            txtAgility.Text = player1.Attribute_Agility.ToString();
-            txtIntellect.Text = player1.Attribute_Intellect.ToString();
-            txtLuck.Text = player1.Attribute_Luck.ToString();
-            txtInsight.Text = player1.Attribute_Insight.ToString();
-        }
-
-        private void btnStatsClose_Click(object sender, EventArgs e)
-        {
-            statsPanel.Visible = false;
-            this.ActiveControl = null;
-            CommandArea.Enabled = false;
+            CharacterCard cc = new CharacterCard(player1);
+            cc.StartPosition = FormStartPosition.CenterScreen;
+            cc.Show(this);
         }
 
         #endregion
-
 
         #region KeyPress
         private void NonSpecialKeyPress(KeyEventArgs key)
@@ -1967,26 +1935,19 @@ namespace TheCaregiver
 
                 //south
                 case Keys.Down:
-                    if (key.Shift)
+                    player1.FormerTile = player1.CurrentTile;
+                    player1.CurrentTile = ScreenMatrix[5, 6];
+
+                    ChangeStep(player1.X, player1.Y + 1);
+
+                    if (OkToStep() && PlayerStillOnMap(key.KeyCode))
+                        player1.Y++;
+
+                    if (!PlayerStillOnMap(key.KeyCode))
                     {
-
-                        MessageBox.Show("Saved!");
+                        BackToTheWilderness();  //Great Scott!!
                     }
-                    else
-                    {
-                        player1.FormerTile = player1.CurrentTile;
-                        player1.CurrentTile = ScreenMatrix[5, 6];
-
-                        ChangeStep(player1.X, player1.Y + 1);
-
-                        if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                            player1.Y++;
-
-                        if (!PlayerStillOnMap(key.KeyCode))
-                        {
-                            BackToTheWilderness();  //Great Scott!!
-                        }
-                    }
+                    
 
                     //DiceRoll for event
 
@@ -2233,7 +2194,12 @@ namespace TheCaregiver
                 case Keys.S:
                     //MSG - amount of sleep is random
 
-                    if (!player1.Sleeping)
+                    if (key.Shift)
+                    {
+
+                        MessageBox.Show("Saved!");
+                    }
+                    else if (!player1.Sleeping)
                     {
                         player1.Sleeping = true;
                         player1.SleepCounter = dice.Roll(1, 8);
@@ -2655,7 +2621,15 @@ namespace TheCaregiver
            // ChanceToFlee
         }
 
+        private void helpToolStripButton_Click(object sender, EventArgs e)
+        {
+            LoadCharacterDialog();
+        }
 
+        private void pasteToolStripButton_Click(object sender, EventArgs e)
+        {
+            LoadInventoryDialog();
+        }
     }
 }
 

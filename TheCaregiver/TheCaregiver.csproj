@@ -80,6 +80,18 @@
     <Compile Include="Classes\Reality.cs" />
     <Compile Include="Classes\Armour.cs" />
     <Compile Include="Classes\Weapon.cs" />
+    <Compile Include="Dialogs\CharacterCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\CharacterCard.Designer.cs">
+      <DependentUpon>CharacterCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\Inventory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\Inventory.Designer.cs">
+      <DependentUpon>Inventory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,6 +128,12 @@
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\CharacterCard.resx">
+      <DependentUpon>CharacterCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\Inventory.resx">
+      <DependentUpon>Inventory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
