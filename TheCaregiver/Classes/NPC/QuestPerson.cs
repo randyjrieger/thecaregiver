@@ -9,26 +9,6 @@ namespace TheCaregiver.Classes
 {
     public class QuestPerson : NPC
     {
-
-        public string Name { get; set; }
-
-        public Bitmap Tile { get; set; }
-        public NPCType Type { get; set; }
-
-        public int X { get; set; }
-        public int Y { get; set; }
-
-        public int ScreenX { get; set; }
-        public int ScreenY { get; set; }
-
-        public int CurrentTile { get; set; }
-        public int FormerTile { get; set; }
-
-        public bool checked_north { get; set; }
-        public bool checked_south { get; set; }
-        public bool checked_west { get; set; }
-        public bool checked_east { get; set; }
-        public int[] AllowedTiles { get; set; }
         public QuestPerson()
         {
             //rockpath

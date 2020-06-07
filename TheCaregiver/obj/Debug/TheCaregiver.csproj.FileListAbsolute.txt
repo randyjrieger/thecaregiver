@@ -45,7 +45,6 @@ C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\bin\Debug\Newtons
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\bin\Debug\AWSSDK.Core.pdb
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\bin\Debug\AWSSDK.Core.xml
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\bin\Debug\Newtonsoft.Json.xml
-C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.csprojAssemblyReference.cache
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.AboutBox.resources
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.Form2.resources
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.GameBoard.resources
@@ -60,3 +59,4 @@ C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCare
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.pdb
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.Dialogs.CharacterCard.resources
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.Dialogs.Inventory.resources
+C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.csprojAssemblyReference.cache

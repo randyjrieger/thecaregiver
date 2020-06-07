@@ -5,16 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using TheCaregiver.World;
 using TheCaregiver.Classes;
+using TheCaregiver.People;
 
 namespace TheCaregiver.Player1
 {
-    public class Player
-    {
-        public string Name { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+    public class Player : Person    {
 
-        public int Health { get; set; }
         public int HealthMax { get; set; }
         public int PreviousMapX { get; set; }
         public int PreviousMapY { get; set; }
@@ -46,9 +42,6 @@ namespace TheCaregiver.Player1
         public bool Dazed { get; set; }
         public int SleepCounter { get; set; }
         public bool Sailing { get; set; }
-
-        public int CurrentTile { get; set; }
-        public int FormerTile { get; set; }
 
         public bool HasSeed { get; set; }
         public bool HasHoe { get; set; }

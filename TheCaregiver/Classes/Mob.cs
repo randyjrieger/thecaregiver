@@ -23,7 +23,7 @@ namespace TheCaregiver.Classes
     }
 
 
-        public class Mob : ICloneable
+    public class Mob : ICloneable
     {
         //Attributes
         public string Name { get; set; }

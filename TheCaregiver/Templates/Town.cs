@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TheCaregiver.Templates;
 
-namespace TheCaregiver.People
+namespace TheCaregiver.Classes
 {
-
-    public class Person
+    public class Town : ITown
     {
         public string Name { get; set; }
-
-        public Person() { }
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }

@@ -70,7 +70,9 @@
     <Compile Include="Classes\MobCard.cs" />
     <Compile Include="Classes\MobHelper.cs" />
     <Compile Include="Classes\NPC\NPC.cs" />
-    <Compile Include="Classes\Person.cs" />
+    <Compile Include="Templates\ILocation.cs" />
+    <Compile Include="Templates\Location.cs" />
+    <Compile Include="Templates\Person.cs" />
     <Compile Include="Classes\Mob.cs" />
     <Compile Include="Classes\Player.cs" />
     <Compile Include="Classes\MapRegion.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Classes\Tile.cs" />
     <Compile Include="Classes\Reality.cs" />
     <Compile Include="Classes\Armour.cs" />
+    <Compile Include="Templates\Town.cs" />
     <Compile Include="Classes\Weapon.cs" />
     <Compile Include="Dialogs\CharacterCard.cs">
       <SubType>Form</SubType>
@@ -120,6 +123,9 @@
     <Compile Include="Splash.Designer.cs">
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
+    <Compile Include="Templates\IMonster.cs" />
+    <Compile Include="Templates\ITown.cs" />
+    <Compile Include="Templates\IPerson.cs" />
     <Compile Include="Tiles.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
