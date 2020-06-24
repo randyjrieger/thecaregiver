@@ -10,7 +10,7 @@ namespace TheCaregiver.Classes
 {
     public class CombatManager
     {
-        protected Mob Opponent { get; set; }
+        protected Monster Opponent { get; set; }
         public NPC NPCOpponent { get; set; }
 
         protected Timer CombatTimer { get; set; }
@@ -28,7 +28,7 @@ namespace TheCaregiver.Classes
 
         }
 
-        public CombatManager(Mob mob, Player player1)
+        public CombatManager(Monster mob, Player player1)
         {
             //Interval is 1 second for now (1000 milliseconds)
          //   CombatTimer.Interval = 1000;
@@ -63,7 +63,7 @@ namespace TheCaregiver.Classes
 
         public void FinishRound()
         {
-            //Check Flee Change of Mob
+            //Check Flee Change of Monster
 
 
         }

@@ -28,8 +28,8 @@ namespace TheCaregiver
         public Player player1;
         public Map CurrentMap { get; set; }
         List<MapRegion> regions = new List<MapRegion>();
-        public List<Mob> MobTypes = new List<Mob>();
-        public List<Mob> Mobs = new List<Mob>();
+        public List<Monster> MonsterTypes = new List<Monster>();
+        public List<Monster> Monsters = new List<Monster>();
         public List<Merchant> Merchants = new List<Merchant>();
         public List<QuestPerson> QuestPeople = new List<QuestPerson>();
         public List<Weapon> Weapons = new List<Weapon>();
@@ -40,14 +40,14 @@ namespace TheCaregiver
         public byte[,] ScreenMatrix = new byte[BOARD_HEIGHT, BOARD_WIDTH];
         public bool startTimers = false;
         public GameState gameState;
-        protected Mob Opponent { get; set; }
+        protected Monster Opponent { get; set; }
         //Timers
         private List<Tile> Tiles = new List<Tile>();
         public CombatManager combatmanager = new CombatManager();
 
 
 
-        private List<Bitmap> MobTiles = new List<Bitmap>();
+        private List<Bitmap> MonsterTiles = new List<Bitmap>();
         private Dice dice = new Dice();
         public GameMode Mode { get; set; }
         public GameBoard(GameMode mode)
@@ -91,9 +91,9 @@ namespace TheCaregiver
                 World_Refresh(Place.Wilderness);
 
 
-                MobHelper.CreateMobs(regions);
-                Mobs = MobHelper.SpawnMobs(regions);
-                //SpawnMobs(regions); 
+                MonsterHelper.CreateMonsters(regions);
+                Monsters = MonsterHelper.SpawnMonsters(regions);
+                //SpawnMonsters(regions); 
                 StartNewGame();
             }
             else
@@ -137,15 +137,15 @@ namespace TheCaregiver
            
                 World_Refresh(player1.Map);
 
-                MobHelper.CreateMobs(regions);
-                Mobs.Clear();
-                Mobs = JsonConvert.DeserializeObject<List<Mob>>(dic["mobs"].ToString());
+                MonsterHelper.CreateMonsters(regions);
+                Monsters.Clear();
+                Monsters = JsonConvert.DeserializeObject<List<Monster>>(dic["mobs"].ToString());
 
-                foreach(Mob m in Mobs)
+                foreach(Monster m in Monsters)
                 {
                     if (m.Tile == null)
                     {
-                        m.Tile = MobHelper.MobBitmapPairing[m.Name.ToString()];
+                        m.Tile = MonsterHelper.MonsterBitmapPairing[m.Name.ToString()];
                     }
                 }
             }
@@ -694,9 +694,9 @@ namespace TheCaregiver
 
             player1.CurrentTile = ScreenMatrix[5, 5];
 
-            //Mobs
-            //search collection of Mobs for an X -5 or +5 and Y -5 and + 5 of player
-            //   Mobs[0].CurrentTile = ScreenMatrix[3, 3];
+            //Monsters
+            //search collection of Monsters for an X -5 or +5 and Y -5 and + 5 of player
+            //   Monsters[0].CurrentTile = ScreenMatrix[3, 3];
 
 
         }
@@ -718,11 +718,11 @@ namespace TheCaregiver
             Bitmap mob1Bmp = null;
             Bitmap merchantBmp = null;
             Bitmap QuestPersonBmp = null;
-            List<Mob> MobsOnScreen = new List<Mob>();
+            List<Monster> MonstersOnScreen = new List<Monster>();
             List<Merchant> MerchantOnScreen = new List<Merchant>();
             List<QuestPerson> PeopleOnScreen = new List<QuestPerson>();
 
-            Mob monster;
+            Monster monster;
             Merchant merchant;
             QuestPerson person;
 
@@ -741,17 +741,17 @@ namespace TheCaregiver
 
             if (gameState.CurrentMap.MAPID == Place.Wilderness)
             {
-                foreach (Mob m in Mobs)
+                foreach (Monster m in Monsters)
                 {
                     //determine if on screen somehow
                     if (IsTargetOnScreen(x1, x2, y1, y2, m))
                     {
-                        //MobsOnScreen.Add Mob with a new X, Y for screen
-                        MobsOnScreen.Add(m);
+                        //MonstersOnScreen.Add Monster with a new X, Y for screen
+                        MonstersOnScreen.Add(m);
                     }
                 }
 
-                //then we draw MobsOnScreen only
+                //then we draw MonstersOnScreen only
             }
             else if (gameState.CurrentMap.MAPID == Place.Lancer)
             {
@@ -760,7 +760,7 @@ namespace TheCaregiver
                     //determine if on screen somehow
                     if (IsTargetOnScreen(x1, x2, y1, y2, m))
                     {
-                        //MobsOnScreen.Add Mob with a new X, Y for screen
+                        //MonstersOnScreen.Add Monster with a new X, Y for screen
                         MerchantOnScreen.Add(m);
                     }
                 }
@@ -770,7 +770,7 @@ namespace TheCaregiver
                     //determine if on screen somehow
                     if (IsTargetOnScreen(x1, x2, y1, y2, m))
                     {
-                        //MobsOnScreen.Add Mob with a new X, Y for screen
+                        //MonstersOnScreen.Add Monster with a new X, Y for screen
                         PeopleOnScreen.Add(m);
                     }
                 }
@@ -921,7 +921,7 @@ namespace TheCaregiver
 
                     if (gameState.CurrentMap.MAPID == Place.Wilderness)
                     {
-                        monster = MobsOnScreen.Find(x => x.ScreenX == i && x.ScreenY == j);
+                        monster = MonstersOnScreen.Find(x => x.ScreenX == i && x.ScreenY == j);
 
                         if (monster != null)
                         {
@@ -988,8 +988,8 @@ namespace TheCaregiver
 
         public void BuildMonsterTypes()
         {
-            MobTiles.Add(new Bitmap(TheCaregiver.Tiles.ettin1));
-            MobTiles.Add(new Bitmap(TheCaregiver.Tiles.partman_trans));
+            MonsterTiles.Add(new Bitmap(TheCaregiver.Tiles.ettin1));
+            MonsterTiles.Add(new Bitmap(TheCaregiver.Tiles.partman_trans));
 
         }
 
@@ -1009,9 +1009,9 @@ namespace TheCaregiver
 
                 }
             }
-            else if (o is Mob)
+            else if (o is Monster)
             {
-                Mob meanie = (Mob)o;
+                Monster meanie = (Monster)o;
 
                 if ((meanie.X >= x1) && (meanie.X <= x2) && (meanie.Y >= y1) && (meanie.Y <= y2))
                 {
@@ -1131,16 +1131,16 @@ namespace TheCaregiver
 
             #endregion
 
-            #region Mob Movement
+            #region Monster Movement
 
             bool movecheck;
             movecheck = false;
 
             if (gameState.CurrentMap.MAPID == Place.Wilderness)
             {
-                foreach (Mob m in Mobs)
+                foreach (Monster m in Monsters)
                 {
-                    //if this Mob is attacking the Player, they don't move
+                    //if this Monster is attacking the Player, they don't move
                     if (m.CombatMode)
                     {
                        // AttackTurn(m);
@@ -1232,16 +1232,16 @@ namespace TheCaregiver
             }
             #endregion
 
-            #region Mob Nearby Check
+            #region Monster Nearby Check
             if (gameState.CurrentMap.MAPID == Place.Wilderness)
             {
                 if ((!CombatTimer.Enabled) && (!player1.CombatMode))
                 {
-                //    Mob meanie = Mobs.Find(m => m.CombatMode);
+                //    Monster meanie = Monsters.Find(m => m.CombatMode);
                 //}
                 //else
                 //{
-                    Mob meanie = (Mob)TileCheckForInteraction(InteractionType.Mob);
+                    Monster meanie = (Monster)TileCheckForInteraction(InteractionType.Monster);
 
                    // if ((meanie != null) && (meanie.Aggressive))
                     if (meanie != null) 
@@ -1421,7 +1421,7 @@ namespace TheCaregiver
             CombatTimer.Stop();
             CombatTimer.Enabled = false;
         }
-        //private void AttackTurn(Mob m)
+        //private void AttackTurn(Monster m)
         //{
         //    if (player1.AttackTurn)
         //    {
@@ -1429,16 +1429,16 @@ namespace TheCaregiver
 
         //        //Roll for Damage
 
-        //        //Health check on Mob
+        //        //Health check on Monster
 
         //        UpdateActionWindow("You killed de beast!");
-        //        gameState.PlayerMobConflict = false;
+        //        gameState.PlayerMonsterConflict = false;
         //        m.OpponentInBattle = false;
 
         //        player1.AttackTurn = false;
         //        m.AttackTurn = true;
 
-        //        //Respawn Mob
+        //        //Respawn Monster
         //    }
         //    else if (m.AttackTurn)
         //    {
@@ -1450,7 +1450,7 @@ namespace TheCaregiver
 
         //        UpdateActionWindow("You dead boi!");
 
-        //        gameState.PlayerMobConflict = false;
+        //        gameState.PlayerMonsterConflict = false;
         //        m.OpponentInBattle = false;
 
 
@@ -1700,15 +1700,15 @@ namespace TheCaregiver
             return found;
         }
 
-        //private Mob TileCheckForMonster()
+        //private Monster TileCheckForMonster()
         //{
-        //    Mob meanie = new Mob();
+        //    Monster meanie = new Monster();
 
         //    for (int i = player1.X-1; i <= player1.X + 1; i++)
         //    {
         //        for (int j = player1.Y - 1; j <= player1.Y + 1; j++)
         //        {
-        //            meanie = Mobs.Find(m => (m.X == i) && (m.Y == j));
+        //            meanie = Monsters.Find(m => (m.X == i) && (m.Y == j));
 
         //            if (meanie != null)
         //                return meanie;
@@ -1722,7 +1722,7 @@ namespace TheCaregiver
 
         public enum InteractionType
         {
-            Mob = 0,
+            Monster = 0,
             Merchant = 1,
             QuestPerson = 2
 
@@ -1731,15 +1731,15 @@ namespace TheCaregiver
 
         private Object TileCheckForInteraction(InteractionType intType)
         {
-            if (intType == InteractionType.Mob)
+            if (intType == InteractionType.Monster)
             {
-                Mob meanie = new Mob();
+                Monster meanie = new Monster();
 
                 for (int i = player1.X - 1; i <= player1.X + 1; i++)
                 {
                     for (int j = player1.Y - 1; j <= player1.Y + 1; j++)
                     {
-                        meanie = Mobs.Find(m => (m.X == i) && (m.Y == j));
+                        meanie = Monsters.Find(m => (m.X == i) && (m.Y == j));
 
                         if (meanie != null)
                             return meanie;
@@ -2461,7 +2461,7 @@ namespace TheCaregiver
                 {
                     { "player1", player1 },
                     { "gamestate", gameState},
-                    { "mobs", Mobs }
+                    { "mobs", Monsters }
                 };
                 
                 string json = JsonConvert.SerializeObject(dic, Formatting.Indented);
@@ -2563,7 +2563,7 @@ namespace TheCaregiver
                             player1.Opponent.OpponentInBattle = false;
 
                             //Start Respawn counter - 10 seconds
-                            MobHelper.ReSpawnMob(Mobs, player1);
+                            MonsterHelper.ReSpawnMonster(Monsters, player1);
 
                         }
 

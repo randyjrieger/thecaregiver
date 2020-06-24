@@ -31,7 +31,7 @@ namespace TheCaregiver.Player1
         public bool AttackTurn { get; set; }
         public Weapon EquipedWeapon { get; set; }
         public Armour EquipedArmour{ get; set; }
-        public Mob Opponent { get; set; }
+        public Monster Opponent { get; set; }
 
         public bool CombatMode { get; set; }
         public bool NextToAttack { get; set; }

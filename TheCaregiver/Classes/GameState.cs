@@ -25,7 +25,7 @@ namespace TheCaregiver.World
         public Map CurrentMap { get; set; }
         public Map PreviousMap { get; set; }
 
-        public bool PlayerMobConflict { get; set; }
+        public bool PlayerMonsterConflict { get; set; }
 
         public Reality reality { get; set; }
         public int seedPolt { get; set; }

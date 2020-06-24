@@ -8,5 +8,9 @@ namespace TheCaregiver.Templates
 {
     public interface IMonster
     {
+        object Clone();
+        bool CheckNextStep(int tile);
+
+        void DetermineStartingHealth();
     }
 }

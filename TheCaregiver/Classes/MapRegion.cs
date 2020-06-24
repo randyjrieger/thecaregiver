@@ -23,14 +23,15 @@ namespace TheCaregiver.Classes
         NordthilanBelly = 11,
         NordthilanSpine = 12,
         Swamp = 13,
-        Ocean = 14
+        Ocean = 14,
+        SouthWind = 15
     }
 
     public class MapRegion
     {
         public int RegionID { get; set; }
         public MapRegionType Type { get; set; }
-        public int MaxMobCount { get; set; }
+        public int MaxMonsterCount { get; set; }
 
         public MapRegion(MapRegionType type, int x1, int x2, int y1, int y2, int maxmobs)
         {
@@ -39,7 +40,7 @@ namespace TheCaregiver.Classes
             X2 = x2;
             Y1 = y1;
             Y2 = y2;
-            MaxMobCount = maxmobs;
+            MaxMonsterCount = maxmobs;
         }
         public int X1 { get; set; }
         public int X2 { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TheCaregiver.Classes
 {
 
-    public class MobCard
+    public class MonsterCard
     {
         public int Name { get; set; }
         public Commonality Commonality { get; set; }
@@ -26,7 +26,7 @@ namespace TheCaregiver.Classes
         public int SuddenAppearance { get; set; }
         public int AllowedTiles { get; set; }
 
-        public MobCard()
+        public MonsterCard()
         {
             RegionsFound = new List<MapRegion>();
         }
