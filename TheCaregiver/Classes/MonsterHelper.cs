@@ -5,57 +5,58 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using TheCaregiver.Player1;
+using TheCaregiver.World;
 
 namespace TheCaregiver.Classes
 {
-    public static class MobHelper
+    public static class MonsterHelper
     {
-        public static Dictionary<string, Bitmap> MobBitmapPairing = new Dictionary<string, Bitmap>();
-        public static List<Mob> MobTypes = new List<Mob>();
+        public static Dictionary<string, Bitmap> MonsterBitmapPairing = new Dictionary<string, Bitmap>();
+        public static List<Monster> MonsterTypes = new List<Monster>();
 
-        public static void CreateMobs(List<MapRegion> regions)
+        public static void CreateMonsters(List<MapRegion> regions)
         {
             Dice dice = new Dice();
-            Mob newMob = new Mob();
+            Monster newMonster = new Monster();
             int healthRoll = 6;
 
-            //Create Mob-Bitmap Pairings
-            MobBitmapPairing.Add("Ettin", new Bitmap(TheCaregiver.Tiles.ettin1));
-            MobBitmapPairing.Add("Rock Spider", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Terrabird", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Bandit", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Plains Giant", new Bitmap(TheCaregiver.Tiles.plainsGiant));
-            MobBitmapPairing.Add("Sand Giant", new Bitmap(TheCaregiver.Tiles.sandGiant));
-            MobBitmapPairing.Add("Emerald Giant", new Bitmap(TheCaregiver.Tiles.emeraldGiant));
-            MobBitmapPairing.Add("Amber Giant", new Bitmap(TheCaregiver.Tiles.amberGiant));
-            MobBitmapPairing.Add("Amber Beetle", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Amber Hatchling", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Orc", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Treant", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Centaur", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Squidling", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Water Spider", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Frog Jelly", new Bitmap(TheCaregiver.Tiles.frogjelly));
-            MobBitmapPairing.Add("Shark", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Merman", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Great Squid", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Kobold", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Goblin", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Fire Turtle", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Hell Hound", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Fire Giant", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Swamp Turtle", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Scorpian", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Shadow", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Sand Worm", new Bitmap(TheCaregiver.Tiles.terrabird));
-            MobBitmapPairing.Add("Venom Weed", new Bitmap(TheCaregiver.Tiles.venomweed));
-            MobBitmapPairing.Add("Fire Ants", new Bitmap(TheCaregiver.Tiles.fireants));
+            //Create Monster-Bitmap Pairings
+            MonsterBitmapPairing.Add("Ettin", new Bitmap(TheCaregiver.Tiles.ettin1));
+            MonsterBitmapPairing.Add("Rock Spider", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Terrabird", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Bandit", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Plains Giant", new Bitmap(TheCaregiver.Tiles.plainsGiant));
+            MonsterBitmapPairing.Add("Sand Giant", new Bitmap(TheCaregiver.Tiles.sandGiant));
+            MonsterBitmapPairing.Add("Emerald Giant", new Bitmap(TheCaregiver.Tiles.emeraldGiant));
+            MonsterBitmapPairing.Add("Amber Giant", new Bitmap(TheCaregiver.Tiles.amberGiant));
+            MonsterBitmapPairing.Add("Amber Beetle", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Amber Hatchling", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Orc", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Treant", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Centaur", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Squidling", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Water Spider", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Frog Jelly", new Bitmap(TheCaregiver.Tiles.frogjelly));
+            MonsterBitmapPairing.Add("Shark", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Merman", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Great Squid", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Kobold", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Goblin", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Fire Turtle", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Hell Hound", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Fire Giant", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Swamp Turtle", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Scorpian", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Shadow", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Sand Worm", new Bitmap(TheCaregiver.Tiles.terrabird));
+            MonsterBitmapPairing.Add("Venom Weed", new Bitmap(TheCaregiver.Tiles.venomweed));
+            MonsterBitmapPairing.Add("Fire Ants", new Bitmap(TheCaregiver.Tiles.fireants));
 
             //Create Monsters
 
             //FOOTHILLS
             //Common -  healthRoll = dice.Roll(3, 6);
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Ettin",
                 Health = healthRoll,
@@ -72,16 +73,16 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "An Ettin towers above you. He looks unimpressed.",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.HyleoSouthPlains, MapRegionType.HyleoPlains, MapRegionType.NordthilanHead },
-                Tile = MobBitmapPairing["Ettin"],
+                SpawnRegion = { MapRegionType.HyleoForestEast, MapRegionType.HyleoForestWest, MapRegionType.NordthilanNeck, MapRegionType.NordArm },
+                Tile = MonsterBitmapPairing["Ettin"],
                 AllowedTiles = new int[] { 120, 109 }
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
 
             //UnCommon - healthRoll = dice.Roll(18, 30);
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Rock Spider",
                 Health = healthRoll,
@@ -99,15 +100,15 @@ namespace TheCaregiver.Classes
                 Aggressive = false,
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.HyleoSouthPlains, MapRegionType.HyleoPlains, MapRegionType.LavaRegion },
-                Tile = MobBitmapPairing["Rock Spider"],
+                SpawnRegion = { MapRegionType.HyleoPlains, MapRegionType.HyleoSouthPlains, MapRegionType.HyleoSouthPlains, MapRegionType.HyleoDesert, MapRegionType.LavaRegion, MapRegionType.NordArm },
+                Tile = MonsterBitmapPairing["Rock Spider"],
                 AllowedTiles = new int[] { 120, 109, 70 },
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Rare - healthRoll = dice.Roll(18, 30);
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Terrabird",
                 Health = healthRoll,
@@ -126,17 +127,17 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "A terrifying bird griffin like creature swoops toward you!",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.NordthilanNeck, MapRegionType.LavaRegion },
-                Tile = MobBitmapPairing["Terrabird"],
+                SpawnRegion = { MapRegionType.NordthilanNeck, MapRegionType.LavaRegion, MapRegionType.NordthilanHead },
+                Tile = MonsterBitmapPairing["Terrabird"],
                 AllowedTiles = new int[] { 109, 77 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //GRASS
             //Common - 
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Bandit",
                 Health = healthRoll,
@@ -146,8 +147,6 @@ namespace TheCaregiver.Classes
                 DamageMax = 6,
                 
                 NumberOfAttacks = 1,
-                SpecialAttack = SpecialAttack.Blind,
-                SpecialAttackDescription = "Bright Ray of Colour",
                 MinHourVisible = 7,
                 MaxHourVisible = 17,
                 SuddenAppearance = true,
@@ -155,17 +154,17 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "A Bandit steps out of the shadows. You are his next vicitm.",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.HyleoForestWest, MapRegionType.NordArm, MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.NordthilanHead, MapRegionType.HyleoPlains, MapRegionType.HyleoSouthPlains, MapRegionType.Otalio },
-                Tile = MobBitmapPairing["Bandit"],
+                SpawnRegion = { MapRegionType.HyleoForestWest, MapRegionType.HyleoSouthPlains, MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.SouthWind, MapRegionType.HyleoPlains },
+                Tile = MonsterBitmapPairing["Bandit"],
                 AllowedTiles = new int[] { 120, 70, 89 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
 
             //Rare - 
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Plains Giant",
                 Health = healthRoll,
@@ -184,16 +183,16 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "You see a Plains Giant take notice of you. That's never good.",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.HyleoPlains, MapRegionType.HyleoSouthPlains },
-                Tile = MobBitmapPairing["Plains Giant"],
+                SpawnRegion = { MapRegionType.HyleoPlains, MapRegionType.HyleoSouthPlains, MapRegionType.NordthilanBelly, MapRegionType.SouthWind },
+                Tile = MonsterBitmapPairing["Plains Giant"],
                 AllowedTiles = new int[] { 120, 70, 89 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Rare - 
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Sand Giant",
                 Health = healthRoll,
@@ -213,15 +212,15 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = {  MapRegionType.HyleoDesert },
-                Tile = MobBitmapPairing["Sand Giant"],
+                Tile = MonsterBitmapPairing["Sand Giant"],
                 AllowedTiles = new int[] { 109, 58 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Emerald Giant
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Emerald Giant",
                 Health = healthRoll,
@@ -240,16 +239,16 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "An Emerald Giant towers over you. You feel powerless.",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.NordthilanHead, MapRegionType.NordthilanSpine },
-                Tile = MobBitmapPairing["Emerald Giant"],
+                SpawnRegion = { MapRegionType.NordthilanHead, MapRegionType.NordthilanSpine, MapRegionType.Swamp },
+                Tile = MonsterBitmapPairing["Emerald Giant"],
                 AllowedTiles = new int[] { 120, 70, 89, 109 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Amber Giant
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Amber Giant",
                 Health = healthRoll,
@@ -267,16 +266,16 @@ namespace TheCaregiver.Classes
                 Aggressive = false,
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.Apathy },
-                Tile = MobBitmapPairing["Amber Giant"],
+                SpawnRegion = { MapRegionType.Apathy , MapRegionType.NordthilanSpine, MapRegionType.NordthilanNeck},
+                Tile = MonsterBitmapPairing["Amber Giant"],
                 AllowedTiles = new int[] { 120, 70, 89, 109 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Amber Beetle
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Amber Beetle",
                 Health = healthRoll,
@@ -294,16 +293,16 @@ namespace TheCaregiver.Classes
                 Aggressive = false,
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.Apathy },
-                Tile = MobBitmapPairing["Amber Beetle"],
+                SpawnRegion = { MapRegionType.Apathy, MapRegionType.NordthilanBelly, MapRegionType.NordthilanSpine },
+                Tile = MonsterBitmapPairing["Amber Beetle"],
                 AllowedTiles = new int[] { 120, 70, 89, 109 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Amber Beetle
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Amber Hatchling",
                 Health = healthRoll,
@@ -321,16 +320,16 @@ namespace TheCaregiver.Classes
                 Aggressive = false,
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.Apathy },
-                Tile = MobBitmapPairing["Amber Hatchling"],
+                SpawnRegion = { MapRegionType.Apathy, MapRegionType.NordthilanBelly, MapRegionType.NordthilanSpine },
+                Tile = MonsterBitmapPairing["Amber Hatchling"],
                 AllowedTiles = new int[] { 120, 70, 89, 109 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Common
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Orc",
                 Health = healthRoll,
@@ -349,16 +348,16 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "An orc jumps up from behind you.",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.HyleoForestWest, MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.NordthilanHead, MapRegionType.HyleoPlains, MapRegionType.HyleoSouthPlains, MapRegionType.NordArm },
-                Tile = MobBitmapPairing["Orc"],
+                SpawnRegion = { MapRegionType.HyleoForestWest, MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.NordthilanHead, MapRegionType.HyleoPlains, MapRegionType.HyleoSouthPlains },
+                Tile = MonsterBitmapPairing["Orc"],
                 AllowedTiles = new int[] { 120, 70, 89 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Rare -Treant
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Treant",
                 Health = healthRoll,
@@ -377,16 +376,16 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.HyleoForestEast, MapRegionType.NordthilanNeck, MapRegionType.NordthilanHead, MapRegionType.NordthilanBelly },
-                Tile = MobBitmapPairing["Treant"],
+                Tile = MonsterBitmapPairing["Treant"],
                 AllowedTiles = new int[] { 89 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
 
             //UnCommon
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Centaur",
                 Health = healthRoll,
@@ -405,18 +404,18 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "A centaur gallops toward you, hate in his eyes!",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.LavaRegion, MapRegionType.NordthilanBelly, MapRegionType.NordthilanHead, MapRegionType.NordthilanNeck },
-                Tile = MobBitmapPairing["Centaur"],
+                SpawnRegion = { MapRegionType.NordthilanBelly, MapRegionType.SouthWind },
+                Tile = MonsterBitmapPairing["Centaur"],
                 AllowedTiles = new int[] { 120, 77, 109 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //OCEAN
-            //Create the Mob
+            //Create the Monster
             //Common
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Squidling",
                 Health = healthRoll,
@@ -433,14 +432,14 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.Ocean, MapRegionType.HyleoForestWest, MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly },
-                Tile = MobBitmapPairing["Squidling"],
+                Tile = MonsterBitmapPairing["Squidling"],
                 AllowedTiles = new int[] { 44, 46 }
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Water Spider - Common
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Water Spider",
                 Health = healthRoll,
@@ -458,14 +457,14 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.Ocean, MapRegionType.HyleoForestWest, MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly },
-                Tile = MobBitmapPairing["Water Spider"],
+                Tile = MonsterBitmapPairing["Water Spider"],
                 AllowedTiles = new int[] { 44 }
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Frog Jelly - UnCommon
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Frog Jelly",
                 Health = healthRoll,
@@ -482,15 +481,15 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "A terrifying gelatinous frog like creature jumps at you!",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.Swamp, MapRegionType.HyleoSouthPlains, MapRegionType.HyleoForestWest, MapRegionType.HyleoForestEast },
-                Tile = MobBitmapPairing["Frog Jelly"],
+                SpawnRegion = { MapRegionType.HyleoPlains, MapRegionType.HyleoSouthPlains, MapRegionType.NordArm, MapRegionType.Swamp },
+                Tile = MonsterBitmapPairing["Frog Jelly"],
                 AllowedTiles = new int[] { 44, 115 }
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Shark - Uncommon
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Shark",
                 Health = healthRoll,
@@ -508,14 +507,14 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.NordArm, MapRegionType.NordthilanBelly, MapRegionType.Otalio, MapRegionType.Ocean },
-                Tile = MobBitmapPairing["Shark"],
+                Tile = MonsterBitmapPairing["Shark"],
                 AllowedTiles = new int[] { 44, 46 }
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Merman - Uncommon
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Merman",
                 Health = healthRoll,
@@ -532,14 +531,14 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.NordArm, MapRegionType.NordthilanBelly, MapRegionType.Ocean },
-                Tile = MobBitmapPairing["Merman"],
+                Tile = MonsterBitmapPairing["Merman"],
                 AllowedTiles = new int[] { 44, 46 }
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Great Squid - Rare
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Great Squid",
                 Health = healthRoll,
@@ -557,14 +556,14 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.Ocean, MapRegionType.Otalio },
-                Tile = MobBitmapPairing["Great Squid"],
+                Tile = MonsterBitmapPairing["Great Squid"],
                 AllowedTiles = new int[] { 46 }
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Kobold - Common
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Kobold",
                 Health = healthRoll,
@@ -583,16 +582,16 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "A kobold appears beside you, ready to attack.",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.HyleoForestWest, MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.NordthilanHead },
-                Tile = MobBitmapPairing["Kobold"],
+                SpawnRegion = { MapRegionType.HyleoForestWest, MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.NordthilanSpine,  MapRegionType.SouthWind },
+                Tile = MonsterBitmapPairing["Kobold"],
                 AllowedTiles = new int[] { 70, 89 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Goblin - UnCommon
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Goblin",
                 Health = healthRoll,
@@ -611,16 +610,16 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "A goblin appears from out of the shadows.",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.NordthilanHead, MapRegionType.NordthilanBelly, MapRegionType.NordthilanSpine, MapRegionType.NordthilanNeck },
-                Tile = MobBitmapPairing["Goblin"],
+                SpawnRegion = { MapRegionType.NordthilanHead, MapRegionType.NordthilanSpine, MapRegionType.NordthilanNeck },
+                Tile = MonsterBitmapPairing["Goblin"],
                 AllowedTiles = new int[] { 109, 89 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Fire Turtle - Common
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Fire Turtle",
                 Health = healthRoll,
@@ -639,15 +638,15 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.LavaRegion },
-                Tile = MobBitmapPairing["Fire Turtle"],
+                Tile = MonsterBitmapPairing["Fire Turtle"],
                 AllowedTiles = new int[] { 109, 35 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Hell Hound - UnCommon
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Hell Hound",
                 Health = healthRoll,
@@ -667,15 +666,15 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.LavaRegion },
-                Tile = MobBitmapPairing["Hell Hound"],
+                Tile = MonsterBitmapPairing["Hell Hound"],
                 AllowedTiles = new int[] { 35 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Fire Giant
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Fire Giant",
                 Health = healthRoll,
@@ -694,16 +693,16 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "A firey, monstrous giant appears before you. From whence did it come? No matter, you're in trouble.",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.NordthilanHead, MapRegionType.NordArm },
-                Tile = MobBitmapPairing["Fire Giant"],
+                SpawnRegion = { MapRegionType.LavaRegion },
+                Tile = MonsterBitmapPairing["Fire Giant"],
                 AllowedTiles = new int[] { 35, 109 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Common -Swamp Turtle
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Swamp Turtle",
                 Health = healthRoll,
@@ -722,16 +721,16 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.Swamp },
-                Tile = MobBitmapPairing["Swamp Turtle"],
+                Tile = MonsterBitmapPairing["Swamp Turtle"],
                 AllowedTiles = new int[] { 115 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
 
             //Shark - Uncommon
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Scorpian",
                 Health = healthRoll,
@@ -749,14 +748,14 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = { MapRegionType.HyleoDesert, MapRegionType.NordthilanNeck},
-                Tile = MobBitmapPairing["Scorpian"],
+                Tile = MonsterBitmapPairing["Scorpian"],
                 AllowedTiles = new int[] { 109, 58 }
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Rare - Shadow
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Shadow",
                 Health = healthRoll,
@@ -776,15 +775,15 @@ namespace TheCaregiver.Classes
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
                 SpawnRegion = {MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.NordthilanHead, MapRegionType.NordArm },
-                Tile = MobBitmapPairing["Shadow"],
+                Tile = MonsterBitmapPairing["Shadow"],
                 AllowedTiles = new int[] { 109, 89 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Sand Worm
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Sand Worm",
                 Health = healthRoll,
@@ -802,16 +801,16 @@ namespace TheCaregiver.Classes
                 Aggressive = false,
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.HyleoForestEast, MapRegionType.NordthilanBelly, MapRegionType.NordthilanHead, MapRegionType.NordArm },
-                Tile = MobBitmapPairing["Sand Worm"],
+                SpawnRegion = { MapRegionType.HyleoDesert },
+                Tile = MonsterBitmapPairing["Sand Worm"],
                 AllowedTiles = new int[] { 109, 58 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Rare - Venom Weed
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Venom Weed",
                 Health = healthRoll,
@@ -829,16 +828,16 @@ namespace TheCaregiver.Classes
                 Aggressive = false,
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.Swamp, MapRegionType.HyleoForestWest, MapRegionType.HyleoSouthPlains, MapRegionType.NordthilanNeck, MapRegionType.NordthilanSpine, MapRegionType.NordthilanHead },
-                Tile = MobBitmapPairing["Venom Weed"],
+                SpawnRegion = { MapRegionType.Swamp, MapRegionType.HyleoForestWest, MapRegionType.HyleoForestEast, MapRegionType.HyleoPlains, MapRegionType.HyleoSouthPlains, MapRegionType.NordArm},
+                Tile = MonsterBitmapPairing["Venom Weed"],
                 AllowedTiles = new int[] { },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
 
             //Common - Fire Ants
-            newMob = new Mob
+            newMonster = new Monster
             {
                 Name = "Fire Ants",
                 Health = healthRoll,
@@ -857,18 +856,18 @@ namespace TheCaregiver.Classes
                 WelcomeMessage = "You suddenly feel covered in burning, tiny bites. You've disurbed a nest of Fire Ants.",
                 ChanceToFlee = 1,
                 FleeThreshold = 1,
-                SpawnRegion = { MapRegionType.Swamp, MapRegionType.HyleoForestEast, MapRegionType.HyleoSouthPlains, MapRegionType.NordthilanSpine, MapRegionType.NordthilanBelly, MapRegionType.NordthilanHead },
-                Tile = MobBitmapPairing["Fire Ants"],
+                SpawnRegion = {  MapRegionType.HyleoDesert, MapRegionType.NordthilanNeck },
+                Tile = MonsterBitmapPairing["Fire Ants"],
                 AllowedTiles = new int[] { 58, 109 },
 
             };
 
-            MobTypes.Add(newMob);
+            MonsterTypes.Add(newMonster);
                        
         }
 
 
-        private static bool FindMobs(Mob mob)
+        private static bool FindMonsters(Monster mob)
         {
           //  if (mob.SpawnRegion.Contains(r.Type))
             {
@@ -899,78 +898,78 @@ namespace TheCaregiver.Classes
 
         }
 
-        public static void ReSpawnMob(List<Mob> MobList, Player player1)
+        public static void ReSpawnMonster(List<Monster> MonsterList, Player player1)
         {
-            // List<Mob> CandidateMobs = null;
-            Mob OpponentToRemove = player1.Opponent;
+            // List<Monster> CandidateMonsters = null;
+            Monster OpponentToRemove = player1.Opponent;
 
             Dice dice = new Dice();
-            Mob CandidateMob = null;
+            Monster CandidateMonster = null;
             Commonality commonality;
             commonality = CommonalityCheck();
             
-            CandidateMob = MobTypes.Find(m => m.Commonality == commonality && m.SpawnRegion.Contains(player1.CurrentRegion.Type));
+            CandidateMonster = MonsterTypes.Find(m => m.Commonality == commonality && m.SpawnRegion.Contains(player1.CurrentRegion.Type));
 
-            CandidateMob.X = dice.Roll(player1.CurrentRegion.X1, player1.CurrentRegion.X2);
-            CandidateMob.Y = dice.Roll(player1.CurrentRegion.Y1, player1.CurrentRegion.Y2);
+            CandidateMonster.X = dice.Roll(player1.CurrentRegion.X1, player1.CurrentRegion.X2);
+            CandidateMonster.Y = dice.Roll(player1.CurrentRegion.Y1, player1.CurrentRegion.Y2);
 
-            //remove as Opponent, should also remove from MobList
+            //remove as Opponent, should also remove from MonsterList
             player1.Opponent = null;
-            MobList.Remove(OpponentToRemove);
-            MobList.Add(CandidateMob);
+            MonsterList.Remove(OpponentToRemove);
+            MonsterList.Add(CandidateMonster);
         }
 
-        public static List<Mob> SpawnMobs(List<MapRegion> regions)
+        public static List<Monster> SpawnMonsters(List<MapRegion> regions)
         {
             Dice dice = new Dice();
-            List<Mob> Mobs = new List<Mob>();
-            List<Mob> SelectedMobs = new List<Mob>();
+            List<Monster> Monsters = new List<Monster>();
+            List<Monster> SelectedMonsters = new List<Monster>();
             Commonality commonality;
-            Mob newMob;
+            Monster newMonster;
 
             //OTALIO - 1 - Don't want anything here
-            // MobTypes.Add(new Mob { X = dice.Roll(regions[0].X1, regions[0].X2), Y = dice.Roll(regions[0].Y1, regions[0].Y2) });
+            // MonsterTypes.Add(new Monster { X = dice.Roll(regions[0].X1, regions[0].X2), Y = dice.Roll(regions[0].Y1, regions[0].Y2) });
 
             foreach (MapRegion r in regions)
             {
                 //skip Otalio
-                for (int i = 1; i < r.MaxMobCount; i++)
+                for (int i = 1; i < r.MaxMonsterCount; i++)
                 {
-                    //What is the Commonality of the new Mob?
-                    SelectedMobs = new List<Mob>();
+                    //What is the Commonality of the new Monster?
+                    SelectedMonsters = new List<Monster>();
 
-                    //Find Mob
-                    // SelectedMobs = MobTypes.FindAll(FindMobs);
+                    //Find Monster
+                    // SelectedMonsters = MonsterTypes.FindAll(FindMonsters);
 
-                    //Commonality of Mob
+                    //Commonality of Monster
                     commonality = CommonalityCheck();
 
                     try
                     {
-                       SelectedMobs = MobTypes.FindAll(m => m.Commonality == commonality && m.SpawnRegion.Contains(r.Type));
+                       SelectedMonsters = MonsterTypes.FindAll(m => m.Commonality == commonality && m.SpawnRegion.Contains(r.Type));
                     }
                     catch (Exception)
                     {
-                        SelectedMobs.Add(MobTypes[0]);
+                        SelectedMonsters.Add(MonsterTypes[0]);
                     }
 
-                    if (SelectedMobs.Count == 0)
+                    if (SelectedMonsters.Count == 0)
                     {
-                        SelectedMobs.Add(MobTypes[0]);
+                        SelectedMonsters.Add(MonsterTypes[0]);
                     }
 
                     //take first mob - skip allowed tile test
-                   // Mobs.Add(new Mob { X = dice.Roll(regions[i].X1, regions[i].X2), Y = dice.Roll(regions[i].Y1, regions[i].Y2) });
-                    newMob = (Mob)SelectedMobs[0].Clone();
-                    newMob.X = dice.Roll(r.X1, r.X2);
-                    newMob.Y = dice.Roll(r.Y1, r.Y2);
-                    Mobs.Add(newMob);
+                   // Monsters.Add(new Monster { X = dice.Roll(regions[i].X1, regions[i].X2), Y = dice.Roll(regions[i].Y1, regions[i].Y2) });
+                    newMonster = (Monster)SelectedMonsters[0].Clone();
+                    newMonster.X = dice.Roll(r.X1, r.X2);
+                    newMonster.Y = dice.Roll(r.Y1, r.Y2);
+                    Monsters.Add(newMonster);
 
                 }
             }
 
 
-            return Mobs;
+            return Monsters;
 
 
 
@@ -978,3 +977,4 @@ namespace TheCaregiver.Classes
         }
     }
 }
+

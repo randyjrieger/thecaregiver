@@ -17,13 +17,13 @@ namespace TheCaregiver.Classes
             Regions.Add(new MapRegion(MapRegionType.Otalio, 423, 426, 97, 100, 1));
 
             //Hyleo Desert
-            Regions.Add(new MapRegion(MapRegionType.HyleoDesert, 374, 450, 112, 134, 8));
+            Regions.Add(new MapRegion(MapRegionType.HyleoDesert, 366, 466, 112, 144, 8));
 
             //Hyleo Lava
-            Regions.Add(new MapRegion(MapRegionType.LavaRegion, 331, 340, 96, 97, 3));
+            Regions.Add(new MapRegion(MapRegionType.LavaRegion, 302, 380, 88, 108, 8));
 
             //Nord Arm
-            Regions.Add(new MapRegion(MapRegionType.NordArm, 255, 300, 101, 106, 2));
+            Regions.Add(new MapRegion(MapRegionType.NordArm, 233, 291, 96, 110, 3));
 
             //Hyleo Forest
             Regions.Add(new MapRegion(MapRegionType.HyleoForestWest, 185, 265, 126, 130, 3));
@@ -39,10 +39,10 @@ namespace TheCaregiver.Classes
             Regions.Add(new MapRegion(MapRegionType.Apathy, 142, 145, 87, 87, 1));
 
             //Nordthilan Dragon's Head
-            Regions.Add(new MapRegion(MapRegionType.NordthilanHead, 22, 80, 28, 57, 6));
+            Regions.Add(new MapRegion(MapRegionType.NordthilanHead, 16, 84, 26, 57, 8));
 
             //Neck
-            Regions.Add(new MapRegion(MapRegionType.NordthilanNeck, 87, 136, 34, 45, 4));
+            Regions.Add(new MapRegion(MapRegionType.NordthilanNeck, 85, 142, 34, 45, 5));
 
             //Belly
             Regions.Add(new MapRegion(MapRegionType.NordthilanBelly, 149, 357, 35, 74, 13));
@@ -51,10 +51,14 @@ namespace TheCaregiver.Classes
             Regions.Add(new MapRegion(MapRegionType.NordthilanSpine, 326, 346, 22, 34, 4));
 
             //Swamp
-            Regions.Add(new MapRegion(MapRegionType.Swamp, 213, 266, 30, 39, 2));
+            Regions.Add(new MapRegion(MapRegionType.Swamp, 163, 216, 65, 67, 3));
 
             //Ocean
             Regions.Add(new MapRegion(MapRegionType.Ocean, 1, 500, 1, 165, 20));
+
+            //SouthWind
+            Regions.Add(new MapRegion(MapRegionType.SouthWind, 352, 414,  72, 86, 5));
+
 
             return Regions;
         }

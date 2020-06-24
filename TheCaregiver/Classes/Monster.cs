@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TheCaregiver.World;
 using System.Drawing;
 using Newtonsoft.Json;
+using TheCaregiver.Templates;
 
 namespace TheCaregiver.Classes
 {
@@ -23,7 +24,7 @@ namespace TheCaregiver.Classes
     }
 
 
-    public class Mob : ICloneable
+    public class Monster : ICloneable, IMonster
     {
         //Attributes
         public string Name { get; set; }
@@ -31,6 +32,7 @@ namespace TheCaregiver.Classes
         public List<MapRegionType> SpawnRegion { get; set; }
         public int Defense { get; set; }
         public int Health { get; set; }
+        public int HealthMin { get; set; }
         public int HealthMax { get; set; }
         public int DamageMax { get; set; }
         public string Introduction { get; set; }
@@ -56,11 +58,13 @@ namespace TheCaregiver.Classes
         public int CurrentTile { get; set; }
         public int FormerTile { get; set; }
 
-        // All Mobs might flee if the conditions are right. When the FleeTheshold is reached, what are the odds for this type?
+        protected Dice dice = new Dice();
+
+        // All Monsters might flee if the conditions are right. When the FleeTheshold is reached, what are the odds for this type?
         // if ChanceToFlee = 1, then 10% chance they will flee
         public int ChanceToFlee { get; set; }
 
-        // At what point does the Mob consider Fleeing an option
+        // At what point does the Monster consider Fleeing an option
         // if FleeThreshold = 1, then at 10% 
         public bool CombatMode { get; set; }
         public bool Aggressive { get; set; }
@@ -77,9 +81,10 @@ namespace TheCaregiver.Classes
         //grass, foothill, Desert, tree, forest, swamp, flowers..
       //  private int[] allowTiles = { 120, 109, 58, 89, 70, 115, 101, 102, 114 };
         
-        public Mob()
+        public Monster()
         {
             SpawnRegion = new List<MapRegionType>();
+            DetermineStartingHealth();
         }
 
         public bool CheckNextStep(int tile)
@@ -97,6 +102,11 @@ namespace TheCaregiver.Classes
         public object Clone()
         {
             return this.MemberwiseClone();
+        }
+
+        public void DetermineStartingHealth()
+        {
+            Health = dice.Roll(HealthMin, HealthMax);
         }
     }
 }
