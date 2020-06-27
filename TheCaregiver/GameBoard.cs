@@ -68,31 +68,15 @@ namespace TheCaregiver
             {
                 player1 = new Player();
                 gameState = new GameState();
-
-
-                gameState.reality.Day = 1;
-                gameState.reality.Season = Season.winter;
-                gameState.reality.Hour = 7;
-                gameState.reality.Minute = 0;
-
-                player1.HealthMax = dice.Roll(15, 25);
-                player1.Health = player1.HealthMax;
-                player1.EquipedWeapon = Weapons.Find(w => w.Name == "Dagger");
-                player1.EquipedArmour = ArmourTypes.Find(a => a.Type == "Nothing");
-                
+                              
 
 
                 //temp
                 //  player1.DamageMax = 6;
-                //  player1.Defense = 15;
+                //  player1.Defense = 20;
 
                 //Load Current Map into Map Array object
                 // MapExtract = gameState.CurrentMap.LoadMapFromFile();
-                World_Refresh(Place.Wilderness);
-
-
-                MonsterHelper.CreateMonsters(regions);
-                Monsters = MonsterHelper.SpawnMonsters(regions);
                 //SpawnMonsters(regions); 
                 StartNewGame();
             }
@@ -137,17 +121,17 @@ namespace TheCaregiver
            
                 World_Refresh(player1.Map);
 
-                MonsterHelper.CreateMonsters(regions);
+                MonsterHelper.CreateMonsterTypes(regions);
                 Monsters.Clear();
                 Monsters = JsonConvert.DeserializeObject<List<Monster>>(dic["mobs"].ToString());
 
-                foreach(Monster m in Monsters)
-                {
-                    if (m.Tile == null)
-                    {
-                        m.Tile = MonsterHelper.MonsterBitmapPairing[m.Name.ToString()];
-                    }
-                }
+                //foreach(Monster m in Monsters)
+                //{
+                //    if (m.Tile == null)
+                //    {
+                //        m.Tile = MonsterHelper.MonsterBitmapPairing[m.Name.ToString()];
+                //    }
+                //}
             }
 
             //Set up board
@@ -156,9 +140,10 @@ namespace TheCaregiver
             panel2.Height = richTextBox1.Height;
             panel1.Left = BOARD_WIDTH * 51;
             panel2.Top = BOARD_HEIGHT * 51;
-            ActionWindow.Height = BOARD_HEIGHT * 51 - CommandArea.Height - panel3.Height + toolStrip1.Height ;
-            CommandArea.Top = ActionWindow.Height + toolStrip1.Height;
-            panel3.Top = CommandArea.Height + ActionWindow.Height ;
+            panel3.Top = toolStrip1.Height;
+            ActionWindow.Top = toolStrip1.Height + panel3.Height;
+            ActionWindow.Height = BOARD_HEIGHT * 51 - CommandArea.Height - panel3.Height - toolStrip1.Height ;
+            CommandArea.Top = ActionWindow.Height + toolStrip1.Height + panel3.Height;
             richTextBox1.Top = 0;
             richTextBox1.Left = 0;
             richTextBox1.Height = panel2.Height;
@@ -331,25 +316,79 @@ namespace TheCaregiver
                 return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
             }
         }
+
+        public void Resurrection()
+        {
+            //return, not fully healed
+            player1.Health = player1.HealthMax - 2;
+
+            //lose one agility point - 9 lowest
+            if (player1.Attribute_Agility > 9)
+                player1.Attribute_Agility--;
+
+            //lost weapon or armour??
+
+            //random respawn in Hyleo
+            UpdateActionWindow("Whatever power controls the universe, it seems they are giving you another chance.");
+            UpdateActionWindow("");
+
+            //if House, they respawn there
+            if (player1.HasHouse)
+            {
+                gameState.PreviousMap = Atlas.Maps[Place.Wilderness];
+                player1.PreviousMapX = player1.HouseX;
+                player1.PreviousMapY = player1.HouseY;
+                player1.FormerTile = 72;
+
+                gameState.CurrentMap = Atlas.Maps[Place.House];
+                player1.Map = Place.House;
+                player1.X = gameState.CurrentMap.StartX;
+                player1.Y = gameState.CurrentMap.StartY;
+                MapExtract = gameState.CurrentMap.LoadMapFromFile();
+                TranslateMap();
+                player1.CurrentTile = MapMatrix[player1.X, player1.Y];
+                UpdateActionWindow("The following day, you wake up in the safety of your cottage, " + player1.HouseName);
+            }
+            else
+            {
+                player1.SetStartPosition(MapMatrix);
+                UpdateActionWindow("The following day, you find yourself somewhere in the wilderness.");
+            }
+
+            //    World_Refresh(player1.Map);
+            gameState.reality.Day++;
+            gameState.reality.Hour = 7;
+            gameState.reality.Minute = 0;
+        }
+
         public void StartNewGame()
         {
-            UpdateActionWindow("And so it begins. You are finally on your own, apart from your family, crafting your own path, starting in the wilderness of Hyleo. What will be your destiny? How will you best contribute to the world? There is nothing more important than leading a meaningful life.");
-            UpdateActionWindow("");
-            UpdateActionWindow("What is the name you will be known as in this world?");
-            UpdateActionWindow("");
-            UpdateActionWindow("The days are short and there are evil things about. It's time to find some food and a place where I can see myself living for a while.");
-            UpdateActionWindow("");
+
+            World_Refresh(Place.Wilderness);
+            MonsterHelper.CreateMonsterTypes(regions);
+
+            Monsters = MonsterHelper.SpawnMonsters(regions);
 
             player1.CurrentState = PlayerProgress.name;
             TransferToActionPanel();
 
+            gameState.reality.Day = 1;
+            gameState.reality.Season = Season.winter;
+            gameState.reality.Hour = 7;
+            gameState.reality.Minute = 0;
+
+            player1.HealthMax = dice.Roll(15, 25);
+            player1.Health = player1.HealthMax;
             player1.Attribute_Strength = dice.Roll(9, 18);
             player1.Attribute_Agility = dice.Roll(9, 18);
             player1.Attribute_Luck = dice.Roll(9, 18);
             player1.Attribute_Intellect = dice.Roll(9, 18);
             player1.Attribute_Insight = dice.Roll(9, 18);
             player1.Attribute_Charisma = dice.Roll(9, 18);
+            player1.EquipedWeapon = Weapons.Find(w => w.Name == "Dagger");
+            player1.EquipedArmour = ArmourTypes.Find(a => a.Type == "Cloth");
 
+            //How many garden plot creations until seed is found?
             gameState.seedPolt = dice.Roll(5, 9);
 
             var saveFilePath = Application.LocalUserAppDataPath;
@@ -357,6 +396,13 @@ namespace TheCaregiver
             {
                 File.CreateText(saveFilePath + @"//" + "savefile.crg");
             }
+
+            UpdateActionWindow("And so it begins. You are finally on your own, apart from your family, crafting your own path, starting in the wilderness of Hyleo. What will be your destiny? How will you best contribute to the world? There is nothing more important than leading a meaningful life.");
+            UpdateActionWindow("");
+            UpdateActionWindow("What is the name you will be known as in this world?");
+            UpdateActionWindow("");
+            UpdateActionWindow("The days are short and there are evil things about. It's time to find some food and a place where I can see myself living for a while.");
+            UpdateActionWindow("");
         }
 
 
@@ -401,7 +447,7 @@ namespace TheCaregiver
         {
             Tile tmpTile;
             //WILDERNESS
-
+            Tiles.Clear();
             Tiles.Add(new Tile
             {
                 Letter = 'p',
@@ -1069,6 +1115,13 @@ namespace TheCaregiver
             //gameState.reality Check
             gameState.reality.Minute++;
 
+            if (gameState.reality.Hour == 24)
+            {
+                gameState.reality.Day++;
+                gameState.reality.Hour = gameState.reality.Hour - 24;
+                gameState.reality.Minute = 0;
+            }
+
             if (gameState.reality.Minute > 60)
             {
                 gameState.reality.Hour++;
@@ -1633,21 +1686,23 @@ namespace TheCaregiver
             TranslateMap();
 
             // Overwrite map with garden
-            foreach (GardenPlot g in player1.GardenPlots)
-            {
-                //MapExtract[g.X, g.Y] = "1";
-                //MapMatrix[g.X, g.Y] = Encoding.Default.GetBytes("1")[0];
-                MapExtract[g.X, g.Y] = "G";
-            }
+            //foreach (GardenPlot g in player1.GardenPlots)
+            //{
+            //    //MapExtract[g.X, g.Y] = "1";
+            //    //MapMatrix[g.X, g.Y] = Encoding.Default.GetBytes("1")[0];
+            //    MapExtract[g.X, g.Y] = "G";
+            //}
 
-            // if (player1.Map == Place.Wilderness)
-            //     KingdomExtract = gameState.CurrentMap.LoadKingdoms();
+            //// if (player1.Map == Place.Wilderness)
+            ////     KingdomExtract = gameState.CurrentMap.LoadKingdoms();
 
-            if (player1.HasHouse)
-                MapExtract[player1.HouseX, player1.HouseY] = "H";
+            //if (player1.HasHouse)
+            //    MapExtract[player1.HouseX, player1.HouseY] = "H";
 
             player1.CurrentTile = MapMatrix[player1.X, player1.Y];
             UpdateActionWindow("You are back in the wilderness.");
+
+            World_Refresh(Place.Wilderness);
 
         }
 
@@ -1897,388 +1952,394 @@ namespace TheCaregiver
             Boolean gardencheck = false;
             Boolean treescheck = false;
 
-
-//Key Combo for attacking
-
-            switch (key.KeyCode)
+            if (!player1.Sleeping)
             {
-                case Keys.W:  //NORTH
-                    if (key.Shift)
-                    {
-                        player1.X = 157;
-                        player1.Y = 133;
+                //Key Combo for attacking
 
-                        UpdateActionWindow("WARP DRIVE!");
-                    }
-                    break;
+                switch (key.KeyCode)
+                {
+                    case Keys.W:  //NORTH
+                        if (key.Shift)
+                        {
+                            player1.X = 157;
+                            player1.Y = 133;
 
-                // MOVEMENT  
-                #region Movement
-                case Keys.Up:  //NORTH
-                    {
+                            UpdateActionWindow("WARP DRIVE!");
+                        }
+                        break;
+
+                    // MOVEMENT  
+                    #region Movement
+                    case Keys.Up:  //NORTH
+                        {
+                            player1.FormerTile = player1.CurrentTile;
+                            player1.CurrentTile = ScreenMatrix[5, 4];
+
+                            ChangeStep(player1.X, player1.Y - 1);
+
+
+                            if (OkToStep() && PlayerStillOnMap(key.KeyCode))
+                                player1.Y--;
+
+                            if (!PlayerStillOnMap(key.KeyCode))
+                            {
+                                BackToTheWilderness();  //Great Scott!!
+                            }
+                        }
+                        //DiceRoll for event
+                        break;
+
+                    //south
+                    case Keys.Down:
                         player1.FormerTile = player1.CurrentTile;
-                        player1.CurrentTile = ScreenMatrix[5, 4];
+                        player1.CurrentTile = ScreenMatrix[5, 6];
 
-                        ChangeStep(player1.X, player1.Y - 1);
-
+                        ChangeStep(player1.X, player1.Y + 1);
 
                         if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                            player1.Y--;
+                            player1.Y++;
 
                         if (!PlayerStillOnMap(key.KeyCode))
                         {
                             BackToTheWilderness();  //Great Scott!!
                         }
-                    }
-                    //DiceRoll for event
-                    break;
-
-                //south
-                case Keys.Down:
-                    player1.FormerTile = player1.CurrentTile;
-                    player1.CurrentTile = ScreenMatrix[5, 6];
-
-                    ChangeStep(player1.X, player1.Y + 1);
-
-                    if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                        player1.Y++;
-
-                    if (!PlayerStillOnMap(key.KeyCode))
-                    {
-                        BackToTheWilderness();  //Great Scott!!
-                    }
-                    
-
-                    //DiceRoll for event
-
-                    break;
-
-                //west
-                case Keys.Left:
-                    player1.FormerTile = player1.CurrentTile;
-                    player1.CurrentTile = ScreenMatrix[4, 5];
-
-                    ChangeStep(player1.X - 1, player1.Y);
-
-                    if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                        player1.X--;
-
-                    if (!PlayerStillOnMap(key.KeyCode))
-                    {
-                        BackToTheWilderness();  //Great Scott!!
-                    }
-
-                    //DiceRoll for event
-
-                    break;
-
-                //east
-                case Keys.Right:
-                    player1.FormerTile = player1.CurrentTile;
-                    player1.CurrentTile = ScreenMatrix[6, 5];
-
-                    ChangeStep(player1.X + 1, player1.Y);
-
-                    if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                        player1.X++;
-
-                    if (!PlayerStillOnMap(key.KeyCode))
-                    {
-                        BackToTheWilderness();  //Great Scott!!
-                    }
-
-                    //DiceRoll for event
-                    break;
-
-                #endregion
 
 
-                //Chop
-                case Keys.C:
+                        //DiceRoll for event
 
-                    if (player1.Chopping)
-                    {
-                        UpdateActionWindow("That's enough for now.");
-                        player1.Chopping = false;
-                    }
-                    else
-                    {
-                        UpdateActionWindow("Let's chop some wood. Hit 'C' to stop.");
+                        break;
 
-                        treescheck = false;
+                    //west
+                    case Keys.Left:
+                        player1.FormerTile = player1.CurrentTile;
+                        player1.CurrentTile = ScreenMatrix[4, 5];
 
-                        for (int i = 4; i <= 6; i++)
+                        ChangeStep(player1.X - 1, player1.Y);
+
+                        if (OkToStep() && PlayerStillOnMap(key.KeyCode))
+                            player1.X--;
+
+                        if (!PlayerStillOnMap(key.KeyCode))
                         {
-                            for (int j = 4; j <= 6; j++)
+                            BackToTheWilderness();  //Great Scott!!
+                        }
+
+                        //DiceRoll for event
+
+                        break;
+
+                    //east
+                    case Keys.Right:
+                        player1.FormerTile = player1.CurrentTile;
+                        player1.CurrentTile = ScreenMatrix[6, 5];
+
+                        ChangeStep(player1.X + 1, player1.Y);
+
+                        if (OkToStep() && PlayerStillOnMap(key.KeyCode))
+                            player1.X++;
+
+                        if (!PlayerStillOnMap(key.KeyCode))
+                        {
+                            BackToTheWilderness();  //Great Scott!!
+                        }
+
+                        //DiceRoll for event
+                        break;
+
+                    #endregion
+
+
+                    //Chop
+                    case Keys.C:
+
+                        if (player1.Chopping)
+                        {
+                            UpdateActionWindow("That's enough for now.");
+                            player1.Chopping = false;
+                        }
+                        else
+                        {
+                            UpdateActionWindow("Let's chop some wood. Hit 'C' to stop.");
+
+                            treescheck = false;
+
+                            for (int i = 4; i <= 6; i++)
                             {
-                                //if (i == 5 & j == 5)
-                                //    break;
-                                //else
+                                for (int j = 4; j <= 6; j++)
                                 {
-                                    //check if this adjacent tile is tree
-                                    if (((char)ScreenMatrix[i, j] == 'F') || ((char)ScreenMatrix[i, j] == 'Y'))
+                                    //if (i == 5 & j == 5)
+                                    //    break;
+                                    //else
                                     {
-                                        treescheck = true;
-                                        player1.Chopping = true;
+                                        //check if this adjacent tile is tree
+                                        if (((char)ScreenMatrix[i, j] == 'F') || ((char)ScreenMatrix[i, j] == 'Y'))
+                                        {
+                                            treescheck = true;
+                                            player1.Chopping = true;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    break;
+                        break;
 
-                //Fish
-                case Keys.F:
+                    //Fish
+                    case Keys.F:
 
-                    if (player1.Fishing)
-                    {
-                        UpdateActionWindow("That's enough for now.");
-                        player1.Fishing = false;
-                    }
-                    else
-                    {
-                        UpdateActionWindow("Let's catch some fish. Hit 'F' to stop.");
-
-                        if (TileCheck(new char[] { '.', ',' }))
+                        if (player1.Fishing)
                         {
-                            player1.Fishing = true;
+                            UpdateActionWindow("That's enough for now.");
+                            player1.Fishing = false;
                         }
-                    }
-
-
-                    break;
-
-
-                //If attempting to build a garden on grass...
-                case Keys.G:
-
-                    //Planting a Garden
-                    housecheck = false;
-                    gardencheck = false;
-
-                    //You need a house and a hoe to work the land
-                    if (player1.HasHouse && player1.HasHoe)
-                    {
-                        housecheck = TileCheck(new char[] { 'H' });
-                        gardencheck = TileCheck(new char[] { 'G' });
-
-                        //Garden has to be beside a house or garden
-                        if (player1.GardenPlots.Count < 10)
+                        else
                         {
-                            if (housecheck || gardencheck)
+                            UpdateActionWindow("Let's catch some fish. Hit 'F' to stop.");
+
+                            if (TileCheck(new char[] { '.', ',' }))
                             {
-                                //Are you on grass? You can only build on grass
-                                if (MapMatrix[player1.X, player1.Y] == 120)
+                                player1.Fishing = true;
+                            }
+                        }
+
+
+                        break;
+
+
+                    //If attempting to build a garden on grass...
+                    case Keys.G:
+
+                        //Planting a Garden
+                        housecheck = false;
+                        gardencheck = false;
+
+                        //You need a house and a hoe to work the land
+                        if (player1.HasHouse && player1.HasHoe)
+                        {
+                            housecheck = TileCheck(new char[] { 'H' });
+                            gardencheck = TileCheck(new char[] { 'G' });
+
+                            //Garden has to be beside a house or garden
+                            if (player1.GardenPlots.Count < 10)
+                            {
+                                if (housecheck || gardencheck)
                                 {
-                                    //Add new garden plot
-                                    player1.GardenPlots.Add(
-                                        new GardenPlot
+                                    //Are you on grass? You can only build on grass
+                                    if (MapMatrix[player1.X, player1.Y] == 120)
+                                    {
+                                        //Add new garden plot
+                                        player1.GardenPlots.Add(
+                                            new GardenPlot
+                                            {
+                                                X = player1.X,
+                                                Y = player1.Y,
+                                                GrowthStage = GardenGrowthStages.Nothing,
+                                                GrowTicker = 10,
+                                            }
+                                        );
+
+                                        //Plot gardon on map
+                                        MapExtract[player1.X, player1.Y] = "G";
+                                        MapMatrix[player1.X, player1.Y] = 71;
+
+                                        //First Garden?
+                                        if (player1.GardenPlots.Count == 1)
                                         {
-                                            X = player1.X,
-                                            Y = player1.Y,
-                                            GrowthStage = GardenGrowthStages.Nothing,
-                                            GrowTicker = 10,
+                                            UpdateActionWindow("You have build yourself a fine garden.");
+                                            player1.CurrentState = PlayerProgress.garden;
                                         }
-                                    );
+                                        else if (player1.GardenPlots.Count < 10)
+                                        {
+                                            UpdateActionWindow("You have added to your garden.");
+                                        }
 
-                                    //Plot gardon on map
-                                    MapExtract[player1.X, player1.Y] = "G";
-                                    MapMatrix[player1.X, player1.Y] = 71;
+                                        //Finding the seed - randomly between the 6th and 9th plot
+                                        if (player1.GardenPlots.Count == gameState.seedPolt)
+                                        {
+                                            UpdateActionWindow("What's this?");
+                                            UpdateActionWindow("You spy a pinkish glimmer poking up from undernearth the soil.");
 
-                                    //First Garden?
-                                    if (player1.GardenPlots.Count == 1)
-                                    {
-                                        UpdateActionWindow("You have build yourself a fine garden.");
-                                        player1.CurrentState = PlayerProgress.garden;
+                                            UpdateActionWindow("You reach down and pick up a small oval object. It looks much like a gem but there is small softness to it.");
+                                            UpdateActionWindow("Strange indeed. You shrug your shoulders and drop it into your pocket.");
+                                            UpdateActionWindow("Perhaps someone in town will know of this? Perhaps, even, it were worth a few crown. That'd be splendid!");
+                                            player1.HasSeed = true;
+                                        }
                                     }
-                                    else if (player1.GardenPlots.Count < 10)
+                                    else
                                     {
-                                        UpdateActionWindow("You have added to your garden.");
-                                    }
-
-                                    //Finding the seed - randomly between the 6th and 9th plot
-                                    if (player1.GardenPlots.Count == gameState.seedPolt)
-                                    {
-                                        UpdateActionWindow("What's this?");
-                                        UpdateActionWindow("You spy a pinkish glimmer poking up from undernearth the soil.");
-
-                                        UpdateActionWindow("You reach down and pick up a small oval object. It looks much like a gem but there is small softness to it.");
-                                        UpdateActionWindow("Strange indeed. You shrug your shoulders and drop it into your pocket.");
-                                        UpdateActionWindow("Perhaps someone in town will know of this? Perhaps, even, it were worth a few crown. That'd be splendid!");
-                                        player1.HasSeed = true;
+                                        UpdateActionWindow("You can only build your garden on grass.");
                                     }
                                 }
                                 else
                                 {
-                                    UpdateActionWindow("You can only build your garden on grass.");
+                                    UpdateActionWindow("You need to build your garden beside your house or the rest of your garden.");
+                                }
+                            }
+
+                            else
+                            {
+                                UpdateActionWindow("You just don't have the time to care for more garden than what you already have!");
+                            }
+                        }
+                        else if (!player1.HasHouse)
+                        {
+                            UpdateActionWindow("You don't even have a house. Where do you expect to creaet a garden?");
+                        }
+                        else if (!player1.HasHoe)
+                        {
+                            UpdateActionWindow("It would be more helpful to use a hoe to make a garden than your fingernails.");
+                        }
+                        break;
+
+
+                    case Keys.H:
+                        if (!player1.HasHouse)
+                        {
+                            //can only build on grass
+                            if (MapMatrix[player1.X, player1.Y] == 120)
+                            {
+                                {
+                                    player1.HasHouse = true;
+                                    player1.HouseX = player1.X;
+                                    player1.HouseY = player1.Y;
+
+                                    //create House
+                                    Map newHouse = new Map
+                                    {
+                                        StartX = 5,
+                                        StartY = 5,
+                                        WorldX = player1.HouseX,
+                                        WorldY = player1.HouseY,
+                                        X = 11,
+                                        Y = 11,
+                                        filePath = Path.Combine(Environment.CurrentDirectory, @"../../Resources/maps/house.txt"),
+                                        MAPID = Place.House
+                                    };
+
+                                    Atlas.Locations.Add(new Coordinates { X = player1.HouseX, Y = player1.HouseY }, Place.House);
+                                    Atlas.Maps.Add(Place.House, newHouse);
+
+                                    MapExtract[player1.HouseX, player1.HouseY] = "H";
+                                    MapMatrix[player1.HouseX, player1.HouseY] = 72;
+                                    UpdateActionWindow("You have built a modest cottage.");
+                                    UpdateActionWindow("It is tradition to name a new home after it's been built. What shall you call it?");
+
+                                    player1.CurrentState = PlayerProgress.house;
+                                    TransferToActionPanel();
+
+                                    //TODO: it costs 10 wood for a house
+                                    //player1.wood = player1.wood - 10;
                                 }
                             }
                             else
                             {
-                                UpdateActionWindow("You need to build your garden beside your house or the rest of your garden.");
-                            }
-                        }
-
-                        else
-                        {
-                            UpdateActionWindow("You just don't have the time to care for more garden than what you already have!");
-                        }
-                    }
-                    else if (!player1.HasHouse)
-                    {
-                        UpdateActionWindow("You don't even have a house. Where do you expect to creaet a garden?");
-                    }
-                    else if (!player1.HasHoe)
-                    {
-                        UpdateActionWindow("It would be more helpful to use a hoe to make a garden than your fingernails.");
-                    }
-                    break;
-
-
-                case Keys.H:
-                    if (!player1.HasHouse)
-                    {
-                        //can only build on grass
-                        if (MapMatrix[player1.X, player1.Y] == 120)
-                        {
-                            {
-                                player1.HasHouse = true;
-                                player1.HouseX = player1.X;
-                                player1.HouseY = player1.Y;
-
-                                //create House
-                                Map newHouse = new Map
-                                {
-                                    StartX = 5,
-                                    StartY = 5,
-                                    WorldX = player1.HouseX,
-                                    WorldY = player1.HouseY,
-                                    X = 11,
-                                    Y = 11,
-                                    filePath = Path.Combine(Environment.CurrentDirectory, @"../../Resources/maps/house.txt"),
-                                    MAPID = Place.House
-                                };
-
-                                Atlas.Locations.Add(new Coordinates { X = player1.HouseX, Y = player1.HouseY }, Place.House);
-                                Atlas.Maps.Add(Place.House, newHouse);
-
-                                MapExtract[player1.HouseX, player1.HouseY] = "H";
-                                MapMatrix[player1.HouseX, player1.HouseY] = 72;
-                                UpdateActionWindow("You have built a modest cottage.");
-                                UpdateActionWindow("It is tradition to name a new home after it's been built. What shall you call it?");
-
-                                player1.CurrentState = PlayerProgress.house;
-                                TransferToActionPanel();
-
-                                //TODO: it costs 10 wood for a house
-                                //player1.wood = player1.wood - 10;
+                                UpdateActionWindow("You can only build your house on grass.");
                             }
                         }
                         else
+                            UpdateActionWindow("You already have a very nice cottage.");
+                        //future option - allow moving cottage for a price
+
+                        break;
+
+                    case Keys.L:
+                        UpdateActionWindow("Coordinates: [" + player1.Map.ToString() + "] (" + player1.X + ", " + player1.Y + ") ASCII " + player1.CurrentTile);
+                        break;
+
+                    //Sleep
+                    case Keys.S:
+                        //MSG - amount of sleep is random
+
+                        if (key.Shift)
                         {
-                            UpdateActionWindow("You can only build your house on grass.");
+
+                            MessageBox.Show("Saved!");
                         }
-                    }
-                    else
-                        UpdateActionWindow("You already have a very nice cottage.");
-                    //future option - allow moving cottage for a price
-
-                    break;
-
-                case Keys.L:
-                    UpdateActionWindow("Coordinates: [" + player1.Map.ToString() + "] (" + player1.X + ", " + player1.Y + ") ASCII " + player1.CurrentTile);
-                    break;
-                    
-                //Sleep
-                case Keys.S:
-                    //MSG - amount of sleep is random
-
-                    if (key.Shift)
-                    {
-
-                        MessageBox.Show("Saved!");
-                    }
-                    else if (!player1.Sleeping)
-                    {
-                        player1.Sleeping = true;
-                        player1.SleepCounter = dice.Roll(1, 8);
-                    }
-
-                    break;
-                case Keys.Space:
-                    CommandArea.Enabled = true;
-                    this.ActiveControl = CommandArea;
-                    break;
-
-                default:
-
-                    break;
-                //Start Conversation - talking
-                case Keys.T:
-                    if (gameState.CurrentMap.MAPID == Place.Lancer)
-                    {
-                        Merchant merchant = (Merchant)TileCheckForInteraction(InteractionType.Merchant);
-
-                        if (merchant != null)
+                        else if (!player1.Sleeping)
                         {
-
-                            UpdateActionWindow(merchant.Name + " wants to sell you some garbage!");
+                            player1.Sleeping = true;
+                            player1.SleepCounter = dice.Roll(1, 8);
+                            gameState.reality.Hour += player1.SleepCounter;
                         }
 
-                        QuestPerson person = (QuestPerson)TileCheckForInteraction(InteractionType.QuestPerson);
+                        break;
+                    case Keys.Space:
+                        CommandArea.Enabled = true;
+                        this.ActiveControl = CommandArea;
+                        break;
 
-                        if (person != null)
+                    default:
+
+                        break;
+                    //Start Conversation - talking
+                    case Keys.T:
+                        if (gameState.CurrentMap.MAPID == Place.Lancer)
                         {
-                            if (person.Name == "Silverblade")
+                            Merchant merchant = (Merchant)TileCheckForInteraction(InteractionType.Merchant);
+
+                            if (merchant != null)
                             {
-                                if (player1.CurrentState == PlayerProgress.hoe)
-                                {
-                                    UpdateActionWindow("With great seeds come great responsibility, Mr. Cactus!");
-                                    player1.CurrentState = PlayerProgress.seed;
 
-                                }
-                                else
-                                {
-                                    UpdateActionWindow("Sorry, I am far too busy to talk!");
+                                UpdateActionWindow(merchant.Name + " wants to sell you some garbage!");
+                            }
 
-                                    //change to someone else
-                                    player1.HasHoe = true;
-                                    player1.NumberofSeeds = 10;
+                            QuestPerson person = (QuestPerson)TileCheckForInteraction(InteractionType.QuestPerson);
+
+                            if (person != null)
+                            {
+                                if (person.Name == "Silverblade")
+                                {
+                                    if (player1.CurrentState == PlayerProgress.hoe)
+                                    {
+                                        UpdateActionWindow("With great seeds come great responsibility, Mr. Cactus!");
+                                        player1.CurrentState = PlayerProgress.seed;
+
+                                    }
+                                    else
+                                    {
+                                        UpdateActionWindow("Sorry, I am far too busy to talk!");
+
+                                        //change to someone else
+                                        player1.HasHoe = true;
+                                        player1.NumberofSeeds = 10;
+                                    }
                                 }
                             }
+
+                            World_Refresh(gameState.CurrentMap.MAPID);
+
                         }
 
-                        World_Refresh(gameState.CurrentMap.MAPID);
+                        break;
 
-                    }
-
-                    break;
-
-                    //case Keys.P:
-                    //    //   GameTimer.Stop();
-                    //    var tp = new TheCaregiver.Resources.TransPanel();
-                    //    tp.Location = new Point(0, 0);
-                    //    tp.Width = 51 * BOARD_WIDTH;
-                    //    tp.Height = 51 * BOARD_HEIGHT;
-                    //    tp.BackColor = Color.Aquamarine;
-                    //    tp.BringToFront();
-                    //    Image img = Image.FromFile(@"Resources\scroll.png");
-                    //    Bitmap bmp = (Bitmap)img;
-                    //    var pb = new PictureBox();
-                    //    pb.Image = img;
-                    //    tp.Width = 51 * BOARD_WIDTH;
-                    //    tp.Height = 51 * BOARD_HEIGHT;
-                    //    pb.Location = new Point(0, 0);
-                    //    tp.Controls.Add(pb);
-                    //    //  pi.BackgroundImage = bmp;
-                    //    this.Controls.Add(tp);
-                    //    // ShowScroll("hiya");
-                    //    break;
+                        //case Keys.P:
+                        //    //   GameTimer.Stop();
+                        //    var tp = new TheCaregiver.Resources.TransPanel();
+                        //    tp.Location = new Point(0, 0);
+                        //    tp.Width = 51 * BOARD_WIDTH;
+                        //    tp.Height = 51 * BOARD_HEIGHT;
+                        //    tp.BackColor = Color.Aquamarine;
+                        //    tp.BringToFront();
+                        //    Image img = Image.FromFile(@"Resources\scroll.png");
+                        //    Bitmap bmp = (Bitmap)img;
+                        //    var pb = new PictureBox();
+                        //    pb.Image = img;
+                        //    tp.Width = 51 * BOARD_WIDTH;
+                        //    tp.Height = 51 * BOARD_HEIGHT;
+                        //    pb.Location = new Point(0, 0);
+                        //    tp.Controls.Add(pb);
+                        //    //  pi.BackgroundImage = bmp;
+                        //    this.Controls.Add(tp);
+                        //    // ShowScroll("hiya");
+                        //    break;
 
 
+                }
             }
-
+            else
+            {
+                UpdateActionWindow("You can't walk in your sleep.");
+            }
         }
 
         private void SpecialKeyPress(KeyEventArgs key)
@@ -2494,13 +2555,15 @@ namespace TheCaregiver
                     player1.Health = player1.Health - damageRoll;
                     if (player1.Health <= 0)
                     {
-                        UpdateActionWindow("You're dead and stuff.");
+                        UpdateActionWindow("Dead men can never die.");
                         player1.Opponent.CombatMode = false;
                         player1.Opponent.OpponentInBattle = false;
                         player1.CombatMode = false;
                         player1.Opponent = null;
                         CombatTimer.Enabled = false;
                         GameTimer.Enabled = true;
+                        player1.Dead = true;
+                        Resurrection();
                     }
                     else
                     {
@@ -2521,19 +2584,18 @@ namespace TheCaregiver
                             UpdateActionWindow("You have been critically wounded.");
                         }
 
-                        player1.Opponent.AttackTurn = true;
-                        player1.AttackTurn = false;
                     }
                 }
                 else
                 {
                     UpdateActionWindow("The " + player1.Opponent.Name + " misses.");
-                    player1.Opponent.AttackTurn = true;
-                    player1.AttackTurn = false;
                 }
 
-                player1.AttackTurn = true;
-                player1.Opponent.AttackTurn = false;
+                if (!player1.Dead)
+                {
+                    player1.AttackTurn = true;
+                    player1.Opponent.AttackTurn = false;
+                }
             }
             else
             {
@@ -2611,8 +2673,10 @@ namespace TheCaregiver
 
 
             //If round is over
-            combatmanager.FinishRound();
-
+            if (!player1.Dead)
+            {
+                combatmanager.FinishRound();
+            }
 
           //  Defense = 15,
            //     DamageMax = 3,

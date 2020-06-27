@@ -15,7 +15,7 @@ namespace TheCaregiver.Classes.Monsters
             Name = "Ettin";
             HealthMax = 6;
             Commonality = Commonality.Common;
-            Defense = 15;
+            Defense = 20;
             DamageMax = 3;
 
             NumberOfAttacks = 1;

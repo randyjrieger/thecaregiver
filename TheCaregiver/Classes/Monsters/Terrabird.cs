@@ -15,7 +15,7 @@ namespace TheCaregiver.Classes.Monsters
             Name = "Terrabird";
             HealthMax = 6;
             Commonality = Commonality.Rare;
-            Defense = 15;
+            Defense = 20;
             DamageMax = 6;
 
             SpecialAttack = SpecialAttack.Blind;

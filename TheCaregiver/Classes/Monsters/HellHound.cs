@@ -15,7 +15,7 @@ namespace TheCaregiver.Classes.Monsters
             Name = "HellHound";
             HealthMax = 6;
             Commonality = Commonality.Uncommon;
-            Defense = 15;
+            Defense = 20;
             DamageMax = 3;
 
             NumberOfAttacks = 1;

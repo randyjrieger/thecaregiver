@@ -15,7 +15,7 @@ namespace TheCaregiver.Classes.Monsters
             Name = "WaterSpider";
             HealthMax = 6;
             Commonality = Commonality.Common;
-            Defense = 15;
+            Defense = 20;
             DamageMax = 3;
 
             NumberOfAttacks = 1;
@@ -29,9 +29,8 @@ namespace TheCaregiver.Classes.Monsters
             AllowedTiles = new int[] { 44 };
 
             SpawnRegion = new List<MapRegionType>();
-            SpawnRegion.Add(MapRegionType.HyleoForestWest);
-            SpawnRegion.Add(MapRegionType.NordthilanBelly);
-            SpawnRegion.Add(MapRegionType.HyleoForestEast);
+            SpawnRegion.Add(MapRegionType.Ocean);
+            SpawnRegion.Add(MapRegionType.NordArm);
         }
     }
 }

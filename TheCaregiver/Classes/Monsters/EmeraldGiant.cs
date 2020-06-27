@@ -15,7 +15,7 @@ namespace TheCaregiver.Classes.Monsters
             Name = "Emerald Giant";
             HealthMax = 6;
             Commonality = Commonality.Rare;
-            Defense = 15;
+            Defense = 20;
             DamageMax = 3;
 
             NumberOfAttacks = 1;
