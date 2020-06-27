@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using TheCaregiver.Player1;
 using TheCaregiver.World;
+using TheCaregiver.Classes.Monsters;
 
 namespace TheCaregiver.Classes
 {
@@ -14,12 +15,8 @@ namespace TheCaregiver.Classes
         public static Dictionary<string, Bitmap> MonsterBitmapPairing = new Dictionary<string, Bitmap>();
         public static List<Monster> MonsterTypes = new List<Monster>();
 
-        public static void CreateMonsters(List<MapRegion> regions)
+        private static void MonsterBitMapPairing()
         {
-            Dice dice = new Dice();
-            Monster newMonster = new Monster();
-            int healthRoll = 6;
-
             //Create Monster-Bitmap Pairings
             MonsterBitmapPairing.Add("Ettin", new Bitmap(TheCaregiver.Tiles.ettin1));
             MonsterBitmapPairing.Add("Rock Spider", new Bitmap(TheCaregiver.Tiles.terrabird));
@@ -51,6 +48,54 @@ namespace TheCaregiver.Classes
             MonsterBitmapPairing.Add("Sand Worm", new Bitmap(TheCaregiver.Tiles.terrabird));
             MonsterBitmapPairing.Add("Venom Weed", new Bitmap(TheCaregiver.Tiles.venomweed));
             MonsterBitmapPairing.Add("Fire Ants", new Bitmap(TheCaregiver.Tiles.fireants));
+        }
+
+
+        public static void CreateMonsterTypes(List<MapRegion> regions)
+        {
+            //Pair Monsters with Bitmap Tiles
+            MonsterBitMapPairing();
+
+            MonsterTypes.Add(new AmberBeetle());
+            MonsterTypes.Add(new AmberGiant());
+            MonsterTypes.Add(new AmberHatchling());
+            MonsterTypes.Add(new Bandit());
+            MonsterTypes.Add(new Centaur());
+            MonsterTypes.Add(new EmeraldGiant());
+            MonsterTypes.Add(new Ettin());
+            MonsterTypes.Add(new FireAnts());
+            MonsterTypes.Add(new FireGiant());
+            MonsterTypes.Add(new FireTurtle());
+            MonsterTypes.Add(new FrogJelly());
+            MonsterTypes.Add(new Goblin());
+            MonsterTypes.Add(new GreatSquid());
+            MonsterTypes.Add(new HellHound());
+            MonsterTypes.Add(new Kobold());
+            MonsterTypes.Add(new Merman());
+            MonsterTypes.Add(new PlainsGiant());
+            MonsterTypes.Add(new RockSpider());
+            MonsterTypes.Add(new SandGiant());
+            MonsterTypes.Add(new SandWorm());
+            MonsterTypes.Add(new Scorpian());
+            MonsterTypes.Add(new Shadow());
+            MonsterTypes.Add(new Shark());
+            MonsterTypes.Add(new Squidling());
+            MonsterTypes.Add(new SwampTurtle());
+            MonsterTypes.Add(new Terrabird());
+            MonsterTypes.Add(new Treant());
+            MonsterTypes.Add(new VenomWeed());
+            MonsterTypes.Add(new WaterSpider());
+            MonsterTypes.Add(new AmberBeetle());
+        }
+
+        public static void CreateMonsterTypes2(List<MapRegion> regions)
+        {
+            Dice dice = new Dice();
+            Monster newMonster = new Monster();
+            int healthRoll = 6;
+
+            //Pair Monsters with Bitmap Tiles
+            MonsterBitMapPairing();
 
             //Create Monsters
 
@@ -927,12 +972,10 @@ namespace TheCaregiver.Classes
             Commonality commonality;
             Monster newMonster;
 
-            //OTALIO - 1 - Don't want anything here
-            // MonsterTypes.Add(new Monster { X = dice.Roll(regions[0].X1, regions[0].X2), Y = dice.Roll(regions[0].Y1, regions[0].Y2) });
-
+            //Run through all Regions
             foreach (MapRegion r in regions)
             {
-                //skip Otalio
+                //Regions have a max number of Monsters
                 for (int i = 1; i < r.MaxMonsterCount; i++)
                 {
                     //What is the Commonality of the new Monster?
@@ -941,11 +984,12 @@ namespace TheCaregiver.Classes
                     //Find Monster
                     // SelectedMonsters = MonsterTypes.FindAll(FindMonsters);
 
-                    //Commonality of Monster
+                    //Commonality of Monster - this is a Random event
                     commonality = CommonalityCheck();
 
                     try
                     {
+                        //Get all monsters with the chosen commonality and region type
                        SelectedMonsters = MonsterTypes.FindAll(m => m.Commonality == commonality && m.SpawnRegion.Contains(r.Type));
                     }
                     catch (Exception)
@@ -958,23 +1002,17 @@ namespace TheCaregiver.Classes
                         SelectedMonsters.Add(MonsterTypes[0]);
                     }
 
-                    //take first mob - skip allowed tile test
-                   // Monsters.Add(new Monster { X = dice.Roll(regions[i].X1, regions[i].X2), Y = dice.Roll(regions[i].Y1, regions[i].Y2) });
+                    //for the moment, we take the first monster type, clone it and add it to the Monster list
+                   
+                    //TODO: this will need to be random as well since there could be more than one monster
                     newMonster = (Monster)SelectedMonsters[0].Clone();
                     newMonster.X = dice.Roll(r.X1, r.X2);
                     newMonster.Y = dice.Roll(r.Y1, r.Y2);
                     Monsters.Add(newMonster);
-
                 }
             }
 
-
             return Monsters;
-
-
-
-
         }
     }
 }
-

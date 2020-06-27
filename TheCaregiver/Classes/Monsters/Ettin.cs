@@ -11,11 +11,12 @@ namespace TheCaregiver.Classes.Monsters
     {
         public SwampTurtle() : base()
         {
-            Tile = MonsterHelper.MonsterBitmapPairing["Swamp Turtle"];
-            Name = "SwampTurtle";
+
+            Tile = MonsterHelper.MonsterBitmapPairing["Ettin"];
+            Name = "Ettin";
             HealthMax = 6;
-            Commonality = Commonality.Common;
-            Defense = 15;
+            Commonality = Commonality.Uncommon;
+            Defense = 20;
             DamageMax = 3;
 
             NumberOfAttacks = 1;
@@ -23,13 +24,16 @@ namespace TheCaregiver.Classes.Monsters
             MaxHourVisible = 23;
             SuddenAppearance = true;
             Aggressive = true;
-            WelcomeMessage = "An Swamp Turtle towers above you. He looks unimpressed.";
+            WelcomeMessage = "An Ettin towers above you. He looks unimpressed.";
             ChanceToFlee = 1;
-            FleeThreshold = 1;            
-            AllowedTiles = new int[] { 115 };
+            FleeThreshold = 1;
+            AllowedTiles = new int[] { 120, 109 };
 
             SpawnRegion = new List<MapRegionType>();
-            SpawnRegion.Add(MapRegionType.Swamp);
+            SpawnRegion.Add(MapRegionType.HyleoForestEast);
+            SpawnRegion.Add(MapRegionType.HyleoForestWest);
+            SpawnRegion.Add(MapRegionType.NordthilanNeck);
+            SpawnRegion.Add(MapRegionType.NordArm);
         }
     }
 }

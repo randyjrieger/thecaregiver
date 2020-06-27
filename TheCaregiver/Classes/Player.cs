@@ -42,6 +42,7 @@ namespace TheCaregiver.Player1
         public bool Dazed { get; set; }
         public int SleepCounter { get; set; }
         public bool Sailing { get; set; }
+        public bool Dead { get; set; }
 
         public bool HasSeed { get; set; }
         public bool HasHoe { get; set; }
@@ -88,7 +89,7 @@ namespace TheCaregiver.Player1
             food = 3;
             NumberofSeeds = 0;
             allowTiles = new int[]  { 120, 109, 58, 89, 70, 115, 101, 102, 114, 79, 80 };
-
+            Dead = false;
             MaxGardenCount = 10;
 
             CombatMode = false;

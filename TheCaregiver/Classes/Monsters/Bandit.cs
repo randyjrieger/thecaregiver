@@ -15,7 +15,7 @@ namespace TheCaregiver.Classes.Monsters
             Name = "Bandit";
             HealthMax = 6;
             Commonality = Commonality.Common;
-            Defense = 15;
+            Defense = 20;
             DamageMax = 6;
 
             NumberOfAttacks = 1;
