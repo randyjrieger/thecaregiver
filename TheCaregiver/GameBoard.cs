@@ -67,7 +67,7 @@ namespace TheCaregiver
             if (Mode == GameMode.New)
             {
                 player1 = new Player();
-                gameState = new GameState();
+                gameState = new GameState(Mode);
                               
 
 
@@ -83,7 +83,7 @@ namespace TheCaregiver
             else
             {
                 player1 = new Player();
-                gameState = new GameState();
+                gameState = new GameState(Mode);
 
                 //Deserialize Save File into Classes
 
@@ -335,13 +335,11 @@ namespace TheCaregiver
             //if House, they respawn there
             if (player1.HasHouse)
             {
-                gameState.PreviousMap = Atlas.Maps[Place.Wilderness];
-                player1.PreviousMapX = player1.HouseX;
-                player1.PreviousMapY = player1.HouseY;
-                player1.FormerTile = 72;
-
                 gameState.CurrentMap = Atlas.Maps[Place.House];
                 player1.Map = Place.House;
+                player1.PreviousMapX = player1.HouseX;
+                player1.PreviousMapY = player1.HouseY;
+
                 player1.X = gameState.CurrentMap.StartX;
                 player1.Y = gameState.CurrentMap.StartY;
                 MapExtract = gameState.CurrentMap.LoadMapFromFile();
@@ -363,19 +361,13 @@ namespace TheCaregiver
 
         public void StartNewGame()
         {
-
-            World_Refresh(Place.Wilderness);
+            World_Refresh(player1.Map);
             MonsterHelper.CreateMonsterTypes(regions);
 
             Monsters = MonsterHelper.SpawnMonsters(regions);
 
             player1.CurrentState = PlayerProgress.name;
             TransferToActionPanel();
-
-            gameState.reality.Day = 1;
-            gameState.reality.Season = Season.winter;
-            gameState.reality.Hour = 7;
-            gameState.reality.Minute = 0;
 
             player1.HealthMax = dice.Roll(15, 25);
             player1.Health = player1.HealthMax;
@@ -397,7 +389,7 @@ namespace TheCaregiver
                 File.CreateText(saveFilePath + @"//" + "savefile.crg");
             }
 
-            UpdateActionWindow("And so it begins. You are finally on your own, apart from your family, crafting your own path, starting in the wilderness of Hyleo. What will be your destiny? How will you best contribute to the world? There is nothing more important than leading a meaningful life.");
+            UpdateActionWindow("And so it begins. It's a lovely spring day. With winter finally over, you are ready to be on your own, apart from your family, crafting your own path, starting in the wilderness of Hyleo. What will be your destiny? How will you best contribute to the world? There is nothing more important than leading a meaningful life.");
             UpdateActionWindow("");
             UpdateActionWindow("What is the name you will be known as in this world?");
             UpdateActionWindow("");
@@ -674,6 +666,19 @@ namespace TheCaregiver
             tmpTile = new Tile
             {
                 Letter = '[',
+                Picture = new Bitmap(TheCaregiver.Tiles.waterfall1)
+            };
+            tmpTile.setMovingPicture(0, new Bitmap(TheCaregiver.Tiles.waterfall1));
+            tmpTile.setMovingPicture(1, new Bitmap(TheCaregiver.Tiles.waterfall2));
+            tmpTile.setMovingPicture(2, new Bitmap(TheCaregiver.Tiles.waterfall3));
+            tmpTile.setMovingPicture(3, new Bitmap(TheCaregiver.Tiles.waterfall4));
+            Tiles.Add(tmpTile);
+            tmpTile = null;
+
+            //fire
+            tmpTile = new Tile
+            {
+                Letter = '{',
                 Picture = new Bitmap(TheCaregiver.Tiles.waterfall1)
             };
             tmpTile.setMovingPicture(0, new Bitmap(TheCaregiver.Tiles.waterfall1));
@@ -1153,20 +1158,24 @@ namespace TheCaregiver
                             {
                                 case Season.autumn:
                                     UpdateActionWindow("A cool wind starts to blow from the west. Autumn has come at last.");
+                                    World_Refresh(player1.Map);
                                     break;
 
                                 case Season.winter:
                                     UpdateActionWindow("The air is cool and crisp. The woods are silent these days and the flowers are resting. Winter has come.");
+                                    World_Refresh(player1.Map);
                                     break;
 
                                 case Season.spring:
 
                                     UpdateActionWindow("From the branches above you hear the sweet, twiriping of baby birds. Spring has sprung.");
+                                    World_Refresh(player1.Map);
                                     break;
 
                                 case Season.summer:
 
                                     UpdateActionWindow("You stop for a moment and look around. The trees are in full green and the grasses are tall and soft. The summer sun has at least risen. ");
+                                    World_Refresh(player1.Map);
                                     break;
 
                                 default:
@@ -1674,10 +1683,9 @@ namespace TheCaregiver
             player1.FormerTile = player1.CurrentTile;
 
             Map tempMap = gameState.CurrentMap;
-            gameState.CurrentMap = gameState.PreviousMap;
+            gameState.CurrentMap = Atlas.Maps[Place.Wilderness];
             gameState.PreviousMap = tempMap;
-            gameState.PreviousMap = gameState.CurrentMap;
-
+            player1.Map = Place.Wilderness;
             player1.X = player1.PreviousMapX;
             player1.Y = player1.PreviousMapY;
             player1.PreviousMapX = 0;
@@ -1702,7 +1710,7 @@ namespace TheCaregiver
             player1.CurrentTile = MapMatrix[player1.X, player1.Y];
             UpdateActionWindow("You are back in the wilderness.");
 
-            World_Refresh(Place.Wilderness);
+            World_Refresh(player1.Map);
 
         }
 
@@ -1980,8 +1988,7 @@ namespace TheCaregiver
 
                             if (OkToStep() && PlayerStillOnMap(key.KeyCode))
                                 player1.Y--;
-
-                            if (!PlayerStillOnMap(key.KeyCode))
+                            else
                             {
                                 BackToTheWilderness();  //Great Scott!!
                             }
@@ -1998,12 +2005,10 @@ namespace TheCaregiver
 
                         if (OkToStep() && PlayerStillOnMap(key.KeyCode))
                             player1.Y++;
-
-                        if (!PlayerStillOnMap(key.KeyCode))
+                        else
                         {
                             BackToTheWilderness();  //Great Scott!!
                         }
-
 
                         //DiceRoll for event
 
@@ -2018,8 +2023,7 @@ namespace TheCaregiver
 
                         if (OkToStep() && PlayerStillOnMap(key.KeyCode))
                             player1.X--;
-
-                        if (!PlayerStillOnMap(key.KeyCode))
+                        else
                         {
                             BackToTheWilderness();  //Great Scott!!
                         }
@@ -2037,8 +2041,7 @@ namespace TheCaregiver
 
                         if (OkToStep() && PlayerStillOnMap(key.KeyCode))
                             player1.X++;
-
-                        if (!PlayerStillOnMap(key.KeyCode))
+                        else
                         {
                             BackToTheWilderness();  //Great Scott!!
                         }
@@ -2409,10 +2412,10 @@ namespace TheCaregiver
                             {
 
                                 gameState.PreviousMap = gameState.CurrentMap;
-                                gameState.CurrentMap = (Atlas.Maps.Single(m => m.Value.WorldX == player1.X && m.Value.WorldY == player1.Y)).Value;
-
                                 player1.PreviousMapX = player1.X;
                                 player1.PreviousMapY = player1.Y;
+
+                                gameState.CurrentMap = Atlas.Maps[Place.House];
                                 player1.X = gameState.CurrentMap.StartX;
                                 player1.Y = gameState.CurrentMap.StartY;
                                 MapExtract = gameState.CurrentMap.LoadMapFromFile();
@@ -2461,8 +2464,8 @@ namespace TheCaregiver
 
         private void World_Refresh(Place thisplace)
         {
-            player1.Map = thisplace;
-            Atlas.BuildAtlas();
+           // player1.Map = thisplace;
+            Atlas.BuildAtlas(gameState.reality.Season);
             gameState.CurrentMap = Atlas.Maps[player1.Map];
 
             MapExtract = gameState.CurrentMap.LoadMapFromFile();

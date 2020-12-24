@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace TheCaregiver.Templates
 {
-    public interface ILocation
+    public class House : ILocation
     {
-        string Name { get; set; }
-        int X { get; set; }
-        int Y { get; set; }
     }
 }
