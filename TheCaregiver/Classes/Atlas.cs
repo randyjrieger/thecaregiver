@@ -16,7 +16,7 @@ namespace TheCaregiver.World
 
 
 
-        public static Boolean BuildAtlas()
+        public static Boolean BuildAtlas(Season season)
         {
             Boolean success = true;
 
@@ -49,7 +49,7 @@ namespace TheCaregiver.World
                     X = 500,
                     Y = 180,
                     type = LocationType.None,
-                    filePath = Path.Combine(Environment.CurrentDirectory, @"../../Resources/maps/world.txt"),
+                    filePath = season == Season.winter ? Path.Combine(Environment.CurrentDirectory, @"../../Resources/maps/world-winter.txt") : Path.Combine(Environment.CurrentDirectory, @"../../Resources/maps/world.txt"),
                     MAPID = Place.Wilderness
                 });
 

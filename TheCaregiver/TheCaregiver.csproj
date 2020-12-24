@@ -99,6 +99,7 @@
     <Compile Include="Classes\MonsterCard.cs" />
     <Compile Include="Classes\MonsterHelper.cs" />
     <Compile Include="Classes\NPC\NPC.cs" />
+    <Compile Include="Templates\House.cs" />
     <Compile Include="Templates\ILocation.cs" />
     <Compile Include="Templates\Location.cs" />
     <Compile Include="Templates\Person.cs" />
@@ -236,6 +237,8 @@
     <None Include="Resources\partman_trans.bmp" />
     <Content Include="Resources\maps\Tempest.txt" />
     <EmbeddedResource Include="Resources\maps\world_empty.txt" />
+    <Content Include="Resources\maps\world-winter.txt" />
+    <Content Include="Resources\maps\world.txt" />
     <Content Include="Resources\scroll.png" />
     <Content Include="Resources\tiles\alter.jpg" />
     <None Include="Resources\tiles\amberGiant.png" />

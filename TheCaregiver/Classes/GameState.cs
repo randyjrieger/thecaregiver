@@ -30,8 +30,16 @@ namespace TheCaregiver.World
         public Reality reality { get; set; }
         public int seedPolt { get; set; }
 
-        public GameState() {
+        public GameState(GameMode mode) {
             reality = new Reality();
+
+            if (mode == GameMode.New)
+            {
+                reality.Day = 1;
+                reality.Season = Season.spring;
+                reality.Hour = 7;
+                reality.Minute = 0;
+            }
         }
     }
 }
