@@ -20,11 +20,14 @@ namespace TheCaregiver
 {
     public partial class GameBoard : Form
     {
-        public const int SCREEN_DIM = 11;
-        public const int BOARD_WIDTH = 11;
-        public const int BOARD_HEIGHT = 11;
-        public const int SCREEN_RADIUS = 5;
-        public int offset = SCREEN_RADIUS;
+        public int SCREEN_DIM = 11;
+        public int TILE_PIXELS = 51;
+        public int BOARD_TILE_WIDTH = 11;
+        public int BOARD_TILE_HEIGHT = 11;
+        public int ASCII_RADIUS_WIDTH = 5;
+        public int ASCII_RADIUS_HEIGHT = 5;
+        public int offset_width;
+        public int offset_height;
         public Player player1;
         public Map CurrentMap { get; set; }
         List<MapRegion> regions = new List<MapRegion>();
@@ -37,7 +40,7 @@ namespace TheCaregiver
         public string[,] KingdomExtract;
         public string[,] MapExtract;
         public byte[,] MapMatrix;
-        public byte[,] ScreenMatrix = new byte[BOARD_HEIGHT, BOARD_WIDTH];
+        public byte[,] ScreenMatrix = new byte[11, 11]; //TODO need constants
         public bool startTimers = false;
         public GameState gameState;
         protected Monster Opponent { get; set; }
@@ -134,16 +137,21 @@ namespace TheCaregiver
                 //    }
                 //}
             }
+                                   
+            offset_width = ASCII_RADIUS_WIDTH;
+            offset_height = ASCII_RADIUS_HEIGHT;
+            BOARD_TILE_WIDTH = (ASCII_RADIUS_WIDTH * 2) + 1;
+            BOARD_TILE_HEIGHT = (ASCII_RADIUS_HEIGHT * 2 ) + 1;
 
             //Set up board
-            this.Width = BOARD_WIDTH * 51 + panel1.Width;
-            richTextBox1.Width = BOARD_WIDTH * 51 + ActionWindow.Width;
+            this.Width = BOARD_TILE_WIDTH * TILE_PIXELS + panel1.Width;
+            richTextBox1.Width = BOARD_TILE_WIDTH * TILE_PIXELS + ActionWindow.Width;
             panel2.Height = richTextBox1.Height;
-            panel1.Left = BOARD_WIDTH * 51;
-            panel2.Top = BOARD_HEIGHT * 51;
+            panel1.Left = BOARD_TILE_WIDTH * TILE_PIXELS;
+            panel2.Top = BOARD_TILE_HEIGHT * TILE_PIXELS;
             panel3.Top = toolStrip1.Height;
             ActionWindow.Top = toolStrip1.Height + panel3.Height;
-            ActionWindow.Height = BOARD_HEIGHT * 51 - CommandArea.Height - panel3.Height - toolStrip1.Height ;
+            ActionWindow.Height = BOARD_TILE_HEIGHT * TILE_PIXELS - CommandArea.Height - panel3.Height - toolStrip1.Height ;
             CommandArea.Top = ActionWindow.Height + toolStrip1.Height + panel3.Height;
             richTextBox1.Top = 0;
             richTextBox1.Left = 0;
@@ -712,21 +720,23 @@ namespace TheCaregiver
         }
         public void CreateScreen()
         {
-            //screen boundaries
-            int Screen_Map_Left = player1.X - SCREEN_RADIUS;
-            int Screen_Map_Right = player1.X + SCREEN_RADIUS;
-            int Screen_Map_Top = player1.Y - SCREEN_RADIUS;
-            int Screen_Map_Bottom = player1.Y + SCREEN_RADIUS;
+            //screen boundaries - this is tile based, not pixel based
+            //this is the area in the ASCII file that will be visible
+            int MapFile_Border_Left = player1.X - ASCII_RADIUS_WIDTH;
+            int MapFile_Border_Right = player1.X + ASCII_RADIUS_WIDTH;
+            int MapFile_Border_Top = player1.Y - ASCII_RADIUS_HEIGHT;
+            int MapFile_Border_Bottom = player1.Y + ASCII_RADIUS_HEIGHT;
 
-            ScreenMatrix = new byte[BOARD_HEIGHT, BOARD_WIDTH];
+            ScreenMatrix = new byte[BOARD_TILE_HEIGHT, BOARD_TILE_WIDTH];
 
             int x;
             int j = 0;
 
-            for (int MapY = Screen_Map_Top; MapY <= Screen_Map_Bottom; MapY++)
+            // *if part of the display is off the map, it's black
+            for (int MapY = MapFile_Border_Top; MapY <= MapFile_Border_Bottom; MapY++)
             {
                 x = 0;
-                for (int MapX = Screen_Map_Left; MapX <= Screen_Map_Right; MapX++)
+                for (int MapX = MapFile_Border_Left; MapX <= MapFile_Border_Right; MapX++)
                 {
                     if ((MapX < 0) || (MapX >= gameState.CurrentMap.X) || (MapY < 0) || (MapY >= gameState.CurrentMap.Y))
                     {
@@ -757,8 +767,8 @@ namespace TheCaregiver
         public void DrawScreen()
         {
 
-            int tileWidth = 51;
-            int tileHeight = 51;
+            int tileWidth = TILE_PIXELS;
+            int tileHeight = TILE_PIXELS;
             PictureBox p;
             Point loc;
             Graphics G;
@@ -2327,16 +2337,16 @@ namespace TheCaregiver
                         //    //   GameTimer.Stop();
                         //    var tp = new TheCaregiver.Resources.TransPanel();
                         //    tp.Location = new Point(0, 0);
-                        //    tp.Width = 51 * BOARD_WIDTH;
-                        //    tp.Height = 51 * BOARD_HEIGHT;
+                        //    tp.Width = TILE_PIXELS * BOARD_TILE_WIDTH;
+                        //    tp.Height = TILE_PIXELS * BOARD_TILE_HEIGHT;
                         //    tp.BackColor = Color.Aquamarine;
                         //    tp.BringToFront();
                         //    Image img = Image.FromFile(@"Resources\scroll.png");
                         //    Bitmap bmp = (Bitmap)img;
                         //    var pb = new PictureBox();
                         //    pb.Image = img;
-                        //    tp.Width = 51 * BOARD_WIDTH;
-                        //    tp.Height = 51 * BOARD_HEIGHT;
+                        //    tp.Width = TILE_PIXELS * BOARD_TILE_WIDTH;
+                        //    tp.Height = TILE_PIXELS * BOARD_TILE_HEIGHT;
                         //    pb.Location = new Point(0, 0);
                         //    tp.Controls.Add(pb);
                         //    //  pi.BackgroundImage = bmp;
