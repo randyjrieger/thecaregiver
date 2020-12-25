@@ -8,5 +8,8 @@ namespace TheCaregiver.Templates
 {
     public class House : ILocation
     {
+        public string Name { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }

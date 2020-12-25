@@ -54,10 +54,15 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.Daytimer = new System.Windows.Forms.Timer(this.components);
             this.CombatTimer = new System.Windows.Forms.Timer(this.components);
+            this.pnlDevSettings = new System.Windows.Forms.Panel();
+            this.btnSaveDevSettings = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.chkDevSetting_HasSeed = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.pnlDevSettings.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -304,12 +309,55 @@
             this.CombatTimer.Interval = 300;
             this.CombatTimer.Tick += new System.EventHandler(this.CombatTimer_Tick);
             // 
+            // pnlDevSettings
+            // 
+            this.pnlDevSettings.BackColor = System.Drawing.Color.PeachPuff;
+            this.pnlDevSettings.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pnlDevSettings.Controls.Add(this.chkDevSetting_HasSeed);
+            this.pnlDevSettings.Controls.Add(this.label1);
+            this.pnlDevSettings.Controls.Add(this.btnSaveDevSettings);
+            this.pnlDevSettings.Location = new System.Drawing.Point(116, 113);
+            this.pnlDevSettings.Name = "pnlDevSettings";
+            this.pnlDevSettings.Size = new System.Drawing.Size(460, 186);
+            this.pnlDevSettings.TabIndex = 3;
+            // 
+            // btnSaveDevSettings
+            // 
+            this.btnSaveDevSettings.Location = new System.Drawing.Point(344, 144);
+            this.btnSaveDevSettings.Name = "btnSaveDevSettings";
+            this.btnSaveDevSettings.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveDevSettings.TabIndex = 0;
+            this.btnSaveDevSettings.Text = "&Save";
+            this.btnSaveDevSettings.UseVisualStyleBackColor = true;
+            this.btnSaveDevSettings.Click += new System.EventHandler(this.btnSaveDevSettings_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(4, 4);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(107, 15);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Developer Settings";
+            // 
+            // chkDevSetting_HasSeed
+            // 
+            this.chkDevSetting_HasSeed.AutoSize = true;
+            this.chkDevSetting_HasSeed.Location = new System.Drawing.Point(30, 23);
+            this.chkDevSetting_HasSeed.Name = "chkDevSetting_HasSeed";
+            this.chkDevSetting_HasSeed.Size = new System.Drawing.Size(77, 19);
+            this.chkDevSetting_HasSeed.TabIndex = 2;
+            this.chkDevSetting_HasSeed.Text = "Has Seed";
+            this.chkDevSetting_HasSeed.UseVisualStyleBackColor = true;
+            this.chkDevSetting_HasSeed.CheckedChanged += new System.EventHandler(this.chkDevSetting_HasSeed_CheckedChanged);
+            // 
             // GameBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(923, 761);
+            this.Controls.Add(this.pnlDevSettings);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Tw Cen MT", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -331,6 +379,8 @@
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.pnlDevSettings.ResumeLayout(false);
+            this.pnlDevSettings.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -360,6 +410,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton helpToolStripButton;
         private System.Windows.Forms.Timer CombatTimer;
+        private System.Windows.Forms.Panel pnlDevSettings;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnSaveDevSettings;
+        private System.Windows.Forms.CheckBox chkDevSetting_HasSeed;
     }
 }
 

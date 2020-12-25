@@ -63,6 +63,7 @@ namespace TheCaregiver
             SetupWeapons();
             SetupArmour();
 
+            pnlDevSettings.Visible = false;
             //Create Player
             if (Mode == GameMode.New)
             {
@@ -2087,6 +2088,13 @@ namespace TheCaregiver
 
                         break;
 
+                    //Developer Window
+                    case Keys.D:
+                        {
+                            pnlDevSettings.Show();
+                            break;
+                        }
+
                     //Fish
                     case Keys.F:
 
@@ -2696,6 +2704,26 @@ namespace TheCaregiver
         private void pasteToolStripButton_Click(object sender, EventArgs e)
         {
             LoadInventoryDialog();
+        }
+
+        private void btnSaveDevSettings_Click(object sender, EventArgs e)
+        {
+            pnlDevSettings.Visible = false;
+        }
+
+        private void chkDevSetting_HasSeed_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDevSetting_HasSeed.Checked)
+            {
+                player1.HasSeed = true;
+            }
+            else
+            {
+                player1.HasSeed = false;
+            }
+
+            //save code
+            player1.HasSeed = chkDevSetting_HasSeed.Checked;
         }
     }
 }
