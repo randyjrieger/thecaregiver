@@ -705,7 +705,7 @@ namespace TheCaregiver
 
         private void GameBoard_SizeChanged(object sender, EventArgs e)
         {
-          //delete me
+            //delete me
         }
 
 
@@ -717,7 +717,7 @@ namespace TheCaregiver
             }
             else
             {
-               // CalculateStuff();
+                // CalculateStuff();
 
                 DrawUI();
             }
@@ -731,20 +731,30 @@ namespace TheCaregiver
 
         private void CalculateStuff()
         {
-            int newWidthInTiles = (this.Width - panel1.Width) / TILE_PIXELS;
-            WIDTH_LEFTOVER = this.Width - (newWidthInTiles * TILE_PIXELS + panel1.Width);
+            panel1.Width = 270;
+            panel2.Height = 111;
+            richTextBox1.Height = 111;
 
+            int newWidthInTiles = (this.Width - panel1.Width) / TILE_PIXELS;
+            WIDTH_LEFTOVER = 0;
             if (newWidthInTiles % 2 == 0)
             {
                 newWidthInTiles -= 1;
-                WIDTH_LEFTOVER += TILE_PIXELS;
+                WIDTH_LEFTOVER = this.Width - (newWidthInTiles * TILE_PIXELS) + panel1.Width + TILE_PIXELS;
+                // WIDTH_LEFTOVER += TILE_PIXELS;
+            }
+            else
+            {
+                WIDTH_LEFTOVER = this.Width - (newWidthInTiles * TILE_PIXELS) + panel1.Width;
             }
 
+            panel1.Left = newWidthInTiles * TILE_PIXELS;
+            panel1.Width += WIDTH_LEFTOVER; //this widens to make up for leftover and also removing tile if it was EVEN
+
             WIDTH_TILE_RADIUS = (newWidthInTiles - 1) / 2;
-            //   WIDTH_LEFTOVER = (this.Width - panel1.Width) % TILE_PIXELS;
             WIDTH_BOARD_TILES = newWidthInTiles;
-            panel1.Left = this.Width + newWidthInTiles * TILE_PIXELS;
-            panel1.Width += WIDTH_LEFTOVER;
+            // panel1.Left = newWidthInTiles * TILE_PIXELS;// - WIDTH_LEFTOVER;
+            //  panel1.Width = this.Width - panel1.Left;
 
 
             int newHeightInTiles = (this.Height - panel2.Height) / TILE_PIXELS;
@@ -766,34 +776,75 @@ namespace TheCaregiver
         /// This is called when there is a resize or on first load        /// 
         /// </summary>
         public void DrawUI()
-        {
-            CalculateStuff();
-            //Set up board
-           // int gap_width = panel1.Left - (WIDTH_BOARD_TILES * TILE_PIXELS);
-            panel1.Left = WIDTH_BOARD_TILES * TILE_PIXELS;
+        {           
+            //set defaults
+            panel1.Width = 270;
+            //panel2.Height = 111;
+            //richTextBox1.Height = 111;
+            WIDTH_LEFTOVER = 0;
+            int GAMEBOARD_WIDTH = this.Width;
+            int GAMEBOARD_HEIGHT = this.Height;
+            int GAMEBOARD_CANVAS_WIDTH_NET = 0;
+            int GAMEBOARD_CANVAS_WIDTH_ADJ = 0;
+            int GAMEBOARD_CANVAS_HEIGHT_NET = 0;
+            int GAMEBOARD_CANVAS_HEIGHT_ADJ = 0;
 
-         //   this.Width -= gap_width;
-            ActionWindow.Top = toolStrip1.Height;// + panel3.Height;
-            ActionWindow.Height = (HEIGHT_BOARD_TILES * TILE_PIXELS - CommandArea.Height - panel3.Height) - toolStrip1.Height;
-            CommandArea.Top = ActionWindow.Height + toolStrip1.Height;
+            GAMEBOARD_CANVAS_WIDTH_NET = GAMEBOARD_WIDTH - panel1.Width;
+            WIDTH_BOARD_TILES = Math.DivRem(GAMEBOARD_CANVAS_WIDTH_NET, TILE_PIXELS, out WIDTH_LEFTOVER);
 
-            //CommandArea.Left = 1; // panel1.Left;
-            //panel3.Left = panel1.Left;
-            panel3.Top = CommandArea.Top + CommandArea.Height;// toolStrip1.Height;
+            //if number of tiles wide is even, we need to adjust
+            if (WIDTH_BOARD_TILES % 2 == 0)
+            {
+                WIDTH_BOARD_TILES--;
+                GAMEBOARD_CANVAS_WIDTH_NET -= TILE_PIXELS;
+                panel1.Width -= TILE_PIXELS;
+            }
+            panel1.Width += WIDTH_LEFTOVER;
+
+            WIDTH_TILE_RADIUS = (WIDTH_BOARD_TILES - 1) / 2;
+            //gameboard pixels height
+            GAMEBOARD_CANVAS_WIDTH_ADJ = WIDTH_BOARD_TILES * TILE_PIXELS;
+            panel1.Left = GAMEBOARD_CANVAS_WIDTH_ADJ;            
+
+            //add the leftover amount to widen panel1
+            panel1.Width += WIDTH_LEFTOVER;
+
+            ActionWindow.Left = 0;
+            ActionWindow.Width = panel1.Width;
+            CommandArea.Left = 0;
+            CommandArea.Width = panel1.Width;
+            panel3.Left = 0;
+            panel3.Width = panel1.Width;
+            //TODO actionpanel still a bit wide
 
 
+            //HEIGHT ADJUSTMENTS
+            GAMEBOARD_CANVAS_HEIGHT_NET = GAMEBOARD_HEIGHT - panel2.Height;
+            HEIGHT_BOARD_TILES = Math.DivRem(GAMEBOARD_CANVAS_HEIGHT_NET, TILE_PIXELS, out HEIGHT_LEFTOVER);
+
+            //if number of tiles high is even, we need to adjust
+            if (HEIGHT_BOARD_TILES%2 == 0)
+            {
+                HEIGHT_BOARD_TILES--;
+                GAMEBOARD_CANVAS_HEIGHT_NET -= TILE_PIXELS;
+                panel2.Height -= TILE_PIXELS;
+            }
+            panel2.Height += HEIGHT_LEFTOVER;
+
+            HEIGHT_TILE_RADIUS = (HEIGHT_BOARD_TILES - 1) / 2;
+            //gameboard pixels height
+            GAMEBOARD_CANVAS_HEIGHT_ADJ = HEIGHT_BOARD_TILES * TILE_PIXELS;
+            panel2.Top = GAMEBOARD_CANVAS_HEIGHT_ADJ;
+
+            //add the leftover amount to widen panel1
             panel2.Width = this.Width;
             richTextBox1.Width = panel2.Width;
 
-            int gap_height = panel2.Top - (HEIGHT_BOARD_TILES * TILE_PIXELS);
-            // panel2.Height = richTextBox1.Height;
-            this.Height -= gap_height;
-            panel2.Top = HEIGHT_BOARD_TILES * TILE_PIXELS;
-            richTextBox1.Top = panel2.Top;
-            richTextBox1.Top = 0;
-            richTextBox1.Left = 0;
-            //richTextBox1.Height = panel2.Height;
-            //this.Height = panel2.Top + panel2.Height + HEIGHT_LEFTOVER;  //this doesn't show the whole bottom panel
+            ActionWindow.Height = GAMEBOARD_CANVAS_HEIGHT_ADJ - panel3.Height - CommandArea.Height - toolStrip1.Height;
+            CommandArea.Top = ActionWindow.Height + toolStrip1.Height;
+            panel3.Top = CommandArea.Top + CommandArea.Height;
+
+
         }
 
         public void CreateScreen()
@@ -811,8 +862,8 @@ namespace TheCaregiver
             int MapFile_Border_Top = player1.Y - HEIGHT_TILE_RADIUS;
             int MapFile_Border_Bottom = player1.Y + HEIGHT_TILE_RADIUS;
 
-            WIDTH_BOARD_TILES = WIDTH_TILE_RADIUS * 2 + 1;
-            HEIGHT_BOARD_TILES = HEIGHT_TILE_RADIUS * 2 + 1;
+           // WIDTH_BOARD_TILES = WIDTH_TILE_RADIUS * 2 + 1;
+           // HEIGHT_BOARD_TILES = HEIGHT_TILE_RADIUS * 2 + 1;
 
             ScreenMatrix = new byte[WIDTH_BOARD_TILES, HEIGHT_BOARD_TILES];
 
@@ -2619,7 +2670,7 @@ namespace TheCaregiver
 
         private void Screen_ReDraw()
         {
-           // DrawUI();
+            // DrawUI();
             CreateScreen();
 
             DrawScreen();
