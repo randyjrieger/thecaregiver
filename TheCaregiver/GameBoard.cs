@@ -814,7 +814,7 @@ namespace TheCaregiver
             WIDTH_BOARD_TILES = WIDTH_TILE_RADIUS * 2 + 1;
             HEIGHT_BOARD_TILES = HEIGHT_TILE_RADIUS * 2 + 1;
 
-            ScreenMatrix = new byte[HEIGHT_BOARD_TILES, WIDTH_BOARD_TILES];
+            ScreenMatrix = new byte[WIDTH_BOARD_TILES, HEIGHT_BOARD_TILES];
 
             // *if part of the display is off the map, it's black
 
@@ -944,7 +944,14 @@ namespace TheCaregiver
                 {
                     if (startTimers)
                     {
-                        p = (PictureBox)this.Controls.Find((tileWidth * i).ToString() + "_" + (tileHeight * j).ToString(), true)[0];
+                        try
+                        {
+                            p = (PictureBox)this.Controls.Find((tileWidth * i).ToString() + "_" + (tileHeight * j).ToString(), true)[0];
+                        }
+                        catch (Exception)
+                        {
+                            p = new PictureBox();
+                        }
                     }
                     else
                     {
