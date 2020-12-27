@@ -55,9 +55,9 @@
             this.Daytimer = new System.Windows.Forms.Timer(this.components);
             this.CombatTimer = new System.Windows.Forms.Timer(this.components);
             this.pnlDevSettings = new System.Windows.Forms.Panel();
-            this.btnSaveDevSettings = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.chkDevSetting_HasSeed = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnSaveDevSettings = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -241,7 +241,7 @@
             this.ActionWindow.ReadOnly = true;
             this.ActionWindow.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             this.ActionWindow.ShortcutsEnabled = false;
-            this.ActionWindow.Size = new System.Drawing.Size(273, 506);
+            this.ActionWindow.Size = new System.Drawing.Size(271, 506);
             this.ActionWindow.TabIndex = 2;
             this.ActionWindow.TabStop = false;
             this.ActionWindow.Text = "";
@@ -321,15 +321,15 @@
             this.pnlDevSettings.Size = new System.Drawing.Size(460, 186);
             this.pnlDevSettings.TabIndex = 3;
             // 
-            // btnSaveDevSettings
+            // chkDevSetting_HasSeed
             // 
-            this.btnSaveDevSettings.Location = new System.Drawing.Point(344, 144);
-            this.btnSaveDevSettings.Name = "btnSaveDevSettings";
-            this.btnSaveDevSettings.Size = new System.Drawing.Size(75, 23);
-            this.btnSaveDevSettings.TabIndex = 0;
-            this.btnSaveDevSettings.Text = "&Save";
-            this.btnSaveDevSettings.UseVisualStyleBackColor = true;
-            this.btnSaveDevSettings.Click += new System.EventHandler(this.btnSaveDevSettings_Click);
+            this.chkDevSetting_HasSeed.AutoSize = true;
+            this.chkDevSetting_HasSeed.Location = new System.Drawing.Point(30, 23);
+            this.chkDevSetting_HasSeed.Name = "chkDevSetting_HasSeed";
+            this.chkDevSetting_HasSeed.Size = new System.Drawing.Size(77, 19);
+            this.chkDevSetting_HasSeed.TabIndex = 2;
+            this.chkDevSetting_HasSeed.Text = "Has Seed";
+            this.chkDevSetting_HasSeed.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -340,16 +340,15 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Developer Settings";
             // 
-            // chkDevSetting_HasSeed
+            // btnSaveDevSettings
             // 
-            this.chkDevSetting_HasSeed.AutoSize = true;
-            this.chkDevSetting_HasSeed.Location = new System.Drawing.Point(30, 23);
-            this.chkDevSetting_HasSeed.Name = "chkDevSetting_HasSeed";
-            this.chkDevSetting_HasSeed.Size = new System.Drawing.Size(77, 19);
-            this.chkDevSetting_HasSeed.TabIndex = 2;
-            this.chkDevSetting_HasSeed.Text = "Has Seed";
-            this.chkDevSetting_HasSeed.UseVisualStyleBackColor = true;
-            this.chkDevSetting_HasSeed.CheckedChanged += new System.EventHandler(this.chkDevSetting_HasSeed_CheckedChanged);
+            this.btnSaveDevSettings.Location = new System.Drawing.Point(344, 144);
+            this.btnSaveDevSettings.Name = "btnSaveDevSettings";
+            this.btnSaveDevSettings.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveDevSettings.TabIndex = 0;
+            this.btnSaveDevSettings.Text = "&Save";
+            this.btnSaveDevSettings.UseVisualStyleBackColor = true;
+            this.btnSaveDevSettings.Click += new System.EventHandler(this.btnSaveDevSettings_Click);
             // 
             // GameBoard
             // 
@@ -370,8 +369,10 @@
             this.Text = "Pirates of Nazidar/The Caregiver";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.GameBoard_Load);
+            this.ResizeEnd += new System.EventHandler(this.GameBoard_ResizeEnd);
             this.SizeChanged += new System.EventHandler(this.GameBoard_SizeChanged);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameBoard_KeyDown);
+            this.Resize += new System.EventHandler(this.GameBoard_Resize);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);

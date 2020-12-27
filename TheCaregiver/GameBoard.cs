@@ -22,10 +22,12 @@ namespace TheCaregiver
     {
         public int SCREEN_DIM = 11;
         public int TILE_PIXELS = 51;
-        public int BOARD_TILE_WIDTH = 11;
-        public int BOARD_TILE_HEIGHT = 11;
-        public int ASCII_RADIUS_WIDTH = 5;
-        public int ASCII_RADIUS_HEIGHT = 5;
+        public int WIDTH_BOARD_TILES = 11;
+        public int HEIGHT_BOARD_TILES = 11;
+        public int WIDTH_TILE_RADIUS = 5;
+        public int WIDTH_LEFTOVER = 0;
+        public int HEIGHT_LEFTOVER = 0;
+        public int HEIGHT_TILE_RADIUS = 5;
         public int offset_width;
         public int offset_height;
         public Player player1;
@@ -47,8 +49,7 @@ namespace TheCaregiver
         //Timers
         private List<Tile> Tiles = new List<Tile>();
         public CombatManager combatmanager = new CombatManager();
-
-
+        private bool IsFirstResizeOnLoad = true;
 
         private List<Bitmap> MonsterTiles = new List<Bitmap>();
         private Dice dice = new Dice();
@@ -72,7 +73,7 @@ namespace TheCaregiver
             {
                 player1 = new Player();
                 gameState = new GameState(Mode);
-                              
+
 
 
                 //temp
@@ -103,7 +104,7 @@ namespace TheCaregiver
                     //};
 
                     //  string json = JsonConvert.DeserializeObject(dic, Formatting.Indented);
-                    
+
                     try
                     {
                         json = sr.ReadToEnd();
@@ -116,13 +117,13 @@ namespace TheCaregiver
                 }
 
                 Dictionary<string, object> dic = new Dictionary<string, object>();
-                dic =  JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+                dic = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
 
                 //player1
                 player1 = JsonConvert.DeserializeObject<Player>(dic["player1"].ToString());
                 //gamestate
                 gameState = JsonConvert.DeserializeObject<GameState>(dic["gamestate"].ToString());
-           
+
                 World_Refresh(player1.Map);
 
                 MonsterHelper.CreateMonsterTypes(regions);
@@ -137,38 +138,20 @@ namespace TheCaregiver
                 //    }
                 //}
             }
-                                   
-            offset_width = ASCII_RADIUS_WIDTH;
-            offset_height = ASCII_RADIUS_HEIGHT;
-            BOARD_TILE_WIDTH = (ASCII_RADIUS_WIDTH * 2) + 1;
-            BOARD_TILE_HEIGHT = (ASCII_RADIUS_HEIGHT * 2 ) + 1;
+            //   DrawUI();
 
-            //Set up board
-            this.Width = BOARD_TILE_WIDTH * TILE_PIXELS + panel1.Width;
-            richTextBox1.Width = BOARD_TILE_WIDTH * TILE_PIXELS + ActionWindow.Width;
-            panel2.Height = richTextBox1.Height;
-            panel1.Left = BOARD_TILE_WIDTH * TILE_PIXELS;
-            panel2.Top = BOARD_TILE_HEIGHT * TILE_PIXELS;
-            panel3.Top = toolStrip1.Height;
-            ActionWindow.Top = toolStrip1.Height + panel3.Height;
-            ActionWindow.Height = BOARD_TILE_HEIGHT * TILE_PIXELS - CommandArea.Height - panel3.Height - toolStrip1.Height ;
-            CommandArea.Top = ActionWindow.Height + toolStrip1.Height + panel3.Height;
-            richTextBox1.Top = 0;
-            richTextBox1.Left = 0;
-            richTextBox1.Height = panel2.Height;
-            this.Height = panel2.Top + panel2.Height;  //this doesn't show the whole bottom panel
-                        
             richTextBox1.Text = "Game On";
-            
-           // inventoryPanel.Visible = false;
-           // statsPanel.Visible = false;
+
+            // inventoryPanel.Visible = false;
+            // statsPanel.Visible = false;
+            DrawUI();
             GameTimer.Enabled = true;
 
             //Getting Ready...
             if (Mode == GameMode.New)
             {
                 player1.SetStartPosition(MapMatrix);
-            }                       
+            }
 
             this.Focus();
 
@@ -237,17 +220,18 @@ namespace TheCaregiver
 
         public void SetupWeapons()
         {
-            Weapons.Add(new Weapon { 
+            Weapons.Add(new Weapon
+            {
                 Name = "Dagger",
                 MaxDamage = 3,
                 Handedness = WeaponHandedness.OneHanded
-                }
+            }
             );
 
             Weapons.Add(new Weapon
-                {
-                    Name = "Sword Sword",
-                    MaxDamage = 4,
+            {
+                Name = "Sword Sword",
+                MaxDamage = 4,
                 Handedness = WeaponHandedness.OneHanded
             }
             );
@@ -431,7 +415,7 @@ namespace TheCaregiver
         {
 
             MapMatrix = new byte[gameState.CurrentMap.X, gameState.CurrentMap.Y];
-  
+
 
             for (var x = 0; x < gameState.CurrentMap.X; x++)
             {
@@ -464,7 +448,7 @@ namespace TheCaregiver
             Tiles.Add(new Tile
             {
                 Letter = '*',
-                Picture  = new Bitmap(TheCaregiver.Tiles.snow)
+                Picture = new Bitmap(TheCaregiver.Tiles.snow)
             });
 
             Tiles.Add(new Tile
@@ -718,35 +702,168 @@ namespace TheCaregiver
                 Picture = new Bitmap(TheCaregiver.Tiles.bridge)
             });
         }
+
+        private void GameBoard_SizeChanged(object sender, EventArgs e)
+        {
+            //Determine the new size
+
+            //Determine the number of tiles for width and height
+
+            //remainder will be added to the side and bottom panels
+
+
+            // UpdateActionWindow("size");
+        }
+
+
+        private void GameBoard_Resize(object sender, EventArgs e)
+        {
+            if (IsFirstResizeOnLoad)
+            {
+                //IsFirstResizeOnLoad = false;
+            }
+            else
+            {
+                WIDTH_TILE_RADIUS = (this.Width - panel1.Width) / TILE_PIXELS;
+                WIDTH_LEFTOVER = (this.Width - panel1.Width) % TILE_PIXELS;
+                WIDTH_BOARD_TILES = (WIDTH_TILE_RADIUS * 2) + 1;
+
+                //if (WIDTH_TILE_RADIUS % 2 == 0)
+                //{
+                //    WIDTH_TILE_RADIUS -= 1;
+                //    WIDTH_LEFTOVER += TILE_PIXELS;
+                //}
+
+                HEIGHT_TILE_RADIUS = (this.Height - panel2.Height) / TILE_PIXELS;
+                HEIGHT_LEFTOVER = (this.Height - panel2.Height) % TILE_PIXELS;
+                HEIGHT_BOARD_TILES = (HEIGHT_TILE_RADIUS * 2) + 1;
+
+                //if (HEIGHT_TILE_RADIUS % 2 == 0)
+                //{
+                //    HEIGHT_TILE_RADIUS -= 1;
+                //    HEIGHT_LEFTOVER += TILE_PIXELS;
+                //}
+
+                DrawUI();
+            }
+
+        }
+
+        private void GameBoard_ResizeEnd(object sender, EventArgs e)
+        {
+            if (IsFirstResizeOnLoad)
+            {
+                //IsFirstResizeOnLoad = false;
+            }
+            else
+            {
+                WIDTH_TILE_RADIUS = (this.Width - panel1.Width) / TILE_PIXELS;
+                WIDTH_LEFTOVER = (this.Width - panel1.Width) % TILE_PIXELS;
+                WIDTH_BOARD_TILES = (WIDTH_TILE_RADIUS * 2) + 1;
+
+                //if (WIDTH_TILE_RADIUS % 2 == 0)
+                //{
+                //    WIDTH_TILE_RADIUS -= 1;
+                //    WIDTH_LEFTOVER += TILE_PIXELS;
+                //}
+
+                HEIGHT_TILE_RADIUS = (this.Height - panel2.Height) / TILE_PIXELS;
+                HEIGHT_LEFTOVER = (this.Height - panel2.Height) % TILE_PIXELS;
+                HEIGHT_BOARD_TILES = (HEIGHT_TILE_RADIUS * 2) + 1;
+
+                //if (HEIGHT_TILE_RADIUS % 2 == 0)
+                //{
+                //    HEIGHT_TILE_RADIUS -= 1;
+                //    HEIGHT_LEFTOVER += TILE_PIXELS;
+                //}
+
+                DrawUI();
+            }
+        }
+        /// <summary>
+        /// This is called when there is a resize or on first load        /// 
+        /// </summary>
+        public void DrawUI()
+        {
+            //Set up board
+            int gap_width = panel1.Left - (WIDTH_BOARD_TILES * TILE_PIXELS);
+            panel1.Left = WIDTH_BOARD_TILES * TILE_PIXELS;
+
+            this.Width -= gap_width;
+            ActionWindow.Top = toolStrip1.Height;// + panel3.Height;
+            ActionWindow.Height = (HEIGHT_BOARD_TILES * TILE_PIXELS - CommandArea.Height - panel3.Height) - toolStrip1.Height;
+            CommandArea.Top = ActionWindow.Height + toolStrip1.Height;
+
+            //CommandArea.Left = 1; // panel1.Left;
+            //panel3.Left = panel1.Left;
+            panel3.Top = CommandArea.Top + CommandArea.Height;// toolStrip1.Height;
+
+
+            panel2.Width = this.Width;
+            richTextBox1.Width = panel2.Width;
+
+            int gap_height = panel2.Top - (HEIGHT_BOARD_TILES * TILE_PIXELS);
+            // panel2.Height = richTextBox1.Height;
+            this.Height -= gap_height;
+            panel2.Top = HEIGHT_BOARD_TILES * TILE_PIXELS;
+            richTextBox1.Top = panel2.Top;
+            richTextBox1.Top = 0;
+            richTextBox1.Left = 0;
+            //richTextBox1.Height = panel2.Height;
+            //this.Height = panel2.Top + panel2.Height + HEIGHT_LEFTOVER;  //this doesn't show the whole bottom panel
+        }
+
         public void CreateScreen()
         {
+            /*
+             * RESIZE
+             * calculate WIDTH_TILE_RADIUS
+             * 
+             */
+
             //screen boundaries - this is tile based, not pixel based
             //this is the area in the ASCII file that will be visible
-            int MapFile_Border_Left = player1.X - ASCII_RADIUS_WIDTH;
-            int MapFile_Border_Right = player1.X + ASCII_RADIUS_WIDTH;
-            int MapFile_Border_Top = player1.Y - ASCII_RADIUS_HEIGHT;
-            int MapFile_Border_Bottom = player1.Y + ASCII_RADIUS_HEIGHT;
+            int MapFile_Border_Left = player1.X - WIDTH_TILE_RADIUS;
+            int MapFile_Border_Right = player1.X + WIDTH_TILE_RADIUS;
+            int MapFile_Border_Top = player1.Y - HEIGHT_TILE_RADIUS;
+            int MapFile_Border_Bottom = player1.Y + HEIGHT_TILE_RADIUS;
 
-            ScreenMatrix = new byte[BOARD_TILE_HEIGHT, BOARD_TILE_WIDTH];
+            WIDTH_BOARD_TILES = WIDTH_TILE_RADIUS * 2 + 1;
+            HEIGHT_BOARD_TILES = HEIGHT_TILE_RADIUS * 2 + 1;
+
+            ScreenMatrix = new byte[HEIGHT_BOARD_TILES, WIDTH_BOARD_TILES];
+
+            // *if part of the display is off the map, it's black
+
+            // end
+
 
             int x;
             int j = 0;
 
-            // *if part of the display is off the map, it's black
+            //Moving down in the map increments Y
             for (int MapY = MapFile_Border_Top; MapY <= MapFile_Border_Bottom; MapY++)
             {
                 x = 0;
+                //Moving left to right in the map increments X
                 for (int MapX = MapFile_Border_Left; MapX <= MapFile_Border_Right; MapX++)
                 {
-                    if ((MapX < 0) || (MapX >= gameState.CurrentMap.X) || (MapY < 0) || (MapY >= gameState.CurrentMap.Y))
+                    try
                     {
-                        ScreenMatrix[x, j] = 0;
-                    }
-                    else
-                    {
-                        ScreenMatrix[x, j] = MapMatrix[MapX, MapY];
-                    }
+                        if ((MapX < 0) || (MapX >= gameState.CurrentMap.X) || (MapY < 0) || (MapY >= gameState.CurrentMap.Y))
+                        {
+                            ScreenMatrix[x, j] = 0;
+                        }
+                        else
+                        {
+                            ScreenMatrix[x, j] = MapMatrix[MapX, MapY];
+                        }
 
+                    }
+                    catch (Exception)
+                    {
+
+                    }
 
                     x++;
                 }
@@ -920,7 +1037,7 @@ namespace TheCaregiver
                         {
                             case ',':
                             case '.':
-                               sourceBmp = (Tiles.Single(t => (t.Letter == (char)ScreenMatrix[i, j])).getMovingPicture(gameState.waterTicker));
+                                sourceBmp = (Tiles.Single(t => (t.Letter == (char)ScreenMatrix[i, j])).getMovingPicture(gameState.waterTicker));
                                 break;
 
                             case '%':
@@ -941,15 +1058,15 @@ namespace TheCaregiver
 
                                 //will this be an issue if near end of map (no gardens there anyway)
                                 GardenPlot g = player1.GardenPlots.Find(w => w.X == gX && w.Y == gY);
-                               
-                                sourceBmp = g.GetGardenTileToDraw();                               
-                                 break;
 
-                            default:                           
+                                sourceBmp = g.GetGardenTileToDraw();
+                                break;
+
+                            default:
                                 sourceBmp = Tiles.Single(t => t.Letter == (char)ScreenMatrix[i, j]).Picture;
                                 break;
                         }
-                       
+
 
                     }
                     catch (System.InvalidOperationException e)
@@ -1035,6 +1152,7 @@ namespace TheCaregiver
 
                 }
             }
+            IsFirstResizeOnLoad = false;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -1216,7 +1334,7 @@ namespace TheCaregiver
                     //if this Monster is attacking the Player, they don't move
                     if (m.CombatMode)
                     {
-                       // AttackTurn(m);
+                        // AttackTurn(m);
                     }
                     else
                     {
@@ -1310,14 +1428,14 @@ namespace TheCaregiver
             {
                 if ((!CombatTimer.Enabled) && (!player1.CombatMode))
                 {
-                //    Monster meanie = Monsters.Find(m => m.CombatMode);
-                //}
-                //else
-                //{
+                    //    Monster meanie = Monsters.Find(m => m.CombatMode);
+                    //}
+                    //else
+                    //{
                     Monster meanie = (Monster)TileCheckForInteraction(InteractionType.Monster);
 
-                   // if ((meanie != null) && (meanie.Aggressive))
-                    if (meanie != null) 
+                    // if ((meanie != null) && (meanie.Aggressive))
+                    if (meanie != null)
                     {
                         UpdateActionWindow(meanie.WelcomeMessage);
 
@@ -1748,7 +1866,7 @@ namespace TheCaregiver
         /// </summary>
         /// <param name="tilesToFind"></param>
         /// <returns></returns>
-      
+
         private bool TileCheck(char[] tilesToFind)
         {
             bool found = false;
@@ -1935,23 +2053,11 @@ namespace TheCaregiver
         {
 
         }
-        private void GameBoard_SizeChanged(object sender, EventArgs e)
-        {
-            //Determine the new size
-
-            //Determine the number of tiles for width and height
-
-            //remainder will be added to the side and bottom panels
-
-
-            // UpdateActionWindow("size");
-        }
-
         private void LoadInventoryDialog()
         {
             Inventory ic = new Inventory(player1);
-            ic.StartPosition = FormStartPosition.CenterScreen; 
-            ic.Show(this);  
+            ic.StartPosition = FormStartPosition.CenterScreen;
+            ic.Show(this);
         }
 
         #region UIButtons
@@ -2337,16 +2443,16 @@ namespace TheCaregiver
                         //    //   GameTimer.Stop();
                         //    var tp = new TheCaregiver.Resources.TransPanel();
                         //    tp.Location = new Point(0, 0);
-                        //    tp.Width = TILE_PIXELS * BOARD_TILE_WIDTH;
-                        //    tp.Height = TILE_PIXELS * BOARD_TILE_HEIGHT;
+                        //    tp.Width = TILE_PIXELS * WIDTH_BOARD_TILES;
+                        //    tp.Height = TILE_PIXELS * HEIGHT_BOARD_TILES;
                         //    tp.BackColor = Color.Aquamarine;
                         //    tp.BringToFront();
                         //    Image img = Image.FromFile(@"Resources\scroll.png");
                         //    Bitmap bmp = (Bitmap)img;
                         //    var pb = new PictureBox();
                         //    pb.Image = img;
-                        //    tp.Width = TILE_PIXELS * BOARD_TILE_WIDTH;
-                        //    tp.Height = TILE_PIXELS * BOARD_TILE_HEIGHT;
+                        //    tp.Width = TILE_PIXELS * WIDTH_BOARD_TILES;
+                        //    tp.Height = TILE_PIXELS * HEIGHT_BOARD_TILES;
                         //    pb.Location = new Point(0, 0);
                         //    tp.Controls.Add(pb);
                         //    //  pi.BackgroundImage = bmp;
@@ -2482,7 +2588,7 @@ namespace TheCaregiver
 
         private void World_Refresh(Place thisplace)
         {
-           // player1.Map = thisplace;
+            // player1.Map = thisplace;
             Atlas.BuildAtlas(gameState.reality.Season);
             gameState.CurrentMap = Atlas.Maps[player1.Map];
 
@@ -2500,7 +2606,7 @@ namespace TheCaregiver
 
             if (player1.Map == Place.Wilderness)
             {
-               
+
                 // Overwrite map with garden
                 foreach (GardenPlot g in player1.GardenPlots)
                 {
@@ -2514,7 +2620,7 @@ namespace TheCaregiver
                 //     KingdomExtract = gameState.CurrentMap.LoadKingdoms();
 
                 if (player1.HasHouse)
-                { 
+                {
                     MapExtract[player1.HouseX, player1.HouseY] = "H";
                     MapMatrix[player1.HouseX, player1.HouseY] = 72;
                 }
@@ -2523,6 +2629,7 @@ namespace TheCaregiver
 
         private void Screen_ReDraw()
         {
+           // DrawUI();
             CreateScreen();
 
             DrawScreen();
@@ -2531,8 +2638,8 @@ namespace TheCaregiver
         #endregion
 
         private void saveToolStripButton_Click_1(object sender, EventArgs e)
-        {              
-            
+        {
+
             var saveFilePath = Application.LocalUserAppDataPath;
 
             using (StreamWriter sw = new StreamWriter(saveFilePath + @"//" + "savefile.crg"))
@@ -2545,9 +2652,9 @@ namespace TheCaregiver
                     { "gamestate", gameState},
                     { "mobs", Monsters }
                 };
-                
+
                 string json = JsonConvert.SerializeObject(dic, Formatting.Indented);
-                
+
                 try
                 {
                     sw.Write(json);
@@ -2588,7 +2695,7 @@ namespace TheCaregiver
                     }
                     else
                     {
-                        if (((Double) player1.Health / player1.HealthMax) >= 0.75)
+                        if (((Double)player1.Health / player1.HealthMax) >= 0.75)
                         {
                             UpdateActionWindow("You've been hit. It's just a flesh wound!");
                         }
@@ -2699,11 +2806,11 @@ namespace TheCaregiver
                 combatmanager.FinishRound();
             }
 
-          //  Defense = 15,
-           //     DamageMax = 3,
+            //  Defense = 15,
+            //     DamageMax = 3,
             //Flee Decision
-           // FleeThreshold
-           // ChanceToFlee
+            // FleeThreshold
+            // ChanceToFlee
         }
 
         private void helpToolStripButton_Click(object sender, EventArgs e)
@@ -2735,6 +2842,7 @@ namespace TheCaregiver
             //save code
             player1.HasSeed = chkDevSetting_HasSeed.Checked;
         }
+
     }
 }
 
