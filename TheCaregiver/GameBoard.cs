@@ -705,14 +705,7 @@ namespace TheCaregiver
 
         private void GameBoard_SizeChanged(object sender, EventArgs e)
         {
-            //Determine the new size
-
-            //Determine the number of tiles for width and height
-
-            //remainder will be added to the side and bottom panels
-
-
-            // UpdateActionWindow("size");
+          //delete me
         }
 
 
@@ -724,25 +717,7 @@ namespace TheCaregiver
             }
             else
             {
-                WIDTH_TILE_RADIUS = (this.Width - panel1.Width) / TILE_PIXELS;
-                WIDTH_LEFTOVER = (this.Width - panel1.Width) % TILE_PIXELS;
-                WIDTH_BOARD_TILES = (WIDTH_TILE_RADIUS * 2) + 1;
-
-                //if (WIDTH_TILE_RADIUS % 2 == 0)
-                //{
-                //    WIDTH_TILE_RADIUS -= 1;
-                //    WIDTH_LEFTOVER += TILE_PIXELS;
-                //}
-
-                HEIGHT_TILE_RADIUS = (this.Height - panel2.Height) / TILE_PIXELS;
-                HEIGHT_LEFTOVER = (this.Height - panel2.Height) % TILE_PIXELS;
-                HEIGHT_BOARD_TILES = (HEIGHT_TILE_RADIUS * 2) + 1;
-
-                //if (HEIGHT_TILE_RADIUS % 2 == 0)
-                //{
-                //    HEIGHT_TILE_RADIUS -= 1;
-                //    HEIGHT_LEFTOVER += TILE_PIXELS;
-                //}
+               // CalculateStuff();
 
                 DrawUI();
             }
@@ -751,45 +726,53 @@ namespace TheCaregiver
 
         private void GameBoard_ResizeEnd(object sender, EventArgs e)
         {
-            if (IsFirstResizeOnLoad)
+            //delete me
+        }
+
+        private void CalculateStuff()
+        {
+            int newWidthInTiles = (this.Width - panel1.Width) / TILE_PIXELS;
+            WIDTH_LEFTOVER = this.Width - (newWidthInTiles * TILE_PIXELS + panel1.Width);
+
+            if (newWidthInTiles % 2 == 0)
             {
-                //IsFirstResizeOnLoad = false;
+                newWidthInTiles -= 1;
+                WIDTH_LEFTOVER += TILE_PIXELS;
             }
-            else
+
+            WIDTH_TILE_RADIUS = (newWidthInTiles - 1) / 2;
+            //   WIDTH_LEFTOVER = (this.Width - panel1.Width) % TILE_PIXELS;
+            WIDTH_BOARD_TILES = newWidthInTiles;
+            panel1.Left = this.Width + newWidthInTiles * TILE_PIXELS;
+            panel1.Width += WIDTH_LEFTOVER;
+
+
+            int newHeightInTiles = (this.Height - panel2.Height) / TILE_PIXELS;
+            HEIGHT_LEFTOVER = this.Height - (newHeightInTiles * TILE_PIXELS + panel2.Height);
+
+            if (newHeightInTiles % 2 == 0)
             {
-                WIDTH_TILE_RADIUS = (this.Width - panel1.Width) / TILE_PIXELS;
-                WIDTH_LEFTOVER = (this.Width - panel1.Width) % TILE_PIXELS;
-                WIDTH_BOARD_TILES = (WIDTH_TILE_RADIUS * 2) + 1;
-
-                //if (WIDTH_TILE_RADIUS % 2 == 0)
-                //{
-                //    WIDTH_TILE_RADIUS -= 1;
-                //    WIDTH_LEFTOVER += TILE_PIXELS;
-                //}
-
-                HEIGHT_TILE_RADIUS = (this.Height - panel2.Height) / TILE_PIXELS;
-                HEIGHT_LEFTOVER = (this.Height - panel2.Height) % TILE_PIXELS;
-                HEIGHT_BOARD_TILES = (HEIGHT_TILE_RADIUS * 2) + 1;
-
-                //if (HEIGHT_TILE_RADIUS % 2 == 0)
-                //{
-                //    HEIGHT_TILE_RADIUS -= 1;
-                //    HEIGHT_LEFTOVER += TILE_PIXELS;
-                //}
-
-                DrawUI();
+                newHeightInTiles -= 1;
+                HEIGHT_LEFTOVER += TILE_PIXELS;
             }
+
+            HEIGHT_TILE_RADIUS = (newHeightInTiles - 1) / 2;
+            // HEIGHT_LEFTOVER = (this.Height - panel2.Height) % TILE_PIXELS;
+            HEIGHT_BOARD_TILES = newHeightInTiles;
+            panel2.Height += HEIGHT_LEFTOVER;
+
         }
         /// <summary>
         /// This is called when there is a resize or on first load        /// 
         /// </summary>
         public void DrawUI()
         {
+            CalculateStuff();
             //Set up board
-            int gap_width = panel1.Left - (WIDTH_BOARD_TILES * TILE_PIXELS);
+           // int gap_width = panel1.Left - (WIDTH_BOARD_TILES * TILE_PIXELS);
             panel1.Left = WIDTH_BOARD_TILES * TILE_PIXELS;
 
-            this.Width -= gap_width;
+         //   this.Width -= gap_width;
             ActionWindow.Top = toolStrip1.Height;// + panel3.Height;
             ActionWindow.Height = (HEIGHT_BOARD_TILES * TILE_PIXELS - CommandArea.Height - panel3.Height) - toolStrip1.Height;
             CommandArea.Top = ActionWindow.Height + toolStrip1.Height;
@@ -906,16 +889,16 @@ namespace TheCaregiver
             QuestPerson person;
 
             //getting four corners of screen coordinates 
-            int x1 = player1.X - 5;
+            int x1 = player1.X - WIDTH_TILE_RADIUS;
             if (x1 < 0) x1 = 0;
 
-            int x2 = player1.X + 5;
+            int x2 = player1.X + WIDTH_TILE_RADIUS;
             if (x2 > gameState.CurrentMap.X) x2 = gameState.CurrentMap.X;
 
-            int y1 = player1.Y - 5;
+            int y1 = player1.Y - HEIGHT_TILE_RADIUS;
             if (y1 < 0) y1 = 0;
 
-            int y2 = player1.Y + 5;
+            int y2 = player1.Y + HEIGHT_TILE_RADIUS;
             if (y2 > gameState.CurrentMap.Y) y2 = gameState.CurrentMap.Y;
 
             if (gameState.CurrentMap.MAPID == Place.Wilderness)
@@ -955,9 +938,9 @@ namespace TheCaregiver
                 }
             }
 
-            for (int j = 10; j >= 0; j--)
+            for (int j = HEIGHT_BOARD_TILES - 1; j >= 0; j--)
             {
-                for (int i = 0; i <= 10; i++)
+                for (int i = 0; i <= WIDTH_BOARD_TILES - 1; i++)
                 {
                     if (startTimers)
                     {
@@ -978,7 +961,7 @@ namespace TheCaregiver
                     //    mob1Bmp = new Bitmap(TheCaregiver.Tiles.ettin1);
 
                     //Player1
-                    if ((j == 5) && (i == 5))
+                    if ((j == HEIGHT_TILE_RADIUS) && (i == WIDTH_TILE_RADIUS))
                     {
                         player1Bmp = new Bitmap(TheCaregiver.Tiles.player1);
                         if (player1.Sleeping)
@@ -1080,7 +1063,7 @@ namespace TheCaregiver
                     /* Centre of screen - this is the player tile
                      * Player tile is a transparent .png written on top of the background tile
                      */
-                    if ((j == 5) && (i == 5))
+                    if ((j == HEIGHT_TILE_RADIUS) && (i == WIDTH_TILE_RADIUS))
                     {
                         var overlay = new Bitmap(p.Width, p.Height);
                         G = Graphics.FromImage(overlay);
