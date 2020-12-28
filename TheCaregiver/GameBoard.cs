@@ -797,7 +797,7 @@ namespace TheCaregiver
             {
                 WIDTH_BOARD_TILES--;
                 GAMEBOARD_CANVAS_WIDTH_NET -= TILE_PIXELS;
-                panel1.Width -= TILE_PIXELS;
+                panel1.Width += TILE_PIXELS;
             }
             panel1.Width += WIDTH_LEFTOVER;
 
@@ -809,15 +809,13 @@ namespace TheCaregiver
             //add the leftover amount to widen panel1
             panel1.Width += WIDTH_LEFTOVER;
 
-            ActionWindow.Left = 0;
+            //ActionWindow.Left = 0;
             ActionWindow.Width = panel1.Width;
-            CommandArea.Left = 0;
+            //CommandArea.Left = 0;
             CommandArea.Width = panel1.Width;
-            panel3.Left = 0;
+            //panel3.Left = 0;
             panel3.Width = panel1.Width;
-            //TODO actionpanel still a bit wide
-
-
+            
             //HEIGHT ADJUSTMENTS
             GAMEBOARD_CANVAS_HEIGHT_NET = GAMEBOARD_HEIGHT - panel2.Height;
             HEIGHT_BOARD_TILES = Math.DivRem(GAMEBOARD_CANVAS_HEIGHT_NET, TILE_PIXELS, out HEIGHT_LEFTOVER);
@@ -825,9 +823,10 @@ namespace TheCaregiver
             //if number of tiles high is even, we need to adjust
             if (HEIGHT_BOARD_TILES%2 == 0)
             {
-                HEIGHT_BOARD_TILES--;
+                //HEIGHT_BOARD_TILES--;
                 GAMEBOARD_CANVAS_HEIGHT_NET -= TILE_PIXELS;
-                panel2.Height -= TILE_PIXELS;
+                HEIGHT_BOARD_TILES = Math.DivRem(GAMEBOARD_CANVAS_HEIGHT_NET, TILE_PIXELS, out HEIGHT_LEFTOVER);
+                panel2.Height += TILE_PIXELS;
             }
             panel2.Height += HEIGHT_LEFTOVER;
 
@@ -835,15 +834,18 @@ namespace TheCaregiver
             //gameboard pixels height
             GAMEBOARD_CANVAS_HEIGHT_ADJ = HEIGHT_BOARD_TILES * TILE_PIXELS;
             panel2.Top = GAMEBOARD_CANVAS_HEIGHT_ADJ;
+            panel1.Height = GAMEBOARD_CANVAS_HEIGHT_ADJ;
 
             //add the leftover amount to widen panel1
             panel2.Width = this.Width;
             richTextBox1.Width = panel2.Width;
 
             ActionWindow.Height = GAMEBOARD_CANVAS_HEIGHT_ADJ - panel3.Height - CommandArea.Height - toolStrip1.Height;
-            CommandArea.Top = ActionWindow.Height + toolStrip1.Height;
+            CommandArea.Top = ActionWindow.Height + ActionWindow.Top;
             panel3.Top = CommandArea.Top + CommandArea.Height;
 
+            //panel3.BringToFront();
+            //CommandArea.BringToFront();
 
         }
 
@@ -905,7 +907,7 @@ namespace TheCaregiver
                 j++;
             }
 
-            player1.CurrentTile = ScreenMatrix[5, 5];
+            player1.CurrentTile = ScreenMatrix[WIDTH_TILE_RADIUS, HEIGHT_TILE_RADIUS];
 
             //Monsters
             //search collection of Monsters for an X -5 or +5 and Y -5 and + 5 of player
