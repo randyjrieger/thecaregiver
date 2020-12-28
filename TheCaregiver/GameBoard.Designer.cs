@@ -369,8 +369,6 @@
             this.Text = "Pirates of Nazidar/The Caregiver";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.GameBoard_Load);
-            this.ResizeEnd += new System.EventHandler(this.GameBoard_ResizeEnd);
-            this.SizeChanged += new System.EventHandler(this.GameBoard_SizeChanged);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameBoard_KeyDown);
             this.Resize += new System.EventHandler(this.GameBoard_Resize);
             this.panel1.ResumeLayout(false);

@@ -695,38 +695,19 @@ namespace TheCaregiver
             Tiles.Add(tmpTile);
             tmpTile = null;
 
-
             Tiles.Add(new Tile
             {
                 Letter = 'j',
                 Picture = new Bitmap(TheCaregiver.Tiles.bridge)
             });
         }
-
-        private void GameBoard_SizeChanged(object sender, EventArgs e)
-        {
-            //delete me
-        }
-
-
+        
         private void GameBoard_Resize(object sender, EventArgs e)
         {
-            if (IsFirstResizeOnLoad)
+            if (!IsFirstResizeOnLoad)
             {
-                //IsFirstResizeOnLoad = false;
-            }
-            else
-            {
-                // CalculateStuff();
-
                 DrawUI();
             }
-
-        }
-
-        private void GameBoard_ResizeEnd(object sender, EventArgs e)
-        {
-            //delete me
         }
 
         private void CalculateStuff()
@@ -741,7 +722,6 @@ namespace TheCaregiver
             {
                 newWidthInTiles -= 1;
                 WIDTH_LEFTOVER = this.Width - (newWidthInTiles * TILE_PIXELS) + panel1.Width + TILE_PIXELS;
-                // WIDTH_LEFTOVER += TILE_PIXELS;
             }
             else
             {
@@ -753,9 +733,6 @@ namespace TheCaregiver
 
             WIDTH_TILE_RADIUS = (newWidthInTiles - 1) / 2;
             WIDTH_BOARD_TILES = newWidthInTiles;
-            // panel1.Left = newWidthInTiles * TILE_PIXELS;// - WIDTH_LEFTOVER;
-            //  panel1.Width = this.Width - panel1.Left;
-
 
             int newHeightInTiles = (this.Height - panel2.Height) / TILE_PIXELS;
             HEIGHT_LEFTOVER = this.Height - (newHeightInTiles * TILE_PIXELS + panel2.Height);
@@ -767,7 +744,6 @@ namespace TheCaregiver
             }
 
             HEIGHT_TILE_RADIUS = (newHeightInTiles - 1) / 2;
-            // HEIGHT_LEFTOVER = (this.Height - panel2.Height) % TILE_PIXELS;
             HEIGHT_BOARD_TILES = newHeightInTiles;
             panel2.Height += HEIGHT_LEFTOVER;
 
@@ -779,8 +755,6 @@ namespace TheCaregiver
         {           
             //set defaults
             panel1.Width = 270;
-            //panel2.Height = 111;
-            //richTextBox1.Height = 111;
             WIDTH_LEFTOVER = 0;
             int GAMEBOARD_WIDTH = this.Width;
             int GAMEBOARD_HEIGHT = this.Height;
@@ -809,11 +783,8 @@ namespace TheCaregiver
             //add the leftover amount to widen panel1
             panel1.Width += WIDTH_LEFTOVER;
 
-            //ActionWindow.Left = 0;
             ActionWindow.Width = panel1.Width;
-            //CommandArea.Left = 0;
             CommandArea.Width = panel1.Width;
-            //panel3.Left = 0;
             panel3.Width = panel1.Width;
             
             //HEIGHT ADJUSTMENTS
@@ -843,20 +814,10 @@ namespace TheCaregiver
             ActionWindow.Height = GAMEBOARD_CANVAS_HEIGHT_ADJ - panel3.Height - CommandArea.Height - toolStrip1.Height;
             CommandArea.Top = ActionWindow.Height + ActionWindow.Top;
             panel3.Top = CommandArea.Top + CommandArea.Height;
-
-            //panel3.BringToFront();
-            //CommandArea.BringToFront();
-
         }
 
         public void CreateScreen()
         {
-            /*
-             * RESIZE
-             * calculate WIDTH_TILE_RADIUS
-             * 
-             */
-
             //screen boundaries - this is tile based, not pixel based
             //this is the area in the ASCII file that will be visible
             int MapFile_Border_Left = player1.X - WIDTH_TILE_RADIUS;
@@ -864,15 +825,7 @@ namespace TheCaregiver
             int MapFile_Border_Top = player1.Y - HEIGHT_TILE_RADIUS;
             int MapFile_Border_Bottom = player1.Y + HEIGHT_TILE_RADIUS;
 
-           // WIDTH_BOARD_TILES = WIDTH_TILE_RADIUS * 2 + 1;
-           // HEIGHT_BOARD_TILES = HEIGHT_TILE_RADIUS * 2 + 1;
-
             ScreenMatrix = new byte[WIDTH_BOARD_TILES, HEIGHT_BOARD_TILES];
-
-            // *if part of the display is off the map, it's black
-
-            // end
-
 
             int x;
             int j = 0;
@@ -2510,6 +2463,12 @@ namespace TheCaregiver
             {
                 UpdateActionWindow("You can't walk in your sleep.");
             }
+
+            ////Developer Window
+            //if (key.Control && key.KeyCode == Keys.D)
+            //{
+            //    pnlDevSettings.Show();
+            //}
         }
 
         private void SpecialKeyPress(KeyEventArgs key)
