@@ -382,11 +382,9 @@ namespace TheCaregiver
                 File.CreateText(saveFilePath + @"//" + "savefile.crg");
             }
 
-            UpdateActionWindow("And so it begins. It's a lovely spring day. With winter finally over, you are ready to be on your own, apart from your family, crafting your own path, starting in the wilderness of Hyleo. What will be your destiny? How will you best contribute to the world? There is nothing more important than leading a meaningful life.");
+            UpdateActionWindow("Your Adventure Begins. It's a lovely spring day. With winter finally over, you are ready to be on your own, apart from your family, crafting your own path. You decide to make your start in the wilds of Hyleo. What will be your destiny? What will you learn about yourself? There is nothing more important than leading a meaningful life.");
             UpdateActionWindow("");
             UpdateActionWindow("What is the name you will be known as in this world?");
-            UpdateActionWindow("");
-            UpdateActionWindow("The days are short and there are evil things about. It's time to find some food and a place where I can see myself living for a while.");
             UpdateActionWindow("");
         }
 
@@ -399,7 +397,7 @@ namespace TheCaregiver
 
         public void UpdateActionWindow(string s)
         {
-            ActionWindow.Text = ActionWindow.Text + Environment.NewLine + "> " + s;
+            ActionWindow.Text = ActionWindow.Text + Environment.NewLine + "  " + s;
 
             ActionWindow.SelectionStart = ActionWindow.Text.Length;
             // scroll it automatically
@@ -1867,9 +1865,9 @@ namespace TheCaregiver
         {
             bool found = false;
 
-            for (int i = 4; i <= 6; i++)
+            for (int i = WIDTH_TILE_RADIUS - 1; i <= WIDTH_TILE_RADIUS + 1; i++)
             {
-                for (int j = 4; j <= 6; j++)
+                for (int j = HEIGHT_TILE_RADIUS - 1; j <=  HEIGHT_TILE_RADIUS + 1; j++)
                 {
                     //if (i == 5 & j == 5)
                     //    break;
@@ -2817,12 +2815,10 @@ namespace TheCaregiver
 
         private void helpToolStripButton_Click(object sender, EventArgs e)
         {
-            LoadCharacterDialog();
         }
 
         private void pasteToolStripButton_Click(object sender, EventArgs e)
         {
-            LoadInventoryDialog();
         }
 
         private void btnSaveDevSettings_Click(object sender, EventArgs e)
@@ -2845,6 +2841,25 @@ namespace TheCaregiver
             player1.HasSeed = chkDevSetting_HasSeed.Checked;
         }
 
+        private void btnInventory_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCharacter_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tsInventory_Click(object sender, EventArgs e)
+        {
+            LoadInventoryDialog();
+        }
+
+        private void tsCharacter_Click(object sender, EventArgs e)
+        {
+            LoadCharacterDialog();
+        }
     }
 }
 
