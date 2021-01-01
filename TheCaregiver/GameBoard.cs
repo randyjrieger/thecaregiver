@@ -54,11 +54,17 @@ namespace TheCaregiver
         private List<Bitmap> MonsterTiles = new List<Bitmap>();
         private Dice dice = new Dice();
         public GameMode Mode { get; set; }
-        public GameBoard(GameMode mode)
+        public GameBoard(GameMode mode, string charName)
         {
             InitializeComponent();
 
             Mode = mode;
+
+            if (Mode == GameMode.New)
+            {
+                player1 = new Player();
+                player1.Name = charName;
+            }
 
         }
 
@@ -71,10 +77,7 @@ namespace TheCaregiver
             //Create Player
             if (Mode == GameMode.New)
             {
-                player1 = new Player();
                 gameState = new GameState(Mode);
-
-
 
                 //temp
                 //  player1.DamageMax = 6;
@@ -360,7 +363,7 @@ namespace TheCaregiver
             Monsters = MonsterHelper.SpawnMonsters(regions);
 
             player1.CurrentState = PlayerProgress.name;
-            TransferToActionPanel();
+            //TransferToActionPanel();
 
             player1.HealthMax = dice.Roll(15, 25);
             player1.Health = player1.HealthMax;
@@ -382,9 +385,7 @@ namespace TheCaregiver
                 File.CreateText(saveFilePath + @"//" + "savefile.crg");
             }
 
-            UpdateActionWindow("Your Adventure Begins. It's a lovely spring day. With winter finally over, you are ready to be on your own, apart from your family, crafting your own path. You decide to make your start in the wilds of Hyleo. What will be your destiny? What will you learn about yourself? There is nothing more important than leading a meaningful life.");
-            UpdateActionWindow("");
-            UpdateActionWindow("What is the name you will be known as in this world?");
+            UpdateActionWindow(player1.Name + ", Your Adventure Begins. It's a lovely spring day. With winter finally over, you are ready to be on your own, apart from your family, crafting your own path. You decide to make your start in the wilds of Hyleo. What will be your destiny? What will you learn about yourself? There is nothing more important than leading a meaningful life.");
             UpdateActionWindow("");
         }
 
@@ -2055,7 +2056,7 @@ namespace TheCaregiver
         }
 
         #region UIButtons
-        private void LoadCharacterDialog()
+        private void LoadCharacterDialog   ()
         {
             CharacterCard cc = new CharacterCard(player1);
             cc.StartPosition = FormStartPosition.CenterScreen;
@@ -2433,27 +2434,26 @@ namespace TheCaregiver
 
                         break;
 
-                        //case Keys.P:
-                        //    //   GameTimer.Stop();
-                        //    var tp = new TheCaregiver.Resources.TransPanel();
-                        //    tp.Location = new Point(0, 0);
-                        //    tp.Width = TILE_PIXELS * WIDTH_BOARD_TILES;
-                        //    tp.Height = TILE_PIXELS * HEIGHT_BOARD_TILES;
-                        //    tp.BackColor = Color.Aquamarine;
-                        //    tp.BringToFront();
-                        //    Image img = Image.FromFile(@"Resources\scroll.png");
-                        //    Bitmap bmp = (Bitmap)img;
-                        //    var pb = new PictureBox();
-                        //    pb.Image = img;
-                        //    tp.Width = TILE_PIXELS * WIDTH_BOARD_TILES;
-                        //    tp.Height = TILE_PIXELS * HEIGHT_BOARD_TILES;
-                        //    pb.Location = new Point(0, 0);
-                        //    tp.Controls.Add(pb);
-                        //    //  pi.BackgroundImage = bmp;
-                        //    this.Controls.Add(tp);
-                        //    // ShowScroll("hiya");
-                        //    break;
-
+                    //case Keys.P:
+                    //    //   GameTimer.Stop();
+                    //    var tp = new TheCaregiver.Resources.TransPanel();
+                    //    tp.Location = new Point(0, 0);
+                    //    tp.Width = TILE_PIXELS * WIDTH_BOARD_TILES;
+                    //    tp.Height = TILE_PIXELS * HEIGHT_BOARD_TILES;
+                    //    tp.BackColor = Color.Aquamarine;
+                    //    tp.BringToFront();
+                    //    Image img = Image.FromFile(@"Resources\scroll.png");
+                    //    Bitmap bmp = (Bitmap)img;
+                    //    var pb = new PictureBox();
+                    //    pb.Image = img;
+                    //    tp.Width = TILE_PIXELS * WIDTH_BOARD_TILES;
+                    //    tp.Height = TILE_PIXELS * HEIGHT_BOARD_TILES;
+                    //    pb.Location = new Point(0, 0);
+                    //    tp.Controls.Add(pb);
+                    //    //  pi.BackgroundImage = bmp;
+                    //    this.Controls.Add(tp);
+                    //    // ShowScroll("hiya");
+                    //    break;
 
                 }
             }
@@ -2471,6 +2471,118 @@ namespace TheCaregiver
 
         private void SpecialKeyPress(KeyEventArgs key)
         {
+            if (key.Control)
+            {
+                switch (key.KeyCode)
+                {
+                    case Keys.D1:
+                        {
+                            UpdateActionWindow("Warp to House!");
+                            player1.X = player1.HouseX - 1;
+                            player1.Y = player1.HouseY - 1;
+                            break;
+                        }
+                    case Keys.D2:
+                        {
+                            UpdateActionWindow("Warp to Lancer!");
+                            player1.X = Atlas.Maps[Place.Lancer].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Lancer].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D3:
+                        {
+                            UpdateActionWindow("Warp to Nord Point!");
+                            player1.X = Atlas.Maps[Place.NordPoint].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.NordPoint].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D4:
+                        {
+                            UpdateActionWindow("Warp to Fyster!");
+                            player1.X = Atlas.Maps[Place.Fyster].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Fyster].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D5:
+                        {
+                            UpdateActionWindow("Warp to Nazidar!");
+                            player1.X = Atlas.Maps[Place.Nazidar].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Nazidar].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D6:
+                        {
+                            UpdateActionWindow("Warp to Lawdyn!");
+                            player1.X = Atlas.Maps[Place.Lawdyn].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Lawdyn].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D7:
+                        {
+                            UpdateActionWindow("Warp to Otalio!");
+                            player1.X = Atlas.Maps[Place.Otalio].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Otalio].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D8:
+                        {
+                            UpdateActionWindow("Warp to Southwind!");
+                            player1.X = Atlas.Maps[Place.Southwind].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Southwind].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D9:
+                        {
+                            UpdateActionWindow("Warp to Byas!");
+                            player1.X = Atlas.Maps[Place.Byas].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Byas].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D0:
+                        {
+                            UpdateActionWindow("Warp to Grove!");
+                            player1.X = Atlas.Maps[Place.Grove].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Grove].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F1:
+                        {
+                            UpdateActionWindow("Warp to Radius!");
+                            player1.X = Atlas.Maps[Place.Radius].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Radius].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F2:
+                        {
+                            UpdateActionWindow("Warp to Snowport!");
+                            player1.X = Atlas.Maps[Place.Snowport].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Snowport].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F3:
+                        {
+                            UpdateActionWindow("Warp to Flagport!");
+                            player1.X = Atlas.Maps[Place.Flagport].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Flagport].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F4:
+                        {
+                            UpdateActionWindow("Warp to Iye!");
+                            player1.X = Atlas.Maps[Place.Iye].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Iye].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F5:
+                        {
+                            UpdateActionWindow("Warp to Tempest!");
+                            player1.X = Atlas.Maps[Place.Tempest].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Tempest].WorldY - 1;
+                            break;
+                        }
+                }
+
+            }
             switch (key.KeyValue)
             {
                 //Enter
