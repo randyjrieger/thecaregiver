@@ -23,6 +23,7 @@ namespace TheCaregiver
         public Splash()
         {
             InitializeComponent();
+
         }
 
         private void btnNewGame_Click(object sender, EventArgs e)

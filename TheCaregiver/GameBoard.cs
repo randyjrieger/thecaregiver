@@ -143,7 +143,6 @@ namespace TheCaregiver
             }
             //   DrawUI();
 
-            richTextBox1.Text = "Game On";
 
             // inventoryPanel.Visible = false;
             // statsPanel.Visible = false;
@@ -385,7 +384,9 @@ namespace TheCaregiver
                 File.CreateText(saveFilePath + @"//" + "savefile.crg");
             }
 
-            UpdateActionWindow(player1.Name + ", Your Adventure Begins. It's a lovely spring day. With winter finally over, you are ready to be on your own, apart from your family, crafting your own path. You decide to make your start in the wilds of Hyleo. What will be your destiny? What will you learn about yourself? There is nothing more important than leading a meaningful life.");
+            UpdateActionWindow(player1.Name + ", Your Adventure Begins.");
+            UpdateActionWindow("It's a lovely spring day. With winter finally over, you are ready to be on your own, apart from your family, crafting your own path.");
+            UpdateActionWindow("You decide to make your start in the wilds of Hyleo. What will be your destiny? What will you learn about yourself? There is nothing more important than leading a meaningful life.");
             UpdateActionWindow("");
         }
 
@@ -408,6 +409,16 @@ namespace TheCaregiver
         public void AppendActionWindow(string s)
         {
             ActionWindow.Text = ActionWindow.Text + s;
+        }
+
+
+        public void UpdateMessageWindow_ShowItems(string message, string[] items)
+        {
+            ActionWindow.Text = ActionWindow.Text + Environment.NewLine + "  " + message + Environment.NewLine;
+            foreach (string s in items)
+            {
+                ActionWindow.Text = ActionWindow.Text + Environment.NewLine + "  " + s;
+            }
         }
 
         public void TranslateMap()
@@ -712,8 +723,6 @@ namespace TheCaregiver
         private void CalculateStuff()
         {
             panel1.Width = 270;
-            panel2.Height = 111;
-            richTextBox1.Height = 111;
 
             int newWidthInTiles = (this.Width - panel1.Width) / TILE_PIXELS;
             WIDTH_LEFTOVER = 0;
@@ -733,8 +742,8 @@ namespace TheCaregiver
             WIDTH_TILE_RADIUS = (newWidthInTiles - 1) / 2;
             WIDTH_BOARD_TILES = newWidthInTiles;
 
-            int newHeightInTiles = (this.Height - panel2.Height) / TILE_PIXELS;
-            HEIGHT_LEFTOVER = this.Height - (newHeightInTiles * TILE_PIXELS + panel2.Height);
+            int newHeightInTiles = (this.Height) / TILE_PIXELS;
+            HEIGHT_LEFTOVER = this.Height - (newHeightInTiles * TILE_PIXELS);
 
             if (newHeightInTiles % 2 == 0)
             {
@@ -744,7 +753,6 @@ namespace TheCaregiver
 
             HEIGHT_TILE_RADIUS = (newHeightInTiles - 1) / 2;
             HEIGHT_BOARD_TILES = newHeightInTiles;
-            panel2.Height += HEIGHT_LEFTOVER;
 
         }
         /// <summary>
@@ -787,7 +795,7 @@ namespace TheCaregiver
             panel3.Width = panel1.Width;
             
             //HEIGHT ADJUSTMENTS
-            GAMEBOARD_CANVAS_HEIGHT_NET = GAMEBOARD_HEIGHT - panel2.Height;
+            GAMEBOARD_CANVAS_HEIGHT_NET = GAMEBOARD_HEIGHT;
             HEIGHT_BOARD_TILES = Math.DivRem(GAMEBOARD_CANVAS_HEIGHT_NET, TILE_PIXELS, out HEIGHT_LEFTOVER);
 
             //if number of tiles high is even, we need to adjust
@@ -796,20 +804,13 @@ namespace TheCaregiver
                 //HEIGHT_BOARD_TILES--;
                 GAMEBOARD_CANVAS_HEIGHT_NET -= TILE_PIXELS;
                 HEIGHT_BOARD_TILES = Math.DivRem(GAMEBOARD_CANVAS_HEIGHT_NET, TILE_PIXELS, out HEIGHT_LEFTOVER);
-                panel2.Height += TILE_PIXELS;
             }
-            panel2.Height += HEIGHT_LEFTOVER;
 
             HEIGHT_TILE_RADIUS = (HEIGHT_BOARD_TILES - 1) / 2;
             //gameboard pixels height
             GAMEBOARD_CANVAS_HEIGHT_ADJ = HEIGHT_BOARD_TILES * TILE_PIXELS;
-            panel2.Top = GAMEBOARD_CANVAS_HEIGHT_ADJ;
             panel1.Height = GAMEBOARD_CANVAS_HEIGHT_ADJ;
-
-            //add the leftover amount to widen panel1
-            panel2.Width = this.Width;
-            richTextBox1.Width = panel2.Width;
-
+            
             ActionWindow.Height = GAMEBOARD_CANVAS_HEIGHT_ADJ - panel3.Height - CommandArea.Height - toolStrip1.Height;
             CommandArea.Top = ActionWindow.Height + ActionWindow.Top;
             panel3.Top = CommandArea.Top + CommandArea.Height;
@@ -1048,13 +1049,22 @@ namespace TheCaregiver
                                 sourceBmp = (Tiles.Single(t => (t.Letter == (char)ScreenMatrix[i, j])).getMovingPicture(lavaRoll));
                                 break;
                             case 'G':
-                                int gX = player1.X - (5 - i);
-                                int gY = player1.Y - (5 - j);
+                                //if in Wilderness, the garden belongs to player1
+                                if (player1.Map == Atlas.Maps[Place.Wilderness].MAPID)
+                                {
+                                    int gX = player1.X - (WIDTH_TILE_RADIUS - i);
+                                    int gY = player1.Y - (HEIGHT_TILE_RADIUS - j);
 
-                                //will this be an issue if near end of map (no gardens there anyway)
-                                GardenPlot g = player1.GardenPlots.Find(w => w.X == gX && w.Y == gY);
+                                    //will this be an issue if near end of map (no gardens there anyway)
+                                    GardenPlot g = player1.GardenPlots.Find(w => w.X == gX && w.Y == gY);
 
-                                sourceBmp = g.GetGardenTileToDraw();
+                                    sourceBmp = g.GetGardenTileToDraw();
+                                }
+                                //Otherwise, in a town where the crops are always ready
+                                else
+                                {
+                                    sourceBmp = new Bitmap(TheCaregiver.Tiles.gardenready);
+                                }
                                 break;
 
                             default:
@@ -2402,7 +2412,17 @@ namespace TheCaregiver
                             if (merchant != null)
                             {
 
-                                UpdateActionWindow(merchant.Name + " wants to sell you some garbage!");
+                                // this merchant should stop moving
+
+                                // Intro in below panel
+
+                                // a choice of buy or sell is displayed
+
+                                // if buy, wares posted in below panel
+                                UpdateMessageWindow_ShowItems("Iolo's Bows", new string[] { "short bow [3 coin]", "dagger [2 coin]"});
+                                // player1 makes choice
+
+                                // checks cost vs player1 gold
                             }
 
                             QuestPerson person = (QuestPerson)TileCheckForInteraction(InteractionType.QuestPerson);
@@ -2591,34 +2611,46 @@ namespace TheCaregiver
                     //Garden Check
                     if (player1.CurrentTile == 71)
                     {
-                        //Which gardenplot
-                        GardenPlot tempplot = player1.GardenPlots.Find(g => g.X == player1.X & g.Y == player1.Y);
+                        if (player1.Map == Atlas.Maps[Place.Wilderness].MAPID)
+                        {
+                            //Which gardenplot
+                            GardenPlot tempplot = player1.GardenPlots.Find(g => g.X == player1.X & g.Y == player1.Y);
 
-                        if (tempplot.GrowthStage == GardenGrowthStages.Growing)
-                        {
-                            //Still Growing
-                            UpdateActionWindow("Have a little patience. It's still growing.");
+                            if (tempplot.GrowthStage == GardenGrowthStages.Growing)
+                            {
+                                //Still Growing
+                                UpdateActionWindow("Have a little patience. It's still growing.");
+                            }
+                            else if (tempplot.GrowthStage == GardenGrowthStages.ReadyToHarvest)
+                            {
+                                //Harest Ready
+                                tempplot.GrowthStage = GardenGrowthStages.Nothing;
+                                UpdateActionWindow("You picked some lovely beans.");
+                                player1.food++;
+                            }
+                            else if (tempplot.GrowthStage == GardenGrowthStages.Nothing)
+                            {
+                                //Plant Seed
+                                if (player1.NumberofSeeds > 0)
+                                {
+                                    tempplot.GrowthStage = GardenGrowthStages.Growing;
+                                    UpdateActionWindow("Seed planted.");
+                                    player1.NumberofSeeds--;
+                                }
+                                else
+                                {
+                                    UpdateActionWindow("You have no seed to plant.");
+                                }
+                            }
                         }
-                        else if (tempplot.GrowthStage == GardenGrowthStages.ReadyToHarvest)
+                        //In garden, in a town - so harvesting
+                        else
                         {
-                            //Harest Ready
-                            tempplot.GrowthStage = GardenGrowthStages.Nothing;
-                            UpdateActionWindow("You picked some lovely beans.");
+                            UpdateActionWindow("You have stolen some beans.  Oh, nice that! Who raised you?");
                             player1.food++;
-                        }
-                        else if (tempplot.GrowthStage == GardenGrowthStages.Nothing)
-                        {
-                            //Plant Seed
-                            if (player1.NumberofSeeds > 0)
-                            {
-                                tempplot.GrowthStage = GardenGrowthStages.Growing;
-                                UpdateActionWindow("Seed planted.");
-                                player1.NumberofSeeds--;
-                            }
-                            else
-                            {
-                                UpdateActionWindow("You have no seed to plant.");
-                            }
+
+                            //TODO: make crop disappear
+
                         }
                     }
                     else
@@ -2630,7 +2662,8 @@ namespace TheCaregiver
 
                         if (testLocation > 0)
                         {
-                            newMap = Atlas.Maps.FirstOrDefault(x => x.Key == testLocation).Value;
+                            //newMap = Atlas.Maps.FirstOrDefault(x => x.Key == testLocation).Value;
+                            newMap = Atlas.Maps.FirstOrDefault(x => x.Key == Place.Lancer).Value;
                         }
                         else
                         {

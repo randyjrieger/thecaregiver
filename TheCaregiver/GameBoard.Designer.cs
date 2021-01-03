@@ -36,6 +36,9 @@
             this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.tsInventory = new System.Windows.Forms.ToolStripButton();
+            this.tsCharacter = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.panel3 = new System.Windows.Forms.Panel();
             this.btnCharacter = new System.Windows.Forms.Button();
@@ -45,21 +48,15 @@
             this.CommandArea = new System.Windows.Forms.TextBox();
             this.panel4 = new System.Windows.Forms.Panel();
             this.GameTimer = new System.Windows.Forms.Timer(this.components);
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.Daytimer = new System.Windows.Forms.Timer(this.components);
             this.CombatTimer = new System.Windows.Forms.Timer(this.components);
             this.pnlDevSettings = new System.Windows.Forms.Panel();
             this.chkDevSetting_HasSeed = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSaveDevSettings = new System.Windows.Forms.Button();
-            this.tsInventory = new System.Windows.Forms.ToolStripButton();
-            this.tsCharacter = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel3.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.pnlDevSettings.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -126,6 +123,31 @@
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
             this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsInventory
+            // 
+            this.tsInventory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsInventory.Image = ((System.Drawing.Image)(resources.GetObject("tsInventory.Image")));
+            this.tsInventory.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsInventory.Name = "tsInventory";
+            this.tsInventory.Size = new System.Drawing.Size(23, 22);
+            this.tsInventory.Text = "&Inventory";
+            this.tsInventory.Click += new System.EventHandler(this.tsInventory_Click);
+            // 
+            // tsCharacter
+            // 
+            this.tsCharacter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsCharacter.Image = ((System.Drawing.Image)(resources.GetObject("tsCharacter.Image")));
+            this.tsCharacter.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsCharacter.Name = "tsCharacter";
+            this.tsCharacter.Size = new System.Drawing.Size(23, 22);
+            this.tsCharacter.Text = "&Character";
+            this.tsCharacter.Click += new System.EventHandler(this.tsCharacter_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // helpToolStripButton
             // 
@@ -227,35 +249,6 @@
             this.GameTimer.Interval = 300;
             this.GameTimer.Tick += new System.EventHandler(this.GameTimer_Tick);
             // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.Controls.Add(this.richTextBox1);
-            this.panel2.Location = new System.Drawing.Point(0, 652);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(925, 119);
-            this.panel2.TabIndex = 2;
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.BackColor = System.Drawing.Color.Black;
-            this.richTextBox1.CausesValidation = false;
-            this.richTextBox1.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.richTextBox1.DetectUrls = false;
-            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.richTextBox1.ShortcutsEnabled = false;
-            this.richTextBox1.Size = new System.Drawing.Size(924, 111);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.TabStop = false;
-            this.richTextBox1.Text = "";
-            // 
             // Daytimer
             // 
             this.Daytimer.Interval = 1000;
@@ -306,39 +299,13 @@
             this.btnSaveDevSettings.UseVisualStyleBackColor = true;
             this.btnSaveDevSettings.Click += new System.EventHandler(this.btnSaveDevSettings_Click);
             // 
-            // tsInventory
-            // 
-            this.tsInventory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsInventory.Image = ((System.Drawing.Image)(resources.GetObject("tsInventory.Image")));
-            this.tsInventory.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsInventory.Name = "tsInventory";
-            this.tsInventory.Size = new System.Drawing.Size(23, 22);
-            this.tsInventory.Text = "&Inventory";
-            this.tsInventory.Click += new System.EventHandler(this.tsInventory_Click);
-            // 
-            // tsCharacter
-            // 
-            this.tsCharacter.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsCharacter.Image = ((System.Drawing.Image)(resources.GetObject("tsCharacter.Image")));
-            this.tsCharacter.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsCharacter.Name = "tsCharacter";
-            this.tsCharacter.Size = new System.Drawing.Size(23, 22);
-            this.tsCharacter.Text = "&Character";
-            this.tsCharacter.Click += new System.EventHandler(this.tsCharacter_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
             // GameBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(923, 761);
+            this.ClientSize = new System.Drawing.Size(923, 646);
             this.Controls.Add(this.pnlDevSettings);
-            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Tw Cen MT", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -358,7 +325,6 @@
             this.toolStrip1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.panel2.ResumeLayout(false);
             this.pnlDevSettings.ResumeLayout(false);
             this.pnlDevSettings.PerformLayout();
             this.ResumeLayout(false);
@@ -367,8 +333,6 @@
 
         #endregion
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Timer GameTimer;
         private System.Windows.Forms.Timer Daytimer;
         private System.Windows.Forms.Panel panel4;
