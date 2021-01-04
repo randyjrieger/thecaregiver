@@ -27,6 +27,8 @@ namespace TheCaregiver.World
 
         public bool PlayerMonsterConflict { get; set; }
 
+        public bool ShopMode { get; set; }
+
         public Reality reality { get; set; }
         public int seedPolt { get; set; }
 

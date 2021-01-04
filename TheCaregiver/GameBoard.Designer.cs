@@ -223,6 +223,7 @@
             this.ActionWindow.TabIndex = 2;
             this.ActionWindow.TabStop = false;
             this.ActionWindow.Text = "";
+            this.ActionWindow.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ActionWindow_KeyDown);
             // 
             // CommandArea
             // 

@@ -362,7 +362,7 @@ namespace TheCaregiver
             Monsters = MonsterHelper.SpawnMonsters(regions);
 
             player1.CurrentState = PlayerProgress.name;
-            //TransferToActionPanel();
+            //TransferFocusToCommandArea();
 
             player1.HealthMax = dice.Roll(15, 25);
             player1.Health = player1.HealthMax;
@@ -399,7 +399,7 @@ namespace TheCaregiver
 
         public void UpdateActionWindow(string s)
         {
-            ActionWindow.Text = ActionWindow.Text + Environment.NewLine + "  " + s;
+            ActionWindow.AppendText(Environment.NewLine + "  " + s);
 
             ActionWindow.SelectionStart = ActionWindow.Text.Length;
             // scroll it automatically
@@ -409,16 +409,28 @@ namespace TheCaregiver
         public void AppendActionWindow(string s)
         {
             ActionWindow.Text = ActionWindow.Text + s;
+
+            ActionWindow.SelectionStart = ActionWindow.Text.Length;
+            // scroll it automatically
+            ActionWindow.ScrollToCaret();
         }
 
 
-        public void UpdateMessageWindow_ShowItems(string message, string[] items)
+        public void UpdateActionWindow_ShowItems(string message, string[] items)
         {
-            ActionWindow.Text = ActionWindow.Text + Environment.NewLine + "  " + message + Environment.NewLine;
+            int x = 0;
+            ActionWindow.AppendText(Environment.NewLine + Environment.NewLine + "  " + message);
             foreach (string s in items)
             {
-                ActionWindow.Text = ActionWindow.Text + Environment.NewLine + "  " + s;
+                x++;
+                ActionWindow.AppendText(Environment.NewLine + String.Format("     {0}) {1}", x, s));
             }
+
+            ActionWindow.AppendText(Environment.NewLine + "Choice? ");
+
+            ActionWindow.SelectionStart = ActionWindow.Text.Length;
+            // scroll it automatically
+            ActionWindow.ScrollToCaret();
         }
 
         public void TranslateMap()
@@ -1764,11 +1776,17 @@ namespace TheCaregiver
             return okToStep;
         }
 
-        private void TransferToActionPanel()
+        private void TransferFocusToCommandArea()
         {
             CommandArea.Clear();
             CommandArea.Enabled = true;
             this.ActiveControl = CommandArea;
+        }
+
+        private void WaitForResponseInActionWindow()
+        {
+            ActionWindow.Enabled = true;
+            this.ActiveControl = ActionWindow;
         }
 
         private void CommandArea_KeyDown(object sender, KeyEventArgs e)
@@ -2357,7 +2375,7 @@ namespace TheCaregiver
                                     UpdateActionWindow("It is tradition to name a new home after it's been built. What shall you call it?");
 
                                     player1.CurrentState = PlayerProgress.house;
-                                    TransferToActionPanel();
+                                    TransferFocusToCommandArea();
 
                                     //TODO: it costs 10 wood for a house
                                     //player1.wood = player1.wood - 10;
@@ -2411,18 +2429,14 @@ namespace TheCaregiver
 
                             if (merchant != null)
                             {
-
+                                gameState.ShopMode = true;
                                 // this merchant should stop moving
 
                                 // Intro in below panel
 
                                 // a choice of buy or sell is displayed
-
-                                // if buy, wares posted in below panel
-                                UpdateMessageWindow_ShowItems("Iolo's Bows", new string[] { "short bow [3 coin]", "dagger [2 coin]"});
-                                // player1 makes choice
-
-                                // checks cost vs player1 gold
+                                UpdateActionWindow("Looking to (B)uy or (S)ell?");
+                                WaitForResponseInActionWindow();
                             }
 
                             QuestPerson person = (QuestPerson)TileCheckForInteraction(InteractionType.QuestPerson);
@@ -3004,6 +3018,65 @@ namespace TheCaregiver
         private void tsCharacter_Click(object sender, EventArgs e)
         {
             LoadCharacterDialog();
+        }
+
+        private void ActionWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (ActiveControl != null && ActiveControl.Name == "ActionWindow")
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.B:
+                        //if in store mode then select Buy
+                        if (gameState.ShopMode)
+                        {
+                            e.Handled = true;
+                            UpdateActionWindow_ShowItems("Iolo's Bows", new string[] { "short bow [3]", "dagger [2]" });
+                            //TransferFocusToCommandArea();
+
+                        }
+                        break;
+
+                    case Keys.S:
+                        e.Handled = true;
+                        //if in store mode then select Sell
+                        break;
+
+                    case Keys.D1:
+                        {
+                            e.Handled = true;
+                            if (gameState.ShopMode)
+                            {
+                                UpdateActionWindow(">1");
+
+                                //call a method that knows the town, merhcant, choices and will make the transaction
+
+                                this.ActiveControl = null;
+                            }
+                            break;
+                        }
+                    case Keys.D2:
+                        {
+                            e.Handled = true;
+                            if (gameState.ShopMode)
+                            {
+                                UpdateActionWindow(">2");
+
+                                this.ActiveControl = null;
+                            }
+                            break;
+                        }
+                        //case 1-9 for awares
+                        /*
+                         * 
+                                    // if buy, wares posted in below panel
+                                    UpdateActionWindow_ShowItems("Iolo's Bows", new string[] { "short bow [3 coin]", "dagger [2 coin]"});
+                                    // player1 makes choice
+
+                                    // checks cost vs player1 gold */
+                }
+            }
         }
     }
 }
