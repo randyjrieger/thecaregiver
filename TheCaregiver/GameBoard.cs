@@ -53,6 +53,7 @@ namespace TheCaregiver
 
         private List<Bitmap> MonsterTiles = new List<Bitmap>();
         private Dice dice = new Dice();
+        public Town currentTown = null;
         public GameMode Mode { get; set; }
         public GameBoard(GameMode mode, string charName)
         {
@@ -2006,10 +2007,31 @@ namespace TheCaregiver
 
         private void StartMap()
         {
+            using(StreamReader reader = File.OpenText(@"c:\person.json"))
+            {
+                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+                // do stuff
+            }
+
             if (gameState.CurrentMap.MAPID == Place.Lancer)
             {
+                //load town
+                currentTown = new Town();
+
+                currentTown = JsonConvert.DeserializeObject<Town>(File.ReadAllText(@"Resources\jsonDB\town_location_choices.json"));
+
+                // deserialize JSON directly from a file
+                using (StreamReader file = File.OpenText(@"c:\movie.json"))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                  //  Movie movie2 = (Movie)serializer.Deserialize(file, typeof(Movie));
+                }
+
+
                 //create merchant
                 Merchants.Clear();
+
+                //Load in Merchants
                 Merchants.Add(
                     new Merchant
                     {
@@ -2125,13 +2147,17 @@ namespace TheCaregiver
 
                             ChangeStep(player1.X, player1.Y - 1);
 
-
-                            if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                                player1.Y--;
-                            else
+                            if (OkToStep())
                             {
-                                BackToTheWilderness();  //Great Scott!!
-                            }
+                                if (PlayerStillOnMap(key.KeyCode))
+                                {
+                                    player1.Y--;
+                                }
+                                else
+                                {
+                                    BackToTheWilderness();  //Great Scott!!
+                                }
+                            }                            
                         }
                         //DiceRoll for event
                         break;
@@ -2143,11 +2169,16 @@ namespace TheCaregiver
 
                         ChangeStep(player1.X, player1.Y + 1);
 
-                        if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                            player1.Y++;
-                        else
+                        if (OkToStep())
                         {
-                            BackToTheWilderness();  //Great Scott!!
+                            if (PlayerStillOnMap(key.KeyCode))
+                            {
+                                player1.Y++;
+                            }
+                            else
+                            {
+                                BackToTheWilderness();  //Great Scott!!
+                            }
                         }
 
                         //DiceRoll for event
@@ -2161,11 +2192,17 @@ namespace TheCaregiver
 
                         ChangeStep(player1.X - 1, player1.Y);
 
-                        if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                            player1.X--;
-                        else
+
+                        if (OkToStep())
                         {
-                            BackToTheWilderness();  //Great Scott!!
+                            if (PlayerStillOnMap(key.KeyCode))
+                            {
+                                player1.X--;
+                            }
+                            else
+                            {
+                                BackToTheWilderness();  //Great Scott!!
+                            }
                         }
 
                         //DiceRoll for event
@@ -2179,11 +2216,17 @@ namespace TheCaregiver
 
                         ChangeStep(player1.X + 1, player1.Y);
 
-                        if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                            player1.X++;
-                        else
+
+                        if (OkToStep())
                         {
-                            BackToTheWilderness();  //Great Scott!!
+                            if (PlayerStillOnMap(key.KeyCode))
+                            {
+                                player1.X++;
+                            }
+                            else
+                            {
+                                BackToTheWilderness();  //Great Scott!!
+                            }
                         }
 
                         //DiceRoll for event
@@ -2423,12 +2466,18 @@ namespace TheCaregiver
                         break;
                     //Start Conversation - talking
                     case Keys.T:
+                        //Determine Town
                         if (gameState.CurrentMap.MAPID == Place.Lancer)
                         {
                             Merchant merchant = (Merchant)TileCheckForInteraction(InteractionType.Merchant);
 
                             if (merchant != null)
                             {
+                                //A merchant has been discovered beside player1
+
+                                // Start dialogue with merchant - find in Merchants list
+
+
                                 gameState.ShopMode = true;
                                 // this merchant should stop moving
 
