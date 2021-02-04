@@ -15,6 +15,8 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TheCaregiver.Dialogs;
+using System.Diagnostics;
+using TheCaregiver.Templates;
 
 namespace TheCaregiver
 {
@@ -2007,32 +2009,34 @@ namespace TheCaregiver
 
         private void StartMap()
         {
-            using(StreamReader reader = File.OpenText(@"c:\person.json"))
-            {
-                JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
-                // do stuff
-            }
+            //using(StreamReader reader = File.OpenText(@"c:\person.json"))
+            //{
+            //    JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+            //    // do stuff
+            //}
 
             if (gameState.CurrentMap.MAPID == Place.Lancer)
             {
                 //load town
-                currentTown = new Town();
-
-                currentTown = JsonConvert.DeserializeObject<Town>(File.ReadAllText(@"Resources\jsonDB\town_location_choices.json"));
-
-                // deserialize JSON directly from a file
-                using (StreamReader file = File.OpenText(@"c:\movie.json"))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                  //  Movie movie2 = (Movie)serializer.Deserialize(file, typeof(Movie));
-                }
-
-
+                //  currentTown = new Town();
+                Root townList = JsonConvert.DeserializeObject<Root>(File.ReadAllText(@"..\..\Resources\jsonDB\town_locations.json"));
+                Town currentTown = townList.towns.Find(t => t.name == "Lancer");
                 //create merchant
-                Merchants.Clear();
 
+                Merchants.Clear();
+                foreach (Location loc in currentTown.locations)
+                {
+                    Merchants.Add(new Merchant
+                    {
+                        Name = loc.merchant,
+                        store = new Store { Name = loc.name }
+                    });
+                
+                }
+            }
+        }
                 //Load in Merchants
-                Merchants.Add(
+              /*  Merchants.Add(
                     new Merchant
                     {
                         Name = "Steve",
@@ -2041,8 +2045,8 @@ namespace TheCaregiver
                         Y = 20
                     }
                 );
-
-                QuestPeople.Clear();
+                */
+                /*QuestPeople.Clear();
                 QuestPeople.Add(
                     new QuestPerson
                     {
@@ -2050,9 +2054,9 @@ namespace TheCaregiver
                         X = 104,
                         Y = 47
                     }
-                );
-            }
-        }
+                );*/
+            
+        
 
 
         private void ShowScroll(String message)
@@ -2560,9 +2564,12 @@ namespace TheCaregiver
                 {
                     case Keys.D1:
                         {
-                            UpdateActionWindow("Warp to House!");
-                            player1.X = player1.HouseX - 1;
-                            player1.Y = player1.HouseY - 1;
+                            if (player1.HasHouse)
+                            {
+                                UpdateActionWindow("Warp to House!");
+                                player1.X = player1.HouseX - 1;
+                                player1.Y = player1.HouseY - 1;
+                            }
                             break;
                         }
                     case Keys.D2:
@@ -2637,9 +2644,9 @@ namespace TheCaregiver
                         }
                     case Keys.F2:
                         {
-                            UpdateActionWindow("Warp to Snowport!");
-                            player1.X = Atlas.Maps[Place.Snowport].WorldX - 1;
-                            player1.Y = Atlas.Maps[Place.Snowport].WorldY - 1;
+                            UpdateActionWindow("Warp to Winter's Hold!");
+                            player1.X = Atlas.Maps[Place.WintersHold].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.WintersHold].WorldY - 1;
                             break;
                         }
                     case Keys.F3:

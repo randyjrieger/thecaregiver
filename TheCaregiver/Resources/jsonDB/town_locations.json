@@ -6,6 +6,7 @@
       "locations": [
         {
           "name": "Iolo's Bows",
+          "merchant":  "Iolo",
           "items_for_sale": [
             {
               "item": "dagger",
@@ -18,7 +19,8 @@
           ]
         },
         {
-          "name": "Dave's Flowers",
+          "name": "Candlestick Inn",
+          "merchant":  "Steve",
           "items_for_sale": [
             {
               "item": "rose",
@@ -38,6 +40,7 @@
       "locations": [
         {
           "name": "Dave's Bows",
+          "merchant": "Dave",
           "items_for_sale": [
             {
               "item": "sword",
@@ -51,6 +54,7 @@
         },
         {
           "name": "Dave's Flowers",
+          "merchant": "Steve",
           "items_for_sale": [
             {
               "item": "rose",

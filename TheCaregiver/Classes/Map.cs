@@ -25,7 +25,7 @@ namespace TheCaregiver.World
         Garden = 12,
         Tempest = 13,
         Radius = 14,
-        Snowport = 15, 
+        WintersHold = 15, 
         Flagport = 16
 
 

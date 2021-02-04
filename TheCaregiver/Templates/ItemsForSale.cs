@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace TheCaregiver.Templates
 {
-    public class House 
+    public class ItemsForSale
     {
-        public string Name { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public string item { get; set; }
+        public int price { get; set; }
     }
 }

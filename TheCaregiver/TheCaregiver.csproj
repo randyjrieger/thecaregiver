@@ -101,6 +101,7 @@
     <Compile Include="Classes\NPC\NPC.cs" />
     <Compile Include="Templates\House.cs" />
     <Compile Include="Templates\ILocation.cs" />
+    <Compile Include="Templates\ItemsForSale.cs" />
     <Compile Include="Templates\Location.cs" />
     <Compile Include="Templates\Person.cs" />
     <Compile Include="Classes\Monster.cs" />
@@ -209,7 +210,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\jsonDB\town_location_choices.json" />
+    <None Include="Resources\jsonDB\town_locations.json" />
     <None Include="Resources\tiles\tiles.zip" />
   </ItemGroup>
   <ItemGroup>

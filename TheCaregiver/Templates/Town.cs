@@ -7,10 +7,10 @@ using TheCaregiver.Templates;
 
 namespace TheCaregiver.Classes
 {
-    public class Town : ITown
+    public class Town
     {
-        public string Name { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public string name { get; set; }
+        public int id { get; set; }
+        public List<Location> locations { get; set; }
     }
 }
