@@ -15,16 +15,23 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TheCaregiver.Dialogs;
+using System.Diagnostics;
+using TheCaregiver.Templates;
 
 namespace TheCaregiver
 {
     public partial class GameBoard : Form
     {
-        public const int SCREEN_DIM = 11;
-        public const int BOARD_WIDTH = 11;
-        public const int BOARD_HEIGHT = 11;
-        public const int SCREEN_RADIUS = 5;
-        public int offset = SCREEN_RADIUS;
+        public int SCREEN_DIM = 11;
+        public int TILE_PIXELS = 51;
+        public int WIDTH_BOARD_TILES = 11;
+        public int HEIGHT_BOARD_TILES = 11;
+        public int WIDTH_TILE_RADIUS = 5;
+        public int WIDTH_LEFTOVER = 0;
+        public int HEIGHT_LEFTOVER = 0;
+        public int HEIGHT_TILE_RADIUS = 5;
+        public int offset_width;
+        public int offset_height;
         public Player player1;
         public Map CurrentMap { get; set; }
         List<MapRegion> regions = new List<MapRegion>();
@@ -37,24 +44,30 @@ namespace TheCaregiver
         public string[,] KingdomExtract;
         public string[,] MapExtract;
         public byte[,] MapMatrix;
-        public byte[,] ScreenMatrix = new byte[BOARD_HEIGHT, BOARD_WIDTH];
+        public byte[,] ScreenMatrix = new byte[11, 11]; //TODO need constants
         public bool startTimers = false;
         public GameState gameState;
         protected Monster Opponent { get; set; }
         //Timers
         private List<Tile> Tiles = new List<Tile>();
         public CombatManager combatmanager = new CombatManager();
-
-
+        private bool IsFirstResizeOnLoad = true;
 
         private List<Bitmap> MonsterTiles = new List<Bitmap>();
         private Dice dice = new Dice();
+        public Town currentTown = null;
         public GameMode Mode { get; set; }
-        public GameBoard(GameMode mode)
+
+        public GameBoard(GameMode mode, Player p)
         {
             InitializeComponent();
 
             Mode = mode;
+
+            if (Mode == GameMode.New)
+            {
+                player1 = p;
+            }
 
         }
 
@@ -63,13 +76,11 @@ namespace TheCaregiver
             SetupWeapons();
             SetupArmour();
 
+            pnlDevSettings.Visible = false;
             //Create Player
             if (Mode == GameMode.New)
             {
-                player1 = new Player();
                 gameState = new GameState(Mode);
-                              
-
 
                 //temp
                 //  player1.DamageMax = 6;
@@ -99,7 +110,7 @@ namespace TheCaregiver
                     //};
 
                     //  string json = JsonConvert.DeserializeObject(dic, Formatting.Indented);
-                    
+
                     try
                     {
                         json = sr.ReadToEnd();
@@ -112,13 +123,13 @@ namespace TheCaregiver
                 }
 
                 Dictionary<string, object> dic = new Dictionary<string, object>();
-                dic =  JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+                dic = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
 
                 //player1
                 player1 = JsonConvert.DeserializeObject<Player>(dic["player1"].ToString());
                 //gamestate
                 gameState = JsonConvert.DeserializeObject<GameState>(dic["gamestate"].ToString());
-           
+
                 World_Refresh(player1.Map);
 
                 MonsterHelper.CreateMonsterTypes(regions);
@@ -133,33 +144,19 @@ namespace TheCaregiver
                 //    }
                 //}
             }
+            //   DrawUI();
 
-            //Set up board
-            this.Width = BOARD_WIDTH * 51 + panel1.Width;
-            richTextBox1.Width = BOARD_WIDTH * 51 + ActionWindow.Width;
-            panel2.Height = richTextBox1.Height;
-            panel1.Left = BOARD_WIDTH * 51;
-            panel2.Top = BOARD_HEIGHT * 51;
-            panel3.Top = toolStrip1.Height;
-            ActionWindow.Top = toolStrip1.Height + panel3.Height;
-            ActionWindow.Height = BOARD_HEIGHT * 51 - CommandArea.Height - panel3.Height - toolStrip1.Height ;
-            CommandArea.Top = ActionWindow.Height + toolStrip1.Height + panel3.Height;
-            richTextBox1.Top = 0;
-            richTextBox1.Left = 0;
-            richTextBox1.Height = panel2.Height;
-            this.Height = panel2.Top + panel2.Height;  //this doesn't show the whole bottom panel
-                        
-            richTextBox1.Text = "Game On";
-            
-           // inventoryPanel.Visible = false;
-           // statsPanel.Visible = false;
+
+            // inventoryPanel.Visible = false;
+            // statsPanel.Visible = false;
+            DrawUI();
             GameTimer.Enabled = true;
 
             //Getting Ready...
             if (Mode == GameMode.New)
             {
                 player1.SetStartPosition(MapMatrix);
-            }                       
+            }
 
             this.Focus();
 
@@ -228,17 +225,18 @@ namespace TheCaregiver
 
         public void SetupWeapons()
         {
-            Weapons.Add(new Weapon { 
+            Weapons.Add(new Weapon
+            {
                 Name = "Dagger",
                 MaxDamage = 3,
                 Handedness = WeaponHandedness.OneHanded
-                }
+            }
             );
 
             Weapons.Add(new Weapon
-                {
-                    Name = "Sword Sword",
-                    MaxDamage = 4,
+            {
+                Name = "Sword Sword",
+                MaxDamage = 4,
                 Handedness = WeaponHandedness.OneHanded
             }
             );
@@ -367,16 +365,30 @@ namespace TheCaregiver
             Monsters = MonsterHelper.SpawnMonsters(regions);
 
             player1.CurrentState = PlayerProgress.name;
-            TransferToActionPanel();
 
-            player1.HealthMax = dice.Roll(15, 25);
+            player1.HealthMax = dice.Roll(15, 20);
+            if (player1.Attribute_Constitution > 9)
+            {
+                player1.HealthMax += 3;
+            }
+            else if (player1.Attribute_Constitution > 7)
+            {
+                player1.HealthMax += 2;
+            }
+            else if (player1.Attribute_Constitution > 5)
+            {
+                player1.HealthMax += 1;
+            }
+            else
+            {
+                player1.HealthMax -= 1;
+            }
+
             player1.Health = player1.HealthMax;
-            player1.Attribute_Strength = dice.Roll(9, 18);
-            player1.Attribute_Agility = dice.Roll(9, 18);
-            player1.Attribute_Luck = dice.Roll(9, 18);
-            player1.Attribute_Intellect = dice.Roll(9, 18);
-            player1.Attribute_Insight = dice.Roll(9, 18);
-            player1.Attribute_Charisma = dice.Roll(9, 18);
+            player1.Attribute_Strength = player1.Attribute_Strength;
+            player1.Attribute_Agility = player1.Attribute_Agility;
+            player1.Attribute_Luck = player1.Attribute_Luck;
+            player1.Attribute_Constitution = player1.Attribute_Constitution;
             player1.EquipedWeapon = Weapons.Find(w => w.Name == "Dagger");
             player1.EquipedArmour = ArmourTypes.Find(a => a.Type == "Cloth");
 
@@ -389,11 +401,9 @@ namespace TheCaregiver
                 File.CreateText(saveFilePath + @"//" + "savefile.crg");
             }
 
-            UpdateActionWindow("And so it begins. It's a lovely spring day. With winter finally over, you are ready to be on your own, apart from your family, crafting your own path, starting in the wilderness of Hyleo. What will be your destiny? How will you best contribute to the world? There is nothing more important than leading a meaningful life.");
-            UpdateActionWindow("");
-            UpdateActionWindow("What is the name you will be known as in this world?");
-            UpdateActionWindow("");
-            UpdateActionWindow("The days are short and there are evil things about. It's time to find some food and a place where I can see myself living for a while.");
+            UpdateActionWindow(player1.Name + ", Your Adventure Begins.");
+            UpdateActionWindow("It's a lovely spring day. With winter finally over, you are ready to be on your own, apart from your family, crafting your own path.");
+            UpdateActionWindow("You decide to make your start in the wilds of Hyleo. What will be your destiny? What will you learn about yourself? There is nothing more important than leading a meaningful life.");
             UpdateActionWindow("");
         }
 
@@ -406,7 +416,7 @@ namespace TheCaregiver
 
         public void UpdateActionWindow(string s)
         {
-            ActionWindow.Text = ActionWindow.Text + Environment.NewLine + "> " + s;
+            ActionWindow.AppendText(Environment.NewLine + "  " + s);
 
             ActionWindow.SelectionStart = ActionWindow.Text.Length;
             // scroll it automatically
@@ -416,13 +426,35 @@ namespace TheCaregiver
         public void AppendActionWindow(string s)
         {
             ActionWindow.Text = ActionWindow.Text + s;
+
+            ActionWindow.SelectionStart = ActionWindow.Text.Length;
+            // scroll it automatically
+            ActionWindow.ScrollToCaret();
+        }
+
+
+        public void UpdateActionWindow_ShowItems(string message, string[] items)
+        {
+            int x = 0;
+            ActionWindow.AppendText(Environment.NewLine + Environment.NewLine + "  " + message);
+            foreach (string s in items)
+            {
+                x++;
+                ActionWindow.AppendText(Environment.NewLine + String.Format("     {0}) {1}", x, s));
+            }
+
+            ActionWindow.AppendText(Environment.NewLine + "Choice? ");
+
+            ActionWindow.SelectionStart = ActionWindow.Text.Length;
+            // scroll it automatically
+            ActionWindow.ScrollToCaret();
         }
 
         public void TranslateMap()
         {
 
             MapMatrix = new byte[gameState.CurrentMap.X, gameState.CurrentMap.Y];
-  
+
 
             for (var x = 0; x < gameState.CurrentMap.X; x++)
             {
@@ -455,7 +487,7 @@ namespace TheCaregiver
             Tiles.Add(new Tile
             {
                 Letter = '*',
-                Picture  = new Bitmap(TheCaregiver.Tiles.snow)
+                Picture = new Bitmap(TheCaregiver.Tiles.snow)
             });
 
             Tiles.Add(new Tile
@@ -621,6 +653,12 @@ namespace TheCaregiver
                 Picture = new Bitmap(TheCaregiver.Tiles.FOW)
             });
 
+            Tiles.Add(new Tile
+            {
+                Letter = '$',
+                Picture = new Bitmap(TheCaregiver.Tiles.sign)
+            });
+
             //WATER
             //shallow
             tmpTile = new Tile
@@ -702,40 +740,154 @@ namespace TheCaregiver
             Tiles.Add(tmpTile);
             tmpTile = null;
 
-
             Tiles.Add(new Tile
             {
                 Letter = 'j',
                 Picture = new Bitmap(TheCaregiver.Tiles.bridge)
             });
         }
+        
+        private void GameBoard_Resize(object sender, EventArgs e)
+        {
+            if (!IsFirstResizeOnLoad)
+            {
+                DrawUI();
+            }
+        }
+
+        private void CalculateStuff()
+        {
+            panel1.Width = 270;
+
+            int newWidthInTiles = (this.Width - panel1.Width) / TILE_PIXELS;
+            WIDTH_LEFTOVER = 0;
+            if (newWidthInTiles % 2 == 0)
+            {
+                newWidthInTiles -= 1;
+                WIDTH_LEFTOVER = this.Width - (newWidthInTiles * TILE_PIXELS) + panel1.Width + TILE_PIXELS;
+            }
+            else
+            {
+                WIDTH_LEFTOVER = this.Width - (newWidthInTiles * TILE_PIXELS) + panel1.Width;
+            }
+
+            panel1.Left = newWidthInTiles * TILE_PIXELS;
+            panel1.Width += WIDTH_LEFTOVER; //this widens to make up for leftover and also removing tile if it was EVEN
+
+            WIDTH_TILE_RADIUS = (newWidthInTiles - 1) / 2;
+            WIDTH_BOARD_TILES = newWidthInTiles;
+
+            int newHeightInTiles = (this.Height) / TILE_PIXELS;
+            HEIGHT_LEFTOVER = this.Height - (newHeightInTiles * TILE_PIXELS);
+
+            if (newHeightInTiles % 2 == 0)
+            {
+                newHeightInTiles -= 1;
+                HEIGHT_LEFTOVER += TILE_PIXELS;
+            }
+
+            HEIGHT_TILE_RADIUS = (newHeightInTiles - 1) / 2;
+            HEIGHT_BOARD_TILES = newHeightInTiles;
+
+        }
+        /// <summary>
+        /// This is called when there is a resize or on first load        /// 
+        /// </summary>
+        public void DrawUI()
+        {           
+            //set defaults
+            panel1.Width = 270;
+            WIDTH_LEFTOVER = 0;
+            int GAMEBOARD_WIDTH = this.Width;
+            int GAMEBOARD_HEIGHT = this.Height;
+            int GAMEBOARD_CANVAS_WIDTH_NET = 0;
+            int GAMEBOARD_CANVAS_WIDTH_ADJ = 0;
+            int GAMEBOARD_CANVAS_HEIGHT_NET = 0;
+            int GAMEBOARD_CANVAS_HEIGHT_ADJ = 0;
+
+            GAMEBOARD_CANVAS_WIDTH_NET = GAMEBOARD_WIDTH - panel1.Width;
+            WIDTH_BOARD_TILES = Math.DivRem(GAMEBOARD_CANVAS_WIDTH_NET, TILE_PIXELS, out WIDTH_LEFTOVER);
+
+            //if number of tiles wide is even, we need to adjust
+            if (WIDTH_BOARD_TILES % 2 == 0)
+            {
+                WIDTH_BOARD_TILES--;
+                GAMEBOARD_CANVAS_WIDTH_NET -= TILE_PIXELS;
+                panel1.Width += TILE_PIXELS;
+            }
+            panel1.Width += WIDTH_LEFTOVER;
+
+            WIDTH_TILE_RADIUS = (WIDTH_BOARD_TILES - 1) / 2;
+            //gameboard pixels height
+            GAMEBOARD_CANVAS_WIDTH_ADJ = WIDTH_BOARD_TILES * TILE_PIXELS;
+            panel1.Left = GAMEBOARD_CANVAS_WIDTH_ADJ;            
+
+            //add the leftover amount to widen panel1
+            panel1.Width += WIDTH_LEFTOVER;
+
+            ActionWindow.Width = panel1.Width;
+            CommandArea.Width = panel1.Width;
+            panel3.Width = panel1.Width;
+            
+            //HEIGHT ADJUSTMENTS
+            GAMEBOARD_CANVAS_HEIGHT_NET = GAMEBOARD_HEIGHT;
+            HEIGHT_BOARD_TILES = Math.DivRem(GAMEBOARD_CANVAS_HEIGHT_NET, TILE_PIXELS, out HEIGHT_LEFTOVER);
+
+            //if number of tiles high is even, we need to adjust
+            if (HEIGHT_BOARD_TILES%2 == 0)
+            {
+                //HEIGHT_BOARD_TILES--;
+                GAMEBOARD_CANVAS_HEIGHT_NET -= TILE_PIXELS;
+                HEIGHT_BOARD_TILES = Math.DivRem(GAMEBOARD_CANVAS_HEIGHT_NET, TILE_PIXELS, out HEIGHT_LEFTOVER);
+            }
+
+            HEIGHT_TILE_RADIUS = (HEIGHT_BOARD_TILES - 1) / 2;
+            //gameboard pixels height
+            GAMEBOARD_CANVAS_HEIGHT_ADJ = HEIGHT_BOARD_TILES * TILE_PIXELS;
+            panel1.Height = GAMEBOARD_CANVAS_HEIGHT_ADJ;
+            
+            ActionWindow.Height = GAMEBOARD_CANVAS_HEIGHT_ADJ - panel3.Height - CommandArea.Height - toolStrip1.Height;
+            CommandArea.Top = ActionWindow.Height + ActionWindow.Top;
+            panel3.Top = CommandArea.Top + CommandArea.Height;
+        }
+
         public void CreateScreen()
         {
-            //screen boundaries
-            int Screen_Map_Left = player1.X - SCREEN_RADIUS;
-            int Screen_Map_Right = player1.X + SCREEN_RADIUS;
-            int Screen_Map_Top = player1.Y - SCREEN_RADIUS;
-            int Screen_Map_Bottom = player1.Y + SCREEN_RADIUS;
+            //screen boundaries - this is tile based, not pixel based
+            //this is the area in the ASCII file that will be visible
+            int MapFile_Border_Left = player1.X - WIDTH_TILE_RADIUS;
+            int MapFile_Border_Right = player1.X + WIDTH_TILE_RADIUS;
+            int MapFile_Border_Top = player1.Y - HEIGHT_TILE_RADIUS;
+            int MapFile_Border_Bottom = player1.Y + HEIGHT_TILE_RADIUS;
 
-            ScreenMatrix = new byte[BOARD_HEIGHT, BOARD_WIDTH];
+            ScreenMatrix = new byte[WIDTH_BOARD_TILES, HEIGHT_BOARD_TILES];
 
             int x;
             int j = 0;
 
-            for (int MapY = Screen_Map_Top; MapY <= Screen_Map_Bottom; MapY++)
+            //Moving down in the map increments Y
+            for (int MapY = MapFile_Border_Top; MapY <= MapFile_Border_Bottom; MapY++)
             {
                 x = 0;
-                for (int MapX = Screen_Map_Left; MapX <= Screen_Map_Right; MapX++)
+                //Moving left to right in the map increments X
+                for (int MapX = MapFile_Border_Left; MapX <= MapFile_Border_Right; MapX++)
                 {
-                    if ((MapX < 0) || (MapX >= gameState.CurrentMap.X) || (MapY < 0) || (MapY >= gameState.CurrentMap.Y))
+                    try
                     {
-                        ScreenMatrix[x, j] = 0;
-                    }
-                    else
-                    {
-                        ScreenMatrix[x, j] = MapMatrix[MapX, MapY];
-                    }
+                        if ((MapX < 0) || (MapX >= gameState.CurrentMap.X) || (MapY < 0) || (MapY >= gameState.CurrentMap.Y))
+                        {
+                            ScreenMatrix[x, j] = 0;
+                        }
+                        else
+                        {
+                            ScreenMatrix[x, j] = MapMatrix[MapX, MapY];
+                        }
 
+                    }
+                    catch (Exception)
+                    {
+
+                    }
 
                     x++;
                 }
@@ -743,7 +895,7 @@ namespace TheCaregiver
                 j++;
             }
 
-            player1.CurrentTile = ScreenMatrix[5, 5];
+            player1.CurrentTile = ScreenMatrix[WIDTH_TILE_RADIUS, HEIGHT_TILE_RADIUS];
 
             //Monsters
             //search collection of Monsters for an X -5 or +5 and Y -5 and + 5 of player
@@ -756,8 +908,8 @@ namespace TheCaregiver
         public void DrawScreen()
         {
 
-            int tileWidth = 51;
-            int tileHeight = 51;
+            int tileWidth = TILE_PIXELS;
+            int tileHeight = TILE_PIXELS;
             PictureBox p;
             Point loc;
             Graphics G;
@@ -778,16 +930,16 @@ namespace TheCaregiver
             QuestPerson person;
 
             //getting four corners of screen coordinates 
-            int x1 = player1.X - 5;
+            int x1 = player1.X - WIDTH_TILE_RADIUS;
             if (x1 < 0) x1 = 0;
 
-            int x2 = player1.X + 5;
+            int x2 = player1.X + WIDTH_TILE_RADIUS;
             if (x2 > gameState.CurrentMap.X) x2 = gameState.CurrentMap.X;
 
-            int y1 = player1.Y - 5;
+            int y1 = player1.Y - HEIGHT_TILE_RADIUS;
             if (y1 < 0) y1 = 0;
 
-            int y2 = player1.Y + 5;
+            int y2 = player1.Y + HEIGHT_TILE_RADIUS;
             if (y2 > gameState.CurrentMap.Y) y2 = gameState.CurrentMap.Y;
 
             if (gameState.CurrentMap.MAPID == Place.Wilderness)
@@ -827,13 +979,20 @@ namespace TheCaregiver
                 }
             }
 
-            for (int j = 10; j >= 0; j--)
+            for (int j = HEIGHT_BOARD_TILES - 1; j >= 0; j--)
             {
-                for (int i = 0; i <= 10; i++)
+                for (int i = 0; i <= WIDTH_BOARD_TILES - 1; i++)
                 {
                     if (startTimers)
                     {
-                        p = (PictureBox)this.Controls.Find((tileWidth * i).ToString() + "_" + (tileHeight * j).ToString(), true)[0];
+                        try
+                        {
+                            p = (PictureBox)this.Controls.Find((tileWidth * i).ToString() + "_" + (tileHeight * j).ToString(), true)[0];
+                        }
+                        catch (Exception)
+                        {
+                            p = new PictureBox();
+                        }
                     }
                     else
                     {
@@ -850,7 +1009,7 @@ namespace TheCaregiver
                     //    mob1Bmp = new Bitmap(TheCaregiver.Tiles.ettin1);
 
                     //Player1
-                    if ((j == 5) && (i == 5))
+                    if ((j == HEIGHT_TILE_RADIUS) && (i == WIDTH_TILE_RADIUS))
                     {
                         player1Bmp = new Bitmap(TheCaregiver.Tiles.player1);
                         if (player1.Sleeping)
@@ -909,7 +1068,7 @@ namespace TheCaregiver
                         {
                             case ',':
                             case '.':
-                               sourceBmp = (Tiles.Single(t => (t.Letter == (char)ScreenMatrix[i, j])).getMovingPicture(gameState.waterTicker));
+                                sourceBmp = (Tiles.Single(t => (t.Letter == (char)ScreenMatrix[i, j])).getMovingPicture(gameState.waterTicker));
                                 break;
 
                             case '%':
@@ -925,20 +1084,29 @@ namespace TheCaregiver
                                 sourceBmp = (Tiles.Single(t => (t.Letter == (char)ScreenMatrix[i, j])).getMovingPicture(lavaRoll));
                                 break;
                             case 'G':
-                                int gX = player1.X - (5 - i);
-                                int gY = player1.Y - (5 - j);
+                                //if in Wilderness, the garden belongs to player1
+                                if (player1.Map == Atlas.Maps[Place.Wilderness].MAPID)
+                                {
+                                    int gX = player1.X - (WIDTH_TILE_RADIUS - i);
+                                    int gY = player1.Y - (HEIGHT_TILE_RADIUS - j);
 
-                                //will this be an issue if near end of map (no gardens there anyway)
-                                GardenPlot g = player1.GardenPlots.Find(w => w.X == gX && w.Y == gY);
-                               
-                                sourceBmp = g.GetGardenTileToDraw();                               
-                                 break;
+                                    //will this be an issue if near end of map (no gardens there anyway)
+                                    GardenPlot g = player1.GardenPlots.Find(w => w.X == gX && w.Y == gY);
 
-                            default:                           
+                                    sourceBmp = g.GetGardenTileToDraw();
+                                }
+                                //Otherwise, in a town where the crops are always ready
+                                else
+                                {
+                                    sourceBmp = new Bitmap(TheCaregiver.Tiles.gardenready);
+                                }
+                                break;
+
+                            default:
                                 sourceBmp = Tiles.Single(t => t.Letter == (char)ScreenMatrix[i, j]).Picture;
                                 break;
                         }
-                       
+
 
                     }
                     catch (System.InvalidOperationException e)
@@ -952,7 +1120,7 @@ namespace TheCaregiver
                     /* Centre of screen - this is the player tile
                      * Player tile is a transparent .png written on top of the background tile
                      */
-                    if ((j == 5) && (i == 5))
+                    if ((j == HEIGHT_TILE_RADIUS) && (i == WIDTH_TILE_RADIUS))
                     {
                         var overlay = new Bitmap(p.Width, p.Height);
                         G = Graphics.FromImage(overlay);
@@ -1024,6 +1192,7 @@ namespace TheCaregiver
 
                 }
             }
+            IsFirstResizeOnLoad = false;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -1205,7 +1374,7 @@ namespace TheCaregiver
                     //if this Monster is attacking the Player, they don't move
                     if (m.CombatMode)
                     {
-                       // AttackTurn(m);
+                        // AttackTurn(m);
                     }
                     else
                     {
@@ -1299,14 +1468,14 @@ namespace TheCaregiver
             {
                 if ((!CombatTimer.Enabled) && (!player1.CombatMode))
                 {
-                //    Monster meanie = Monsters.Find(m => m.CombatMode);
-                //}
-                //else
-                //{
+                    //    Monster meanie = Monsters.Find(m => m.CombatMode);
+                    //}
+                    //else
+                    //{
                     Monster meanie = (Monster)TileCheckForInteraction(InteractionType.Monster);
 
-                   // if ((meanie != null) && (meanie.Aggressive))
-                    if (meanie != null) 
+                    // if ((meanie != null) && (meanie.Aggressive))
+                    if (meanie != null)
                     {
                         UpdateActionWindow(meanie.WelcomeMessage);
 
@@ -1630,11 +1799,17 @@ namespace TheCaregiver
             return okToStep;
         }
 
-        private void TransferToActionPanel()
+        private void TransferFocusToCommandArea()
         {
             CommandArea.Clear();
             CommandArea.Enabled = true;
             this.ActiveControl = CommandArea;
+        }
+
+        private void WaitForResponseInActionWindow()
+        {
+            ActionWindow.Enabled = true;
+            this.ActiveControl = ActionWindow;
         }
 
         private void CommandArea_KeyDown(object sender, KeyEventArgs e)
@@ -1737,14 +1912,14 @@ namespace TheCaregiver
         /// </summary>
         /// <param name="tilesToFind"></param>
         /// <returns></returns>
-      
+
         private bool TileCheck(char[] tilesToFind)
         {
             bool found = false;
 
-            for (int i = 4; i <= 6; i++)
+            for (int i = WIDTH_TILE_RADIUS - 1; i <= WIDTH_TILE_RADIUS + 1; i++)
             {
-                for (int j = 4; j <= 6; j++)
+                for (int j = HEIGHT_TILE_RADIUS - 1; j <=  HEIGHT_TILE_RADIUS + 1; j++)
                 {
                     //if (i == 5 & j == 5)
                     //    break;
@@ -1854,11 +2029,34 @@ namespace TheCaregiver
 
         private void StartMap()
         {
+            //using(StreamReader reader = File.OpenText(@"c:\person.json"))
+            //{
+            //    JObject o = (JObject)JToken.ReadFrom(new JsonTextReader(reader));
+            //    // do stuff
+            //}
+
             if (gameState.CurrentMap.MAPID == Place.Lancer)
             {
+                //load town
+                //  currentTown = new Town();
+                Root townList = JsonConvert.DeserializeObject<Root>(File.ReadAllText(@"..\..\Resources\jsonDB\town_locations.json"));
+                Town currentTown = townList.towns.Find(t => t.name == "Lancer");
                 //create merchant
+
                 Merchants.Clear();
-                Merchants.Add(
+                foreach (Location loc in currentTown.locations)
+                {
+                    Merchants.Add(new Merchant
+                    {
+                        Name = loc.merchant,
+                        store = new Store { Name = loc.name }
+                    });
+                
+                }
+            }
+        }
+                //Load in Merchants
+              /*  Merchants.Add(
                     new Merchant
                     {
                         Name = "Steve",
@@ -1867,8 +2065,8 @@ namespace TheCaregiver
                         Y = 20
                     }
                 );
-
-                QuestPeople.Clear();
+                */
+                /*QuestPeople.Clear();
                 QuestPeople.Add(
                     new QuestPerson
                     {
@@ -1876,9 +2074,9 @@ namespace TheCaregiver
                         X = 104,
                         Y = 47
                     }
-                );
-            }
-        }
+                );*/
+            
+        
 
 
         private void ShowScroll(String message)
@@ -1924,27 +2122,15 @@ namespace TheCaregiver
         {
 
         }
-        private void GameBoard_SizeChanged(object sender, EventArgs e)
-        {
-            //Determine the new size
-
-            //Determine the number of tiles for width and height
-
-            //remainder will be added to the side and bottom panels
-
-
-            // UpdateActionWindow("size");
-        }
-
         private void LoadInventoryDialog()
         {
             Inventory ic = new Inventory(player1);
-            ic.StartPosition = FormStartPosition.CenterScreen; 
-            ic.Show(this);  
+            ic.StartPosition = FormStartPosition.CenterScreen;
+            ic.Show(this);
         }
 
         #region UIButtons
-        private void LoadCharacterDialog()
+        private void LoadCharacterDialog   ()
         {
             CharacterCard cc = new CharacterCard(player1);
             cc.StartPosition = FormStartPosition.CenterScreen;
@@ -1985,13 +2171,17 @@ namespace TheCaregiver
 
                             ChangeStep(player1.X, player1.Y - 1);
 
-
-                            if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                                player1.Y--;
-                            else
+                            if (OkToStep())
                             {
-                                BackToTheWilderness();  //Great Scott!!
-                            }
+                                if (PlayerStillOnMap(key.KeyCode))
+                                {
+                                    player1.Y--;
+                                }
+                                else
+                                {
+                                    BackToTheWilderness();  //Great Scott!!
+                                }
+                            }                            
                         }
                         //DiceRoll for event
                         break;
@@ -2003,11 +2193,16 @@ namespace TheCaregiver
 
                         ChangeStep(player1.X, player1.Y + 1);
 
-                        if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                            player1.Y++;
-                        else
+                        if (OkToStep())
                         {
-                            BackToTheWilderness();  //Great Scott!!
+                            if (PlayerStillOnMap(key.KeyCode))
+                            {
+                                player1.Y++;
+                            }
+                            else
+                            {
+                                BackToTheWilderness();  //Great Scott!!
+                            }
                         }
 
                         //DiceRoll for event
@@ -2021,11 +2216,17 @@ namespace TheCaregiver
 
                         ChangeStep(player1.X - 1, player1.Y);
 
-                        if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                            player1.X--;
-                        else
+
+                        if (OkToStep())
                         {
-                            BackToTheWilderness();  //Great Scott!!
+                            if (PlayerStillOnMap(key.KeyCode))
+                            {
+                                player1.X--;
+                            }
+                            else
+                            {
+                                BackToTheWilderness();  //Great Scott!!
+                            }
                         }
 
                         //DiceRoll for event
@@ -2039,11 +2240,17 @@ namespace TheCaregiver
 
                         ChangeStep(player1.X + 1, player1.Y);
 
-                        if (OkToStep() && PlayerStillOnMap(key.KeyCode))
-                            player1.X++;
-                        else
+
+                        if (OkToStep())
                         {
-                            BackToTheWilderness();  //Great Scott!!
+                            if (PlayerStillOnMap(key.KeyCode))
+                            {
+                                player1.X++;
+                            }
+                            else
+                            {
+                                BackToTheWilderness();  //Great Scott!!
+                            }
                         }
 
                         //DiceRoll for event
@@ -2086,6 +2293,13 @@ namespace TheCaregiver
                         }
 
                         break;
+
+                    //Developer Window
+                    case Keys.D:
+                        {
+                            pnlDevSettings.Show();
+                            break;
+                        }
 
                     //Fish
                     case Keys.F:
@@ -2228,7 +2442,7 @@ namespace TheCaregiver
                                     UpdateActionWindow("It is tradition to name a new home after it's been built. What shall you call it?");
 
                                     player1.CurrentState = PlayerProgress.house;
-                                    TransferToActionPanel();
+                                    TransferFocusToCommandArea();
 
                                     //TODO: it costs 10 wood for a house
                                     //player1.wood = player1.wood - 10;
@@ -2248,7 +2462,29 @@ namespace TheCaregiver
                     case Keys.L:
                         UpdateActionWindow("Coordinates: [" + player1.Map.ToString() + "] (" + player1.X + ", " + player1.Y + ") ASCII " + player1.CurrentTile);
                         break;
+                    
+                    //Read
+                    case Keys.R:
+                        //search signs.json
+                        if (MapMatrix[player1.X, player1.Y] == 36)
+                        {
+                            var signWords = SignHelper.ReadSign(player1.X, player1.Y);
+                            if (!String.IsNullOrEmpty(signWords))
+                            {
+                                UpdateActionWindow("You read a sign which says...");
+                                UpdateActionWindow(SignHelper.ReadSign(player1.X, player1.Y));
+                            }
+                            else
+                            {
+                                UpdateActionWindow("Um, there's nothing to read here.");
+                            }
+                        }
+                        else
+                        {
+                            UpdateActionWindow("Um, there's nothing to read here.");
+                        }
 
+                        break;
                     //Sleep
                     case Keys.S:
                         //MSG - amount of sleep is random
@@ -2276,14 +2512,26 @@ namespace TheCaregiver
                         break;
                     //Start Conversation - talking
                     case Keys.T:
+                        //Determine Town
                         if (gameState.CurrentMap.MAPID == Place.Lancer)
                         {
                             Merchant merchant = (Merchant)TileCheckForInteraction(InteractionType.Merchant);
 
                             if (merchant != null)
                             {
+                                //A merchant has been discovered beside player1
 
-                                UpdateActionWindow(merchant.Name + " wants to sell you some garbage!");
+                                // Start dialogue with merchant - find in Merchants list
+
+
+                                gameState.ShopMode = true;
+                                // this merchant should stop moving
+
+                                // Intro in below panel
+
+                                // a choice of buy or sell is displayed
+                                UpdateActionWindow("Looking to (B)uy or (S)ell?");
+                                WaitForResponseInActionWindow();
                             }
 
                             QuestPerson person = (QuestPerson)TileCheckForInteraction(InteractionType.QuestPerson);
@@ -2315,27 +2563,26 @@ namespace TheCaregiver
 
                         break;
 
-                        //case Keys.P:
-                        //    //   GameTimer.Stop();
-                        //    var tp = new TheCaregiver.Resources.TransPanel();
-                        //    tp.Location = new Point(0, 0);
-                        //    tp.Width = 51 * BOARD_WIDTH;
-                        //    tp.Height = 51 * BOARD_HEIGHT;
-                        //    tp.BackColor = Color.Aquamarine;
-                        //    tp.BringToFront();
-                        //    Image img = Image.FromFile(@"Resources\scroll.png");
-                        //    Bitmap bmp = (Bitmap)img;
-                        //    var pb = new PictureBox();
-                        //    pb.Image = img;
-                        //    tp.Width = 51 * BOARD_WIDTH;
-                        //    tp.Height = 51 * BOARD_HEIGHT;
-                        //    pb.Location = new Point(0, 0);
-                        //    tp.Controls.Add(pb);
-                        //    //  pi.BackgroundImage = bmp;
-                        //    this.Controls.Add(tp);
-                        //    // ShowScroll("hiya");
-                        //    break;
-
+                    //case Keys.P:
+                    //    //   GameTimer.Stop();
+                    //    var tp = new TheCaregiver.Resources.TransPanel();
+                    //    tp.Location = new Point(0, 0);
+                    //    tp.Width = TILE_PIXELS * WIDTH_BOARD_TILES;
+                    //    tp.Height = TILE_PIXELS * HEIGHT_BOARD_TILES;
+                    //    tp.BackColor = Color.Aquamarine;
+                    //    tp.BringToFront();
+                    //    Image img = Image.FromFile(@"Resources\scroll.png");
+                    //    Bitmap bmp = (Bitmap)img;
+                    //    var pb = new PictureBox();
+                    //    pb.Image = img;
+                    //    tp.Width = TILE_PIXELS * WIDTH_BOARD_TILES;
+                    //    tp.Height = TILE_PIXELS * HEIGHT_BOARD_TILES;
+                    //    pb.Location = new Point(0, 0);
+                    //    tp.Controls.Add(pb);
+                    //    //  pi.BackgroundImage = bmp;
+                    //    this.Controls.Add(tp);
+                    //    // ShowScroll("hiya");
+                    //    break;
 
                 }
             }
@@ -2343,10 +2590,131 @@ namespace TheCaregiver
             {
                 UpdateActionWindow("You can't walk in your sleep.");
             }
+
+            ////Developer Window
+            //if (key.Control && key.KeyCode == Keys.D)
+            //{
+            //    pnlDevSettings.Show();
+            //}
         }
 
         private void SpecialKeyPress(KeyEventArgs key)
         {
+            if (key.Control)
+            {
+                switch (key.KeyCode)
+                {
+                    case Keys.D1:
+                        {
+                            if (player1.HasHouse)
+                            {
+                                UpdateActionWindow("Warp to House!");
+                                player1.X = player1.HouseX - 1;
+                                player1.Y = player1.HouseY - 1;
+                            }
+                            break;
+                        }
+                    case Keys.D2:
+                        {
+                            UpdateActionWindow("Warp to Lancer!");
+                            player1.X = Atlas.Maps[Place.Lancer].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Lancer].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D3:
+                        {
+                            UpdateActionWindow("Warp to Nord Point!");
+                            player1.X = Atlas.Maps[Place.NordPoint].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.NordPoint].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D4:
+                        {
+                            UpdateActionWindow("Warp to Fyster!");
+                            player1.X = Atlas.Maps[Place.Fyster].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Fyster].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D5:
+                        {
+                            UpdateActionWindow("Warp to Nazidar!");
+                            player1.X = Atlas.Maps[Place.Nazidar].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Nazidar].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D6:
+                        {
+                            UpdateActionWindow("Warp to Lawdyn!");
+                            player1.X = Atlas.Maps[Place.Lawdyn].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Lawdyn].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D7:
+                        {
+                            UpdateActionWindow("Warp to Otalio!");
+                            player1.X = Atlas.Maps[Place.Otalio].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Otalio].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D8:
+                        {
+                            UpdateActionWindow("Warp to Southwind!");
+                            player1.X = Atlas.Maps[Place.Southwind].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Southwind].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D9:
+                        {
+                            UpdateActionWindow("Warp to Byas!");
+                            player1.X = Atlas.Maps[Place.Byas].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Byas].WorldY - 1;
+                            break;
+                        }
+                    case Keys.D0:
+                        {
+                            UpdateActionWindow("Warp to Grove!");
+                            player1.X = Atlas.Maps[Place.Grove].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Grove].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F1:
+                        {
+                            UpdateActionWindow("Warp to Radius!");
+                            player1.X = Atlas.Maps[Place.Radius].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Radius].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F2:
+                        {
+                            UpdateActionWindow("Warp to Winter's Hold!");
+                            player1.X = Atlas.Maps[Place.WintersHold].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.WintersHold].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F3:
+                        {
+                            UpdateActionWindow("Warp to Flagport!");
+                            player1.X = Atlas.Maps[Place.Flagport].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Flagport].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F4:
+                        {
+                            UpdateActionWindow("Warp to Iye!");
+                            player1.X = Atlas.Maps[Place.Iye].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Iye].WorldY - 1;
+                            break;
+                        }
+                    case Keys.F5:
+                        {
+                            UpdateActionWindow("Warp to Tempest!");
+                            player1.X = Atlas.Maps[Place.Tempest].WorldX - 1;
+                            player1.Y = Atlas.Maps[Place.Tempest].WorldY - 1;
+                            break;
+                        }
+                }
+
+            }
             switch (key.KeyValue)
             {
                 //Enter
@@ -2355,34 +2723,46 @@ namespace TheCaregiver
                     //Garden Check
                     if (player1.CurrentTile == 71)
                     {
-                        //Which gardenplot
-                        GardenPlot tempplot = player1.GardenPlots.Find(g => g.X == player1.X & g.Y == player1.Y);
+                        if (player1.Map == Atlas.Maps[Place.Wilderness].MAPID)
+                        {
+                            //Which gardenplot
+                            GardenPlot tempplot = player1.GardenPlots.Find(g => g.X == player1.X & g.Y == player1.Y);
 
-                        if (tempplot.GrowthStage == GardenGrowthStages.Growing)
-                        {
-                            //Still Growing
-                            UpdateActionWindow("Have a little patience. It's still growing.");
+                            if (tempplot.GrowthStage == GardenGrowthStages.Growing)
+                            {
+                                //Still Growing
+                                UpdateActionWindow("Have a little patience. It's still growing.");
+                            }
+                            else if (tempplot.GrowthStage == GardenGrowthStages.ReadyToHarvest)
+                            {
+                                //Harest Ready
+                                tempplot.GrowthStage = GardenGrowthStages.Nothing;
+                                UpdateActionWindow("You picked some lovely beans.");
+                                player1.food++;
+                            }
+                            else if (tempplot.GrowthStage == GardenGrowthStages.Nothing)
+                            {
+                                //Plant Seed
+                                if (player1.NumberofSeeds > 0)
+                                {
+                                    tempplot.GrowthStage = GardenGrowthStages.Growing;
+                                    UpdateActionWindow("Seed planted.");
+                                    player1.NumberofSeeds--;
+                                }
+                                else
+                                {
+                                    UpdateActionWindow("You have no seed to plant.");
+                                }
+                            }
                         }
-                        else if (tempplot.GrowthStage == GardenGrowthStages.ReadyToHarvest)
+                        //In garden, in a town - so harvesting
+                        else
                         {
-                            //Harest Ready
-                            tempplot.GrowthStage = GardenGrowthStages.Nothing;
-                            UpdateActionWindow("You picked some lovely beans.");
+                            UpdateActionWindow("You have stolen some beans.  Oh, nice that! Who raised you?");
                             player1.food++;
-                        }
-                        else if (tempplot.GrowthStage == GardenGrowthStages.Nothing)
-                        {
-                            //Plant Seed
-                            if (player1.NumberofSeeds > 0)
-                            {
-                                tempplot.GrowthStage = GardenGrowthStages.Growing;
-                                UpdateActionWindow("Seed planted.");
-                                player1.NumberofSeeds--;
-                            }
-                            else
-                            {
-                                UpdateActionWindow("You have no seed to plant.");
-                            }
+
+                            //TODO: make crop disappear
+
                         }
                     }
                     else
@@ -2394,7 +2774,8 @@ namespace TheCaregiver
 
                         if (testLocation > 0)
                         {
-                            newMap = Atlas.Maps.FirstOrDefault(x => x.Key == testLocation).Value;
+                            //newMap = Atlas.Maps.FirstOrDefault(x => x.Key == testLocation).Value;
+                            newMap = Atlas.Maps.FirstOrDefault(x => x.Key == Place.Lancer).Value;
                         }
                         else
                         {
@@ -2464,7 +2845,7 @@ namespace TheCaregiver
 
         private void World_Refresh(Place thisplace)
         {
-           // player1.Map = thisplace;
+            // player1.Map = thisplace;
             Atlas.BuildAtlas(gameState.reality.Season);
             gameState.CurrentMap = Atlas.Maps[player1.Map];
 
@@ -2482,7 +2863,7 @@ namespace TheCaregiver
 
             if (player1.Map == Place.Wilderness)
             {
-               
+
                 // Overwrite map with garden
                 foreach (GardenPlot g in player1.GardenPlots)
                 {
@@ -2496,7 +2877,7 @@ namespace TheCaregiver
                 //     KingdomExtract = gameState.CurrentMap.LoadKingdoms();
 
                 if (player1.HasHouse)
-                { 
+                {
                     MapExtract[player1.HouseX, player1.HouseY] = "H";
                     MapMatrix[player1.HouseX, player1.HouseY] = 72;
                 }
@@ -2505,6 +2886,7 @@ namespace TheCaregiver
 
         private void Screen_ReDraw()
         {
+            // DrawUI();
             CreateScreen();
 
             DrawScreen();
@@ -2513,8 +2895,8 @@ namespace TheCaregiver
         #endregion
 
         private void saveToolStripButton_Click_1(object sender, EventArgs e)
-        {              
-            
+        {
+
             var saveFilePath = Application.LocalUserAppDataPath;
 
             using (StreamWriter sw = new StreamWriter(saveFilePath + @"//" + "savefile.crg"))
@@ -2527,9 +2909,9 @@ namespace TheCaregiver
                     { "gamestate", gameState},
                     { "mobs", Monsters }
                 };
-                
+
                 string json = JsonConvert.SerializeObject(dic, Formatting.Indented);
-                
+
                 try
                 {
                     sw.Write(json);
@@ -2570,7 +2952,7 @@ namespace TheCaregiver
                     }
                     else
                     {
-                        if (((Double) player1.Health / player1.HealthMax) >= 0.75)
+                        if (((Double)player1.Health / player1.HealthMax) >= 0.75)
                         {
                             UpdateActionWindow("You've been hit. It's just a flesh wound!");
                         }
@@ -2681,21 +3063,118 @@ namespace TheCaregiver
                 combatmanager.FinishRound();
             }
 
-          //  Defense = 15,
-           //     DamageMax = 3,
+            //  Defense = 15,
+            //     DamageMax = 3,
             //Flee Decision
-           // FleeThreshold
-           // ChanceToFlee
+            // FleeThreshold
+            // ChanceToFlee
         }
 
         private void helpToolStripButton_Click(object sender, EventArgs e)
         {
-            LoadCharacterDialog();
         }
 
         private void pasteToolStripButton_Click(object sender, EventArgs e)
         {
+        }
+
+        private void btnSaveDevSettings_Click(object sender, EventArgs e)
+        {
+            pnlDevSettings.Visible = false;
+        }
+
+        private void chkDevSetting_HasSeed_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDevSetting_HasSeed.Checked)
+            {
+                player1.HasSeed = true;
+            }
+            else
+            {
+                player1.HasSeed = false;
+            }
+
+            //save code
+            player1.HasSeed = chkDevSetting_HasSeed.Checked;
+        }
+
+        private void btnInventory_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCharacter_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tsInventory_Click(object sender, EventArgs e)
+        {
             LoadInventoryDialog();
+        }
+
+        private void tsCharacter_Click(object sender, EventArgs e)
+        {
+            LoadCharacterDialog();
+        }
+
+        private void ActionWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (ActiveControl != null && ActiveControl.Name == "ActionWindow")
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.B:
+                        //if in store mode then select Buy
+                        if (gameState.ShopMode)
+                        {
+                            e.Handled = true;
+                            UpdateActionWindow_ShowItems("Iolo's Bows", new string[] { "short bow [3]", "dagger [2]" });
+                            //TransferFocusToCommandArea();
+
+                        }
+                        break;
+
+                    case Keys.S:
+                        e.Handled = true;
+                        //if in store mode then select Sell
+                        break;
+
+                    case Keys.D1:
+                        {
+                            e.Handled = true;
+                            if (gameState.ShopMode)
+                            {
+                                UpdateActionWindow(">1");
+
+                                //call a method that knows the town, merhcant, choices and will make the transaction
+
+                                this.ActiveControl = null;
+                            }
+                            break;
+                        }
+                    case Keys.D2:
+                        {
+                            e.Handled = true;
+                            if (gameState.ShopMode)
+                            {
+                                UpdateActionWindow(">2");
+
+                                this.ActiveControl = null;
+                            }
+                            break;
+                        }
+                        //case 1-9 for awares
+                        /*
+                         * 
+                                    // if buy, wares posted in below panel
+                                    UpdateActionWindow_ShowItems("Iolo's Bows", new string[] { "short bow [3 coin]", "dagger [2 coin]"});
+                                    // player1 makes choice
+
+                                    // checks cost vs player1 gold */
+                }
+            }
         }
     }
 }

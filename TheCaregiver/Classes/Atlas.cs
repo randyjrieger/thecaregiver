@@ -223,8 +223,8 @@ namespace TheCaregiver.World
                     MAPID = Place.Radius
                 });
 
-                Locations.Add(new Coordinates { X = 177, Y = 27 }, Place.Snowport);
-                Maps.Add(Place.Snowport, new Map
+                Locations.Add(new Coordinates { X = 177, Y = 27 }, Place.WintersHold);
+                Maps.Add(Place.WintersHold, new Map
                 {
                     StartX = 30,
                     StartY = 30,
@@ -234,7 +234,7 @@ namespace TheCaregiver.World
                     Y = 53,
                     type = LocationType.Special,
                     filePath = Path.Combine(Environment.CurrentDirectory, @"../../Resources/maps/Iye.txt"),
-                    MAPID = Place.Snowport
+                    MAPID = Place.WintersHold
                 });
 
                 Locations.Add(new Coordinates { X = 317, Y = 147 }, Place.Flagport);

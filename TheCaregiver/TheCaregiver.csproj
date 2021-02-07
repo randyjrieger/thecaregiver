@@ -99,8 +99,21 @@
     <Compile Include="Classes\MonsterCard.cs" />
     <Compile Include="Classes\MonsterHelper.cs" />
     <Compile Include="Classes\NPC\NPC.cs" />
+    <Compile Include="Classes\SignHelper.cs" />
+    <Compile Include="NewCharacter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewCharacter.Designer.cs">
+      <DependentUpon>NewCharacter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\icons\Icons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Icons.resx</DependentUpon>
+    </Compile>
     <Compile Include="Templates\House.cs" />
     <Compile Include="Templates\ILocation.cs" />
+    <Compile Include="Templates\ItemsForSale.cs" />
     <Compile Include="Templates\Location.cs" />
     <Compile Include="Templates\Person.cs" />
     <Compile Include="Classes\Monster.cs" />
@@ -182,6 +195,9 @@
       <LastGenOutput>Maps.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="NewCharacter.resx">
+      <DependentUpon>NewCharacter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -190,7 +206,12 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Resources\icons\Icons.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
     </EmbeddedResource>
@@ -209,6 +230,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\jsonDB\signs.json" />
+    <None Include="Resources\jsonDB\town_locations.json" />
     <None Include="Resources\tiles\tiles.zip" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +243,8 @@
     <None Include="Resources\tiles\waterfall2.jpg" />
     <None Include="Resources\tiles\waterfall1.jpg" />
     <None Include="Resources\lava1.bmp" />
+    <None Include="Resources\icons\up.png" />
+    <None Include="Resources\icons\down.png" />
     <Content Include="Resources\maps\Byas.txt" />
     <Content Include="Resources\maps\Fyster.txt" />
     <Content Include="Resources\maps\GroveOfFilu.txt" />

@@ -8,8 +8,8 @@ namespace TheCaregiver.Templates
 {
     public interface ILocation
     {
-        string Name { get; set; }
-        int X { get; set; }
-        int Y { get; set; }
+        string name { get; set; } 
+        string merchant { get; set; } 
+        List<ItemsForSale> items_for_sale { get; set; } 
     }
 }

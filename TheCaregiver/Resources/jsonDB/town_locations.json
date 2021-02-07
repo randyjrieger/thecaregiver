@@ -1,0 +1,73 @@
+﻿{
+  "towns": [
+    {
+      "name": "Lancer",
+      "id": 1,
+      "locations": [
+        {
+          "name": "Iolo's Bows",
+          "merchant":  "Iolo",
+          "items_for_sale": [
+            {
+              "item": "dagger",
+              "price": 2
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        },
+        {
+          "name": "Candlestick Inn",
+          "merchant":  "Steve",
+          "items_for_sale": [
+            {
+              "item": "rose",
+              "price": 1
+            },
+            {
+              "item": "tulip",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Fyster",
+      "id": 1,
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        },
+        {
+          "name": "Dave's Flowers",
+          "merchant": "Steve",
+          "items_for_sale": [
+            {
+              "item": "rose",
+              "price": 1
+            },
+            {
+              "item": "tulip",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+}

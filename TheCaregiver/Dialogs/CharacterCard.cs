@@ -25,15 +25,15 @@ namespace TheCaregiver.Dialogs
             pbHealth.Style = ProgressBarStyle.Blocks;
             pbHealth.ForeColor = Color.LightCoral;
             lblHealth.Text = player1.Health + "/" + player1.HealthMax;
-
+            txtGender.Text = player1.GenderValue.ToString();
+            txtSpecies.Text = player1.SpeciesValue.ToString();
 
             txtName.Text = player1.Name;
             txtStr.Text = player1.Attribute_Strength.ToString();
-            txtCharisma.Text = player1.Attribute_Charisma.ToString();
             txtAgility.Text = player1.Attribute_Agility.ToString();
-            txtIntellect.Text = player1.Attribute_Intellect.ToString();
             txtLuck.Text = player1.Attribute_Luck.ToString();
-            txtInsight.Text = player1.Attribute_Insight.ToString();
+            txtConstitution.Text = player1.Attribute_Constitution.ToString();
+            
         }
 
         private void btnStatsClose_Click(object sender, EventArgs e)

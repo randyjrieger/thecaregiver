@@ -66,11 +66,25 @@ namespace TheCaregiver.Player1
         public int Skill_Defence { get; set; }
         
         public int Attribute_Strength { get; set; }
-        public int Attribute_Charisma { get; set; }
         public int Attribute_Luck { get; set; }
-        public int Attribute_Intellect { get; set; }
-        public int Attribute_Insight { get; set; }
         public int Attribute_Agility { get; set; }
+        public int Attribute_Constitution { get; set; }
+
+        public Species SpeciesValue { get; set; }
+        public Gender GenderValue{ get; set; }
+
+        public enum Species
+        {
+            BlueElf = 0,
+            Human
+        }
+        
+        public enum Gender
+        {
+            Male = 0,
+            Female,
+            Other
+        }
 
         public Player()
         {

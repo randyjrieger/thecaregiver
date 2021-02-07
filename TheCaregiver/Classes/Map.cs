@@ -25,7 +25,7 @@ namespace TheCaregiver.World
         Garden = 12,
         Tempest = 13,
         Radius = 14,
-        Snowport = 15, 
+        WintersHold = 15, 
         Flagport = 16
 
 
@@ -41,8 +41,8 @@ namespace TheCaregiver.World
     
     public class Map
     {
-        //public const int SCREEN_RADIUS = 5;
-        //public int offset = SCREEN_RADIUS;
+        //public const int ASCII_RADIUS = 5;
+        //public int offset = ASCII_RADIUS;
 
         public Place MAPID { get; set; }
 
