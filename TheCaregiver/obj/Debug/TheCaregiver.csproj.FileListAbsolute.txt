@@ -60,3 +60,5 @@ C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCare
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.Dialogs.CharacterCard.resources
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.Dialogs.Inventory.resources
 C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.csprojAssemblyReference.cache
+C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.NewCharacter.resources
+C:\Users\darke\projects\TheCaregiver\thecaregiver\TheCaregiver\obj\Debug\TheCaregiver.Resources.icons.Icons.resources

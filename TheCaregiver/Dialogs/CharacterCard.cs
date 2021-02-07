@@ -29,11 +29,10 @@ namespace TheCaregiver.Dialogs
 
             txtName.Text = player1.Name;
             txtStr.Text = player1.Attribute_Strength.ToString();
-            txtCharisma.Text = player1.Attribute_Charisma.ToString();
             txtAgility.Text = player1.Attribute_Agility.ToString();
-            txtIntellect.Text = player1.Attribute_Intellect.ToString();
             txtLuck.Text = player1.Attribute_Luck.ToString();
-            txtInsight.Text = player1.Attribute_Insight.ToString();
+            txtConstitution.Text = player1.Attribute_Constitution.ToString();
+            
         }
 
         private void btnStatsClose_Click(object sender, EventArgs e)

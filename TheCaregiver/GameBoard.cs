@@ -372,9 +372,9 @@ namespace TheCaregiver
             player1.Attribute_Strength = dice.Roll(9, 18);
             player1.Attribute_Agility = dice.Roll(9, 18);
             player1.Attribute_Luck = dice.Roll(9, 18);
-            player1.Attribute_Intellect = dice.Roll(9, 18);
-            player1.Attribute_Insight = dice.Roll(9, 18);
-            player1.Attribute_Charisma = dice.Roll(9, 18);
+            player1.Attribute_Constitution = dice.Roll(9, 18);
+          //  player1.Attribute_Insight = dice.Roll(9, 18);
+          //  player1.Attribute_Charisma = dice.Roll(9, 18);
             player1.EquipedWeapon = Weapons.Find(w => w.Name == "Dagger");
             player1.EquipedArmour = ArmourTypes.Find(a => a.Type == "Cloth");
 

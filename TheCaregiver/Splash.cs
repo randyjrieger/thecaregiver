@@ -28,12 +28,8 @@ namespace TheCaregiver
 
         private void btnNewGame_Click(object sender, EventArgs e)
         { 
-            if (txtName.Text.Trim() == "")
-            {
-                return;
-            }
 
-            GameBoard m = new GameBoard(GameMode.New, txtName.Text);
+            NewCharacter m = new NewCharacter();
             m.Show();
             this.Hide();
         }
