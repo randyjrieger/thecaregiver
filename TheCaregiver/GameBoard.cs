@@ -653,6 +653,12 @@ namespace TheCaregiver
                 Picture = new Bitmap(TheCaregiver.Tiles.FOW)
             });
 
+            Tiles.Add(new Tile
+            {
+                Letter = '$',
+                Picture = new Bitmap(TheCaregiver.Tiles.sign)
+            });
+
             //WATER
             //shallow
             tmpTile = new Tile
@@ -2456,7 +2462,29 @@ namespace TheCaregiver
                     case Keys.L:
                         UpdateActionWindow("Coordinates: [" + player1.Map.ToString() + "] (" + player1.X + ", " + player1.Y + ") ASCII " + player1.CurrentTile);
                         break;
+                    
+                    //Read
+                    case Keys.R:
+                        //search signs.json
+                        if (MapMatrix[player1.X, player1.Y] == 36)
+                        {
+                            var signWords = SignHelper.ReadSign(player1.X, player1.Y);
+                            if (!String.IsNullOrEmpty(signWords))
+                            {
+                                UpdateActionWindow("You read a sign which says...");
+                                UpdateActionWindow(SignHelper.ReadSign(player1.X, player1.Y));
+                            }
+                            else
+                            {
+                                UpdateActionWindow("Um, there's nothing to read here.");
+                            }
+                        }
+                        else
+                        {
+                            UpdateActionWindow("Um, there's nothing to read here.");
+                        }
 
+                        break;
                     //Sleep
                     case Keys.S:
                         //MSG - amount of sleep is random
