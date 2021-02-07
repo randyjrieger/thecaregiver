@@ -43,11 +43,19 @@
             this.txtConstitution = new System.Windows.Forms.TextBox();
             this.txtStr = new System.Windows.Forms.TextBox();
             this.txtName = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtGender = new System.Windows.Forms.TextBox();
+            this.txtSpecies = new System.Windows.Forms.TextBox();
             this.statsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // statsPanel
             // 
+            this.statsPanel.Controls.Add(this.txtSpecies);
+            this.statsPanel.Controls.Add(this.txtGender);
+            this.statsPanel.Controls.Add(this.label6);
+            this.statsPanel.Controls.Add(this.label3);
             this.statsPanel.Controls.Add(this.lblHealth);
             this.statsPanel.Controls.Add(this.label8);
             this.statsPanel.Controls.Add(this.pbHealth);
@@ -198,6 +206,42 @@
             this.txtName.Size = new System.Drawing.Size(116, 20);
             this.txtName.TabIndex = 14;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(168, 151);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(45, 13);
+            this.label3.TabIndex = 33;
+            this.label3.Text = "Gender:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(168, 178);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(48, 13);
+            this.label6.TabIndex = 34;
+            this.label6.Text = "Species:";
+            // 
+            // txtGender
+            // 
+            this.txtGender.Location = new System.Drawing.Point(249, 144);
+            this.txtGender.Margin = new System.Windows.Forms.Padding(4);
+            this.txtGender.Name = "txtGender";
+            this.txtGender.Size = new System.Drawing.Size(88, 20);
+            this.txtGender.TabIndex = 35;
+            // 
+            // txtSpecies
+            // 
+            this.txtSpecies.Location = new System.Drawing.Point(249, 178);
+            this.txtSpecies.Margin = new System.Windows.Forms.Padding(4);
+            this.txtSpecies.Name = "txtSpecies";
+            this.txtSpecies.Size = new System.Drawing.Size(88, 20);
+            this.txtSpecies.TabIndex = 36;
+            // 
             // CharacterCard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -229,5 +273,9 @@
         private System.Windows.Forms.TextBox txtConstitution;
         private System.Windows.Forms.TextBox txtStr;
         private System.Windows.Forms.TextBox txtName;
+        private System.Windows.Forms.TextBox txtSpecies;
+        private System.Windows.Forms.TextBox txtGender;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label3;
     }
 }

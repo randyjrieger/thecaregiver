@@ -79,6 +79,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(190, 20);
             this.txtName.TabIndex = 1;
+            this.txtName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtName_KeyDown);
             // 
             // grpAbilities
             // 
@@ -262,7 +263,6 @@
             this.rbOther.TabStop = true;
             this.rbOther.Text = "Other";
             this.rbOther.UseVisualStyleBackColor = true;
-            this.rbOther.Visible = false;
             // 
             // rbFemale
             // 
@@ -396,6 +396,7 @@
             this.Name = "NewCharacter";
             this.Text = "Who Are You?";
             this.Load += new System.EventHandler(this.NewCharacter_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.NewCharacter_KeyDown);
             this.grpAbilities.ResumeLayout(false);
             this.grpAbilities.PerformLayout();
             this.grpGender.ResumeLayout(false);

@@ -42,7 +42,7 @@ namespace TheCaregiver
 
         private void button2_Click(object sender, EventArgs e)
         {
-            GameBoard m = new GameBoard(GameMode.Load, "");
+            GameBoard m = new GameBoard(GameMode.Load, null);
             m.Show();
             this.Hide();
         }

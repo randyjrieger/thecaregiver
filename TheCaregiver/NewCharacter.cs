@@ -117,7 +117,7 @@ namespace TheCaregiver
                     p.SpeciesValue = Player.Species.Human;
                 }
 
-                GameBoard m = new GameBoard(GameMode.New, txtName.Text);
+                GameBoard m = new GameBoard(GameMode.New, p);
                 m.Show();
                 this.Hide();
             }
@@ -226,6 +226,32 @@ namespace TheCaregiver
         private int CalcPoints()
         {
             return Convert.ToInt16(txtStr.Text) + Convert.ToInt16(txtAgi.Text) + Convert.ToInt16(txtCon.Text) + Convert.ToInt16(txtluc.Text);
+        }
+
+        private void NewCharacter_KeyDown(object sender, KeyEventArgs e)
+        {
+        }
+
+        private void txtName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.D)
+            {
+                Player p = new Player
+                {
+                    Name = "Curia",
+                    Attribute_Strength = 7,
+                    Attribute_Agility = 6,
+                    Attribute_Constitution = 5,
+                    Attribute_Luck = 5,
+                    GenderValue = Player.Gender.Female,
+                    SpeciesValue = Player.Species.BlueElf
+                };
+
+                GameBoard m = new GameBoard(GameMode.New, p);
+                m.Show();
+                this.Hide();
+
+            }
         }
     }
 }

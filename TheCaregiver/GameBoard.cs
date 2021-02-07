@@ -57,7 +57,8 @@ namespace TheCaregiver
         private Dice dice = new Dice();
         public Town currentTown = null;
         public GameMode Mode { get; set; }
-        public GameBoard(GameMode mode, string charName)
+
+        public GameBoard(GameMode mode, Player p)
         {
             InitializeComponent();
 
@@ -65,8 +66,7 @@ namespace TheCaregiver
 
             if (Mode == GameMode.New)
             {
-                player1 = new Player();
-                player1.Name = charName;
+                player1 = p;
             }
 
         }
@@ -365,16 +365,30 @@ namespace TheCaregiver
             Monsters = MonsterHelper.SpawnMonsters(regions);
 
             player1.CurrentState = PlayerProgress.name;
-            //TransferFocusToCommandArea();
 
-            player1.HealthMax = dice.Roll(15, 25);
+            player1.HealthMax = dice.Roll(15, 20);
+            if (player1.Attribute_Constitution > 9)
+            {
+                player1.HealthMax += 3;
+            }
+            else if (player1.Attribute_Constitution > 7)
+            {
+                player1.HealthMax += 2;
+            }
+            else if (player1.Attribute_Constitution > 5)
+            {
+                player1.HealthMax += 1;
+            }
+            else
+            {
+                player1.HealthMax -= 1;
+            }
+
             player1.Health = player1.HealthMax;
-            player1.Attribute_Strength = dice.Roll(9, 18);
-            player1.Attribute_Agility = dice.Roll(9, 18);
-            player1.Attribute_Luck = dice.Roll(9, 18);
-            player1.Attribute_Constitution = dice.Roll(9, 18);
-          //  player1.Attribute_Insight = dice.Roll(9, 18);
-          //  player1.Attribute_Charisma = dice.Roll(9, 18);
+            player1.Attribute_Strength = player1.Attribute_Strength;
+            player1.Attribute_Agility = player1.Attribute_Agility;
+            player1.Attribute_Luck = player1.Attribute_Luck;
+            player1.Attribute_Constitution = player1.Attribute_Constitution;
             player1.EquipedWeapon = Weapons.Find(w => w.Name == "Dagger");
             player1.EquipedArmour = ArmourTypes.Find(a => a.Type == "Cloth");
 

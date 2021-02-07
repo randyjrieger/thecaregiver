@@ -25,7 +25,8 @@ namespace TheCaregiver.Dialogs
             pbHealth.Style = ProgressBarStyle.Blocks;
             pbHealth.ForeColor = Color.LightCoral;
             lblHealth.Text = player1.Health + "/" + player1.HealthMax;
-
+            txtGender.Text = player1.GenderValue.ToString();
+            txtSpecies.Text = player1.SpeciesValue.ToString();
 
             txtName.Text = player1.Name;
             txtStr.Text = player1.Attribute_Strength.ToString();
