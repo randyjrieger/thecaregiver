@@ -7,28 +7,15 @@ using TheCaregiver.World;
 using System.Drawing;
 using Newtonsoft.Json;
 using TheCaregiver.Templates;
+using Newtonsoft.Json.Converters;
+using System.Runtime.Serialization;
 
 namespace TheCaregiver.Classes
 {
-    public enum Commonality
-    {
-        Common = 0,
-        Uncommon = 1,
-        Rare = 2
-    }
-
-    public enum SpecialAttack
-    {
-        Blind = 0,
-        Poison = 1
-    }
-
-
     public class Monster : ICloneable, IMonster
     {
         //Attributes
         public string Name { get; set; }
-        public Commonality Commonality { get; set; }
         public List<MapRegionType> SpawnRegion { get; set; }
         public int Defense { get; set; }
         public int Health { get; set; }
@@ -36,18 +23,25 @@ namespace TheCaregiver.Classes
         public int HealthMax { get; set; }
         public int DamageMax { get; set; }
         public string Introduction { get; set; }
-        public SpecialAttack SpecialAttack { get; set; }
-        public string SpecialAttackDescription { get; set; }
         public int NumberOfAttacks { get; set; }
         public int MinHourVisible { get; set; }
         public int MaxHourVisible { get; set; }
         public bool SuddenAppearance { get; set; }
         public string WelcomeMessage { get; set; }
         public int[] AllowedTiles { get; set; }
-
         [JsonIgnore]
-
         public Bitmap Tile { get; set; }
+        [JsonIgnore]
+        public Commonality Commonality { get; set; }
+        public string CommonalityDesc
+        {
+            set
+            {
+                Enum.TryParse(value, out Commonality setValue);
+                Commonality = setValue;
+            }
+        }
+
 
         public int X { get; set; }
         public int Y { get; set; }
@@ -55,6 +49,7 @@ namespace TheCaregiver.Classes
         public int ScreenX { get; set; }
         public int ScreenY { get; set; }
 
+        public string TileDesc { get; set; }
         public int CurrentTile { get; set; }
         public int FormerTile { get; set; }
 
@@ -86,6 +81,8 @@ namespace TheCaregiver.Classes
             SpawnRegion = new List<MapRegionType>();
             DetermineStartingHealth();
         }
+
+
 
         public bool CheckNextStep(int tile)
         {

@@ -2,11 +2,19 @@
   "towns": [
     {
       "name": "Lancer",
-      "id": 1,
+      "place": "Lancer",
+      "startX": 35,
+      "startY": 2,
+      "worldX": 158,
+      "worldY": 141,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Lancer.txt",
       "locations": [
         {
           "name": "Iolo's Bows",
-          "merchant":  "Iolo",
+          "type": "business",
+          "merchant": "Iolo",
           "items_for_sale": [
             {
               "item": "dagger",
@@ -20,7 +28,8 @@
         },
         {
           "name": "Candlestick Inn",
-          "merchant":  "Steve",
+          "type": "business",
+          "merchant": "Steve",
           "items_for_sale": [
             {
               "item": "rose",
@@ -36,10 +45,18 @@
     },
     {
       "name": "Fyster",
-      "id": 1,
+      "place": "Fyster",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 77,
+      "worldY": 61,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Fyster.txt",
       "locations": [
         {
           "name": "Dave's Bows",
+          "type": "business",
           "merchant": "Dave",
           "items_for_sale": [
             {
@@ -51,17 +68,339 @@
               "price": 3
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "name": "Nord Point",
+      "place": "NordPoint",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 246,
+      "worldY": 101,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/NordPoint.txt",
+      "locations": [
         {
-          "name": "Dave's Flowers",
-          "merchant": "Steve",
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
           "items_for_sale": [
             {
-              "item": "rose",
-              "price": 1
+              "item": "sword",
+              "price": 12
             },
             {
-              "item": "tulip",
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Grove Of Filu",
+      "place": "Grove",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 246,
+      "worldY": 47,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/GroveOfFilu.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Nazidar",
+      "place": "Nazidar",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 87,
+      "worldY": 100,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Nazidar.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Lawdyn",
+      "place": "Lawdyn",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 417,
+      "worldY": 108,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Lawdyn.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Otailo",
+      "place": "Otalio",
+      "startX": 10,
+      "startY": 10,
+      "worldX": 418,
+      "worldY": 96,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Otalio.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Southwind",
+      "place": "Southwind",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 388,
+      "worldY": 93,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Southwind.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Byas",
+      "place": "Byas",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 400,
+      "worldY": 50,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Byas.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Iye",
+      "place": "Iye",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 286,
+      "worldY": 73,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Iye.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tempest",
+      "place": "Tempest",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 319,
+      "worldY": 98,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Tempest.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Radius",
+      "place": "Radius",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 165,
+      "worldY": 60,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Radius.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Winters Hold",
+      "place": "WintersHold",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 177,
+      "worldY": 27,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/WintersHold.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
+              "price": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Flagport",
+      "place": "Flagport",
+      "startX": 30,
+      "startY": 30,
+      "worldX": 317,
+      "worldY": 147,
+      "X": 151,
+      "Y": 53,
+      "filePath": "../../Resources/maps/Flagport.txt",
+      "locations": [
+        {
+          "name": "Dave's Bows",
+          "type": "business",
+          "merchant": "Dave",
+          "items_for_sale": [
+            {
+              "item": "sword",
+              "price": 12
+            },
+            {
+              "item": "bow",
               "price": 3
             }
           ]
@@ -69,5 +408,4 @@
       ]
     }
   ]
-
 }

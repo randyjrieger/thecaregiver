@@ -2035,25 +2035,6 @@ namespace TheCaregiver
             //    // do stuff
             //}
 
-            if (gameState.CurrentMap.MAPID == Place.Lancer)
-            {
-                //load town
-                //  currentTown = new Town();
-                Root townList = JsonConvert.DeserializeObject<Root>(File.ReadAllText(@"..\..\Resources\jsonDB\town_locations.json"));
-                Town currentTown = townList.towns.Find(t => t.name == "Lancer");
-                //create merchant
-
-                Merchants.Clear();
-                foreach (Location loc in currentTown.locations)
-                {
-                    Merchants.Add(new Merchant
-                    {
-                        Name = loc.merchant,
-                        store = new Store { Name = loc.name }
-                    });
-                
-                }
-            }
         }
                 //Load in Merchants
               /*  Merchants.Add(
@@ -2460,7 +2441,7 @@ namespace TheCaregiver
                         break;
 
                     case Keys.L:
-                        UpdateActionWindow("Coordinates: [" + player1.Map.ToString() + "] (" + player1.X + ", " + player1.Y + ") ASCII " + player1.CurrentTile);
+                        UpdateActionWindow("Coordinates: [" + player1.Map.ToString() + "] (" + (int)(player1.X + 1) + ", " + (int)(player1.Y + 1) + ") ASCII " + player1.CurrentTile);
                         break;
                     
                     //Read
@@ -2846,7 +2827,7 @@ namespace TheCaregiver
         private void World_Refresh(Place thisplace)
         {
             // player1.Map = thisplace;
-            Atlas.BuildAtlas(gameState.reality.Season);
+            Atlas.BuildTownDatabase(gameState.reality.Season);
             gameState.CurrentMap = Atlas.Maps[player1.Map];
 
             MapExtract = gameState.CurrentMap.LoadMapFromFile();

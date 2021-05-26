@@ -10,6 +10,7 @@ namespace TheCaregiver.Templates
     public class Location : ILocation
     {
         public string name { get; set; }
+        public string type { get; set; }
         public string merchant { get; set; }
         public List<ItemsForSale> items_for_sale { get; set; }
     }
