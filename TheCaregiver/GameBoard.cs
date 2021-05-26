@@ -2441,7 +2441,7 @@ namespace TheCaregiver
                         break;
 
                     case Keys.L:
-                        UpdateActionWindow("Coordinates: [" + player1.Map.ToString() + "] (" + player1.X + ", " + player1.Y + ") ASCII " + player1.CurrentTile);
+                        UpdateActionWindow("Coordinates: [" + player1.Map.ToString() + "] (" + (int)(player1.X + 1) + ", " + (int)(player1.Y + 1) + ") ASCII " + player1.CurrentTile);
                         break;
                     
                     //Read

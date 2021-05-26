@@ -18,8 +18,6 @@ namespace TheCaregiver.Classes.Monsters
             Defense = 20;
             DamageMax = 6;
 
-            SpecialAttack = SpecialAttack.Blind;
-            SpecialAttackDescription = "Bright Ray of Colour";
             NumberOfAttacks = 1;
             MinHourVisible = 7;
             MaxHourVisible = 17;

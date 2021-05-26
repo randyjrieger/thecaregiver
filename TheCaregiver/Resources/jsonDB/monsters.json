@@ -1,0 +1,793 @@
+{
+  "monsters": [
+    {
+      "Name": "Ettin",
+      "Defense": 15,
+      "Health": 6,
+      "HealthMin": 6,
+      "HealthMax": 6,
+      "DamageMax": 3,
+      "MinHourVisible": 0,
+      "MaxHourVisible": 23,
+      "SuddenAppearance": true,
+      "NumberOfAttacks": 1,
+      "Aggressive": true,
+      "Introduction": "An Ettin towers above you. He looks unimpressed.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "CommonalityDesc": "Common",
+      "SpawnRegion": [
+        "HyleoForestEast",
+        "HyleoForestWest",
+        "NordthilanNeck",
+        "NordArm"
+      ],
+      "TileDesc": "Ettin",
+      "AllowedTiles": [
+        120,
+        109
+      ]
+    },
+    {
+      "Name": "Plains Giant",
+      "Defense": 15,
+      "Health": 6,
+      "HealthMin": 5,
+      "HealthMax": 6,
+      "DamageMax": 3,
+      "MinHourVisible": 0,
+      "MaxHourVisible": 23,
+      "SuddenAppearance": true,
+      "NumberOfAttacks": 1,
+      "Aggressive": true,
+      "Introduction": "You see a Plains Giant take notice of you. That's never good.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoPlains",
+        "HyleoSouthPlains",
+        "NordthilanBelly",
+        "SouthWind"
+      ],
+      "TileDesc": "Plains Giant",
+      "AllowedTiles": [
+        120,
+        79,
+        89
+      ],
+      "CommonalityDesc": "Rare"
+    },
+    {
+      "Name": "Terra Bird",
+      "Defense": 15,
+      "Health": 6,
+      "HealthMin": 4,
+      "HealthMax": 6,
+      "DamageMax": 6,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "NumberOfAttacks": 1,
+      "Aggressive": true,
+      "Introduction": "You hear a terrifying shriek from behind you. A brightly coloured giant dragon-like bird is running at you.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "NordthilanNeck",
+        "LavaRegion",
+        "NordthilanHead"
+      ],
+      "TileDesc": "Terrabird",
+      "AllowedTiles": [
+        77,
+        109
+      ],
+      "CommonalityDesc": "Rare"
+    },
+    {
+      "Name": "Rock Spider",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Uncommon",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoPlains",
+        "HyleoSouthPlains",
+        "HyleoSouthPlains",
+        "HyleoDesert",
+        "LavaRegion",
+        "NordArm"
+      ],
+      "TileDesc": "Rock Spider",
+      "AllowedTiles":
+      [
+        120,
+        109,
+        70
+      ]
+    },
+    {
+      "Name": "Bandit",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "A Bandit steps out of the shadows. You are his next vicitm.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoForestWest",
+        "HyleoSouthPlains",
+        "HyleoForestEast",
+        "NordthilanBelly",
+        "SouthWind",
+        "HyleoPlains"
+      ],
+      "TileDesc": "Bandit",
+      "AllowedTiles": [
+        120,
+        70,
+        89
+      ]
+    },
+    {
+      "Name": "Sand Giant",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Rare",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "You turn a Sand Giant aggressively approaching you.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoDesert"
+      ],
+      "TileDesc": "Sand Giant",
+      "AllowedTiles": [
+        109,
+        58
+      ]
+    },
+    {
+      "Name": "Emerald Giant",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Rare",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "An Emerald Giant towers over you. You feel powerless.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "NordthilanHead",
+        "NordthilanSpine",
+        "Swamp"
+      ],
+      "TileDesc":  "Emerald Giant",
+      "AllowedTiles": [
+        120,
+        70,
+        89,
+        109
+      ]
+    },
+    {
+      "Name": "Amber Giant",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Rare",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "Apathy",
+        "NordthilanSpine",
+        "NordthilanNeck"
+      ],
+      "TileDesc":  "Amber Giant",
+      "AllowedTiles": [
+        120,
+        70,
+        89,
+        109
+      ]
+    },
+    {
+      "Name": "Amber Beetle",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Uncommon",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "Apathy",
+        "NordthilanBelly",
+        "NordthilanSpine"
+      ],
+      "TileDesc": "Amber Beetle",
+      "AllowedTiles": [
+        120,
+        70,
+        89,
+        109
+      ]
+    },
+    {
+      "Name": "Amber Hatchling",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "Apathy",
+        "NordthilanBelly",
+        "NordthilanSpine"
+      ],
+      "TileDesc":  "Amber Hatchling",
+      "AllowedTiles": [
+        120,
+        70,
+        89,
+        109
+      ]
+    },
+    {
+      "Name": "Orc",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "An orc jumps up from behind you.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoForestWest",
+        "HyleoForestEast",
+        "NordthilanBelly",
+        "NordthilanHead",
+        "HyleoPlains",
+        "HyleoSouthPlains"
+      ],
+      "TileDesc":  "Orc",
+      "AllowedTiles": [
+        120,
+        70,
+        89
+      ]
+    },
+    {
+      "Name": "Treant",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Rare",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoForestEast",
+        "NordthilanNeck",
+        "NordthilanHead",
+        "NordthilanBelly"
+      ],
+      "TileDesc":  "Treant",
+      "AllowedTiles": [
+        89
+      ]
+    },
+    {
+      "Name": "Centaur",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Uncommon",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "A centaur gallops toward you, hate in his eyes!",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "NordthilanBelly",
+        "SouthWind"
+      ],
+      "TileDesc": "Centaur",
+      "AllowedTiles": [
+        120,
+        77,
+        109
+      ]
+    },
+    {
+      "Name": "Squidling",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 3,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 0,
+      "MaxHourVisible": 23,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "Ocean",
+        "HyleoForestWest",
+        "HyleoForestEast",
+        "NordthilanBelly"
+      ],
+      "TileDesc": "Squidling",
+      "AllowedTiles": [
+        44,
+        46
+      ]
+    },
+    {
+      "Name": "Water Spider",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 3,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 0,
+      "MaxHourVisible": 23,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "A water spider swims after you.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "Ocean",
+        "HyleoForestWest",
+        "HyleoForestEast",
+        "NordthilanBelly"
+      ],
+      "TileDesc": "Water Spider",
+      "AllowedTiles": [
+        44
+      ]
+    },
+    {
+      "Name": "Frog Jelly",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Uncommon",
+      "Defense": 15,
+      "DamageMax": 3,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 0,
+      "MaxHourVisible": 23,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "A terrifying gelatinous frog like creature jumps at you!",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoPlains",
+        "HyleoSouthPlains",
+        "NordArm",
+        "Swamp"
+      ],
+      "TileDesc": "Frog Jelly",
+      "AllowedTiles": [
+        44,
+        115
+      ]
+    },
+    {
+      "Name": "Shark",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Uncommon",
+      "Defense": 15,
+      "DamageMax": 3,
+      "Introduction": ".",
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 0,
+      "MaxHourVisible": 23,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "You see the dorsal fin of a hungry shark beside you.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "NordArm",
+        "NordthilanBelly",
+        "Otalio",
+        "Ocean"
+      ],
+      "TileDesc": "Shark",
+      "AllowedTiles": [
+        44,
+        46
+      ]
+    },
+    {
+      "Name": "Merman",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Uncommon",
+      "Defense": 15,
+      "DamageMax": 3,
+      "Introduction": ".",
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 0,
+      "MaxHourVisible": 23,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "NordArm",
+        "NordthilanBelly",
+        "Ocean"
+      ],
+      "TileDesc": "Merman",
+      "AllowedTiles": [
+        44,
+        46
+      ]
+    },
+    {
+      "Name": "Great Squid",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Rare",
+      "Defense": 15,
+      "DamageMax": 3,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 0,
+      "MaxHourVisible": 23,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "A huge many-armed beast surfaces beside you. It's a Giant Squid!",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "Ocean",
+        "Otalio"
+      ],
+      "TileDesc": "Great Squid",
+      "AllowedTiles": [
+        46
+      ]
+    },
+    {
+      "Name": "Kobold",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "A kobold appears beside you, ready to attack.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoForestWest",
+        "HyleoForestEast",
+        "NordthilanBelly",
+        "NordthilanSpine",
+        "SouthWind"
+      ],
+      "TileDesc": "Kobold",
+      "AllowedTiles": [
+        70,
+        89
+      ]
+    },
+    {
+      "Name": "Goblin",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Uncommon",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "A goblin appears from out of the shadows.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "NordthilanHead",
+        "NordthilanSpine",
+        "NordthilanNeck"
+      ],
+      "TileDesc": "Goblin",
+      "AllowedTiles": [
+        109,
+        89
+      ]
+    },
+    {
+      "Name": "Fire Turtle",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "LavaRegion"
+      ],
+      "TileDesc": "Fire Turtle",
+      "AllowedTiles": [
+        109,
+        35
+      ]
+    },
+    {
+      "Name": "Hell Hound",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Uncommon",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "The haunting growls of a Hell Hound fill your ears. You are not alone!",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "LavaRegion"
+      ],
+      "TileDesc": "Hell Hound",
+      "AllowedTiles": [
+        35
+      ]
+    },
+    {
+      "Name": "Fire Giant",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Rare",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "A firey, monstrous giant appears before you. From whence did it come? No matter, you're in trouble.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "LavaRegion"
+      ],
+      "TileDesc": "Fire Giant",
+      "AllowedTiles": [
+        35,
+        109
+      ]
+    },
+    {
+      "Name": "Swamp Turtle",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "Swamp"
+      ],
+      "TileDesc": "Swamp Turtle",
+      "AllowedTiles": [
+        115
+      ]
+    },
+    {
+      "Name": "Scorpian",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 3,
+      "Introduction": ".",
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 0,
+      "MaxHourVisible": 23,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "A scorpian scampers toward you, tail stinger raised.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoDesert",
+        "NordthilanNeck"
+      ],
+      "TileDesc": "Scorpian",
+      "AllowedTiles": [
+        109,
+        58
+      ]
+    },
+    {
+      "Name": "Shadow",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Rare",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "Shadows around your feet begin to swirl around you, forming into a dark spirit, with soulless yellow eyes.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoForestEast",
+        "NordthilanBelly",
+        "NordthilanHead",
+        "NordArm"
+      ],
+      "TileDesc": "Shadow",
+      "AllowedTiles": [
+        109,
+        89
+      ]
+    },
+    {
+      "Name": "Sand Worm",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Uncommon",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoDesert"
+      ],
+      "TileDesc": "Sand Worm",
+      "AllowedTiles": [
+        109,
+        58
+      ]
+    },
+    {
+      "Name": "Venom Weed",
+      "Health": "6",
+      "HealthMax": "6",
+      "CommonalityDesc": "Rare",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": false,
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "Swamp",
+        "HyleoForestWest",
+        "HyleoForestEast",
+        "HyleoPlains",
+        "HyleoSouthPlains",
+        "NordArm"
+      ],
+      "TileDesc": "Venom Weed",
+      "AllowedTiles": [ 109
+
+      ]      
+    },
+    {
+      "Name": "Fire Ants",
+      "Health": 6,
+      "HealthMax": 6,
+      "CommonalityDesc": "Common",
+      "Defense": 15,
+      "DamageMax": 6,
+      "NumberOfAttacks": 1,
+      "MinHourVisible": 7,
+      "MaxHourVisible": 17,
+      "SuddenAppearance": true,
+      "Aggressive": true,
+      "WelcomeMessage": "You suddenly feel covered in burning, tiny bites. You've disurbed a nest of Fire Ants.",
+      "ChanceToFlee": 1,
+      "FleeThreshold": 1,
+      "SpawnRegion": [
+        "HyleoDesert",
+        "NordthilanNeck"
+      ],
+      "TileDesc": "Fire Ants",
+      "AllowedTiles": [
+        58,
+        109
+      ]
+    }
+  ]
+}

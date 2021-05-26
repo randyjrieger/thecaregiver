@@ -230,6 +230,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\jsonDB\monsters.json" />
     <None Include="Resources\jsonDB\signs.json" />
     <None Include="Resources\jsonDB\town_locations.json" />
     <None Include="Resources\tiles\tiles.zip" />
